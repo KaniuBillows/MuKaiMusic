@@ -55,7 +55,6 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Folder Include="mukaiMusic\dist\mukaiMusic\" />
     <Folder Include="wwwroot\" />
   </ItemGroup>
 
