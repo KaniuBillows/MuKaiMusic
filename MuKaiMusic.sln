@@ -1,0 +1,61 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 16
+VisualStudioVersion = 16.0.29503.13
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Encrypt", "Encrypt\Encrypt.csproj", "{D3E66052-9695-4AF3-9DD6-AA97FB135937}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Kuwo_Music_Api", "Kuwo_Music_Api\Kuwo_Music_Api.csproj", "{EFA7C192-E6E4-4F93-8D22-B044F7532C39}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "MiGu_Music_API", "MiGu_Music_API\MiGu_Music_API.csproj", "{6409AF83-4DD1-4A75-8314-58E1617789AA}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "MuKai Music", "MuKai Music\MuKai Music.csproj", "{1A089FFD-2702-44DA-BCD2-8EB34824E408}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "NetEaseMusic_API", "NetEaseMusic_API\NetEaseMusic_API.csproj", "{F74EEFEC-1633-43BB-B5E2-C8DB63EB390E}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "RequestHandler", "RequestHandler\RequestHandler.csproj", "{00E649DB-669B-47C5-B19D-1A698DEF3D7B}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Test", "Test\Test.csproj", "{3CED6683-4602-4CFA-87D1-88A6C0696163}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{D3E66052-9695-4AF3-9DD6-AA97FB135937}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{D3E66052-9695-4AF3-9DD6-AA97FB135937}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{D3E66052-9695-4AF3-9DD6-AA97FB135937}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{D3E66052-9695-4AF3-9DD6-AA97FB135937}.Release|Any CPU.Build.0 = Release|Any CPU
+		{EFA7C192-E6E4-4F93-8D22-B044F7532C39}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{EFA7C192-E6E4-4F93-8D22-B044F7532C39}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{EFA7C192-E6E4-4F93-8D22-B044F7532C39}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{EFA7C192-E6E4-4F93-8D22-B044F7532C39}.Release|Any CPU.Build.0 = Release|Any CPU
+		{6409AF83-4DD1-4A75-8314-58E1617789AA}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{6409AF83-4DD1-4A75-8314-58E1617789AA}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{6409AF83-4DD1-4A75-8314-58E1617789AA}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{6409AF83-4DD1-4A75-8314-58E1617789AA}.Release|Any CPU.Build.0 = Release|Any CPU
+		{1A089FFD-2702-44DA-BCD2-8EB34824E408}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{1A089FFD-2702-44DA-BCD2-8EB34824E408}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{1A089FFD-2702-44DA-BCD2-8EB34824E408}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{1A089FFD-2702-44DA-BCD2-8EB34824E408}.Release|Any CPU.Build.0 = Release|Any CPU
+		{F74EEFEC-1633-43BB-B5E2-C8DB63EB390E}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{F74EEFEC-1633-43BB-B5E2-C8DB63EB390E}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{F74EEFEC-1633-43BB-B5E2-C8DB63EB390E}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{F74EEFEC-1633-43BB-B5E2-C8DB63EB390E}.Release|Any CPU.Build.0 = Release|Any CPU
+		{00E649DB-669B-47C5-B19D-1A698DEF3D7B}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{00E649DB-669B-47C5-B19D-1A698DEF3D7B}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{00E649DB-669B-47C5-B19D-1A698DEF3D7B}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{00E649DB-669B-47C5-B19D-1A698DEF3D7B}.Release|Any CPU.Build.0 = Release|Any CPU
+		{3CED6683-4602-4CFA-87D1-88A6C0696163}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{3CED6683-4602-4CFA-87D1-88A6C0696163}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{3CED6683-4602-4CFA-87D1-88A6C0696163}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{3CED6683-4602-4CFA-87D1-88A6C0696163}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {C226748C-A521-472E-82D9-E75C32EE0DCE}
+	EndGlobalSection
+EndGlobal
