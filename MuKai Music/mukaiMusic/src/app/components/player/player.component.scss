@@ -1,0 +1,14 @@
+.playButton{
+  height: 36px;
+  width: 36px;
+  cursor: pointer;
+}
+#ProgressBar{
+  width: 60vw;
+}
+#controls{
+  position: absolute;
+  display: flex;
+  bottom: 5vh;
+  margin-left: 20vh;
+}
