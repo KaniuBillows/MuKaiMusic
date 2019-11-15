@@ -1,12 +1,16 @@
-<div id="controls">
-  <mat-icon class="playButton" svgIcon='play_button'>
+<div id='back-board'>
+    <img src='http://p2.music.126.net/yEGx5yAd9zaa3l03d30KNw==/18511377767183740.jpg?param=1024y768'>
+    <div id='back-board-mask'></div>
+</div>
+<div id='control'>
+    <div id="control-buttons">
+        <mat-icon>skip_previous</mat-icon>
+        <mat-icon *ngIf="stauts!='playing'">play_circle_outline</mat-icon>
+        <mat-icon *ngIf="stauts=='playing'">pause_circle_outline</mat-icon>
+        <mat-icon>skip_next</mat-icon>
+    </div>
+    <mat-slider id='seek-bar'></mat-slider>
+    <div id='volume'>
 
-  </mat-icon>
-
-  <mat-icon class="playButton" svgIcon='pause_button'>
-
-  </mat-icon>
-  <div>
-    <mat-slider id="ProgressBar"></mat-slider>
-  </div>
+    </div>
 </div>
