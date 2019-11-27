@@ -1,10 +1,6 @@
 ﻿using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
-using MiGu_Music_API;
 using MuKai_Music.DataContext;
-using MuKai_Music.Model.RequestEntity;
-using MuKai_Music.Model.ResponseEntity;
-using MuKai_Music.Model.ResultEntity;
 using NetEaseMusic_API.RequestOption.Options.Album;
 using NetEaseMusic_API.RequestOption.Options.Artist;
 using NetEaseMusic_API.RequestOption.Options.Music;
@@ -12,9 +8,6 @@ using NetEaseMusic_API.RequestOption.Options.Playlist;
 using NetEaseMusic_API.RequestOption.Options.Search;
 using NetEaseMusic_API.RequestOption.Options.Similar;
 using RequestHandler;
-using System.Collections;
-using System.Collections.Generic;
-using System.Linq;
 using System.Threading.Tasks;
 
 namespace MuKai_Music.Model.Service
@@ -45,46 +38,26 @@ namespace MuKai_Music.Model.Service
         }
 
         /// <summary>
-        /// 请求歌曲URL
+        /// 获取歌曲的URL
         /// </summary>
-        /// <param name="urlParams"></param>
+        /// <param name="id"></param>
+        /// <param name="br"></param>
         /// <returns></returns>
-        public async Task<ObjectResult> GetMusicUrl(Get_MusicUrl_Param[] urlParams)
+        public async Task<ObjectResult> GetMusicUrl(int id, int br)
         {
-            int[] ids = urlParams.Select(para => para.Id).ToArray();
-            IRequestOption request = new MusicUrl(GetCookie(this.httpContext.Request), ids, urlParams[0].Br);
-            var result = await this.GetResult<Get_MusicUrl_Result>(httpContext.Response, request);
-            var migu = new List<Hashtable>();
-            foreach (var info in result.Data)
-            {
-                if (info.Url == null)
-                {
-                    var hs = new Hashtable()
-                    {
-                        {"keyword",$"{urlParams.First(re => re.Id == info.Id).Name}-{urlParams.First(re => re.Id == info.Id).Artist}" },
-                        {"id",info.Id }
-                    };
-                    migu.Add(hs);
-                }
-            }
-            if (migu.Count > 0)
-            {
-                foreach (var req in migu)
-                {
-                    IRequestOption search_re = new Web_Search((string)req["keyword"]);
-                    var migu_search = await this.GetResult<Migu_Search_Result>(search_re);
-                    IRequestOption url_re = new Web_PlayInfo(migu_search.SearchResult.List.SongList[0].CopyrightId);
-                    var migu_url = await this.GetResult<Migu_Url_Result>(url_re);
-                    Playinfo bq = migu_url.Data.BqPlayInfo;
-                    Playinfo hq = migu_url.Data.HqPlayInfo;
-                    Playinfo sq = migu_url.Data.SqPlayInfo;
-                    result.Data.First(r => r.Id.Equals((int)req["id"])).Url
-                        = sq != null ? sq.PlayUrl : (hq != null ? hq.PlayUrl : bq?.PlayUrl);
-                }
+            int[] ids = { id };
+            IRequestOption request = new MusicUrl(GetCookie(this.httpContext.Request), ids, br);
+            return await this.GetResult(httpContext.Response, request);
+        }
 
-                return new ObjectResult(result);
-            }
-            else return new ObjectResult(result);
+        /// <summary>
+        /// 进行全网URL搜索
+        /// </summary>
+        /// <param name="key"></param>
+        /// <returns></returns>
+        public Task<ObjectResult> SearchUrl(string key)
+        {
+            return null;
         }
 
         /// <summary>

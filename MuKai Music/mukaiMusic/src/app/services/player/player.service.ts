@@ -1,4 +1,4 @@
-import { Injectable } from '@angular/core';
+import { Injectable, EventEmitter } from '@angular/core';
 
 @Injectable({
   providedIn: 'root'
@@ -7,13 +7,20 @@ export class PlayerService {
 
   private player: HTMLAudioElement;
 
-  private _status: 'pause' | 'playing' | 'stop' = 'stop';
+  private _status: 'pause' | 'loading' | 'playing' | 'stop' = 'stop';
 
   constructor() {
     this.player = document.createElement('audio');
+    this.player.ontimeupdate = () => {
+      this.onCurrentTimeChange.emit(this.player.currentTime);
+    }
+    this.player.ondurationchange = () => {
+      this.onDurationChange.emit(this.player.duration);
+    }
   }
 
-  public set status(value: 'pause' | 'playing' | 'stop') {
+  //#region public property
+  public set status(value: 'pause' | 'loading' | 'playing' | 'stop') {
     this._status = value;
   }
 
@@ -21,6 +28,16 @@ export class PlayerService {
     return this._status;
   }
 
+  public get src() {
+    return this.player.src;
+  }
+
+  public get duration() {
+    return this.player.duration;
+  }
+  //#endregion
+
+  //#region public methods
   public play() {
     if (this.player.src) {
       this.status = 'playing';
@@ -35,7 +52,23 @@ export class PlayerService {
 
   public start(url: string) {
     this.player.src = url;
-    this.player.pause();
+    this.play();
+  }
+  
+  public setVolume(volume: number) {
+    this.player.volume = volume;
   }
 
+  public seek(value: number) {
+    this.player.currentTime = value;
+  }
+
+  //#endregion
+
+  //#region events
+
+  public onCurrentTimeChange = new EventEmitter<number>();
+
+  public onDurationChange = new EventEmitter<number>();
+  //#endregion
 }

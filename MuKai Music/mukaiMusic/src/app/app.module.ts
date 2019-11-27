@@ -1,4 +1,4 @@
-import { BrowserModule } from '@angular/platform-browser';
+import { BrowserModule,HAMMER_GESTURE_CONFIG} from '@angular/platform-browser';
 import { NgModule } from '@angular/core';
 import { MatIconModule } from '@angular/material/icon';
 import { MatSlideToggleModule } from '@angular/material/slide-toggle';
@@ -8,6 +8,7 @@ import { PlayerComponent } from './components/player/player.component';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { HttpClientModule } from '@angular/common/http';
 import { MatSliderModule } from '@angular/material/slider';
+import { GestureConfig } from '@angular/material/core';
 @NgModule({
   declarations: [
     AppComponent,
@@ -22,7 +23,9 @@ import { MatSliderModule } from '@angular/material/slider';
     AppRoutingModule,
     BrowserAnimationsModule
   ],
-  providers: [],
+  providers: [
+    {provide:HAMMER_GESTURE_CONFIG,useClass:GestureConfig}
+  ],
   bootstrap: [AppComponent]
 })
 export class AppModule { }

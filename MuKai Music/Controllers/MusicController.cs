@@ -11,7 +11,7 @@ namespace MuKai_Music.Service
 {
 #nullable enable
 
-    [Route("api/")]
+    [Route("api")]
     [ApiController]
     [ServiceFilter(typeof(MyAuthorFilter))]
     public class MusicController : ControllerBase
@@ -58,6 +58,7 @@ namespace MuKai_Music.Service
         /// </summary>
         /// <returns></returns>
         [HttpGet("music/personalized")]
+        [ResponseCache(Duration = 120)]
         public async Task<ObjectResult> PersonalizedMusic() => await musicService.GetPersonalizedNewMusic();
 
         /// <summary>
@@ -71,19 +72,29 @@ namespace MuKai_Music.Service
         /// <summary>
         /// 获取歌曲的URL
         /// </summary>
-        /// <param name="urlParams"></param>
+        /// <param name="id"></param>
+        /// <param name="br"></param>
         /// <returns></returns>
-        [HttpPost("url")]
-        public async Task<ObjectResult> MsuicUrl([FromBody]Get_MusicUrl_Param[] urlParams)
+        [HttpGet("url")]
+        [ResponseCache(Duration = 3600)]
+        public async Task<ObjectResult> MsuicUrl(int id, int br)
         {
-            return await musicService.GetMusicUrl(urlParams);
+            return await musicService.GetMusicUrl(id, br);
         }
+        //全网搜索歌曲Url
+        /*[HttpGet("search/Url")]
+        [ResponseCache(Duration = 3600)]
+        public async Task<ObjectResult> SearchUrl(string keyInfo)
+        {
+            return await musicService.SearchUrl(keyInfo);
+        }*/
 
         /// <summary>
         /// 获取歌词
         /// </summary>
         /// <param name="id">歌曲id</param>
         [HttpGet("lyric")]
+        [ResponseCache(CacheProfileName = "default")]
         public async Task<ObjectResult> GetLyric(int id) => await musicService.GetLyric(id);
 
         /// <summary>
@@ -91,7 +102,7 @@ namespace MuKai_Music.Service
         /// </summary>
         /// <param name="ids"></param>
         [HttpPost("music/detail")]
-        public async Task<ObjectResult> Detail(int[] ids) => await musicService.GetMusicDetail(ids);
+        public async Task<ObjectResult> Detail([FromBody]int[] ids) => await musicService.GetMusicDetail(ids);
 
         /// <summary>
         /// 获取全部歌单分类
