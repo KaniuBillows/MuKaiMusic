@@ -125,6 +125,7 @@ _ReSharper*/
 # JustCode is a .NET coding add-in
 .JustCode
 
+MuKai Music/mukaiMusic/dist
 # TeamCity is a build add-in
 _TeamCity*
 

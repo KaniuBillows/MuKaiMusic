@@ -54,7 +54,7 @@ namespace MuKai_Music
             // In production, the Angular files will be served from this directory
             services.AddSpaStaticFiles(configuration =>
             {
-                configuration.RootPath = "mukaiMusic/dist/mukaiMusic";
+                configuration.RootPath = "mukaiMusic/dist/muKaiMusic";
             });
             services.AddMvc(option =>
             {
@@ -125,12 +125,13 @@ namespace MuKai_Music
             });
 
             app.UseSpaStaticFiles();
+            
             app.UseSpa(spa =>
             {
                 // To learn more about options for serving an Angular SPA from ASP.NET Core,
                 // see https://go.microsoft.com/fwlink/?linkid=864501
 
-                spa.Options.SourcePath = "mukaiMusic/dist";
+                spa.Options.SourcePath = "mukaiMusic";
 
                 if (env.IsDevelopment())
                 {
