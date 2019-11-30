@@ -184,10 +184,9 @@ export class PlayerComponent implements OnInit {
       this.getMusicDetail(this._playlist[this._playlist.length - 1].id, () =>
         this.startPlay());
     } else {
-      this.getMusicDetail(this._playlist[0].id, () =>
+      this.getMusicDetail(this._playlist[this.currentMusicIndex - 1].id, () =>
         this.startPlay());
     }
-    this.startPlay();
   }
   public onMuteClick() {
     this._stagingVolume = this._volume;

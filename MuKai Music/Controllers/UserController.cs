@@ -16,9 +16,9 @@ namespace MuKai_Music.Controllers
     {
         public UserService UserService { get; }
 
-        public UserController(MyAuthorFilter myAuthor, Func<HttpContext, UserService> userServiceFactory)
+        public UserController(MyAuthorFilter myAuthor)
         {
-            this.UserService = userServiceFactory.Invoke(myAuthor.HttpContext);
+            this.UserService = new UserService(myAuthor.HttpContext);
         }
 
         /// <summary>
@@ -29,7 +29,7 @@ namespace MuKai_Music.Controllers
         /// <param name="password">密码,需客户端采用MD5加密</param>
         /// <returns></returns>
         [HttpPost("netease/login")]
-        [ResponseCache(NoStore =true)]
+        [ResponseCache(NoStore = true)]
         public async Task LoginPhone(string countrycode, string phone, string password) => await UserService.LogInPhone(countrycode, phone, password);
 
         /// <summary>

@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc.Filters;
+using System;
 
 namespace MuKai_Music.Filter
 {
@@ -15,6 +16,10 @@ namespace MuKai_Music.Filter
 
         public void OnAuthorization(AuthorizationFilterContext context)
         {
+            if (context == null)
+            {
+                throw new ArgumentNullException(nameof(context));
+            }
             this.httpContext = context.HttpContext;
         }
     }

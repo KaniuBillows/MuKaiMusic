@@ -4,6 +4,8 @@ import { Observable } from 'rxjs';
 import 'src/app/entities/music';
 import { lyricInfo, musicDetailResult, personalizedResult, NetEaseUrlResult } from 'src/app/entities/music';
 export const baseUrl: string = 'http://localhost:2000'
+//export const baseUrl: string = '';
+
 @Injectable({
   providedIn: 'root'
 })
@@ -36,6 +38,6 @@ export class MusicService {
   }
 
   public getNeteaseUrl(id: number, br?: number): Observable<NetEaseUrlResult> {
-    return this.httpClient.get<NetEaseUrlResult>(baseUrl + `/api/url?id=${id}&br=${br | 128000}`);
+    return this.httpClient.get<NetEaseUrlResult>(baseUrl + `/api/url?id=${id}&br=${br || 128000}`);
   }
 }

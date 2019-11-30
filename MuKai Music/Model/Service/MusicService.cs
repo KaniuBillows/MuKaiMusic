@@ -16,12 +16,11 @@ namespace MuKai_Music.Model.Service
     {
         private readonly HttpContext httpContext;
 
-        private readonly MusicContext miguContext;
+        //private readonly MusicContext miguContext;
 
-        public MusicService(HttpContext httpContext, MusicContext miguContext)
+        public MusicService(HttpContext httpContext)
         {
             this.httpContext = httpContext;
-            this.miguContext = miguContext;
         }
 
         /// <summary>

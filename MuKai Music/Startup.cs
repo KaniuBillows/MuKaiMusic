@@ -29,26 +29,14 @@ namespace MuKai_Music
         {
             services.AddSwaggerDocument();
             services.AddControllersWithViews();
-            services.AddSingleton<Func<HttpContext, MusicService>>((HttpContext httpContext) =>
-            {
-                var optionsBuilder = new DbContextOptionsBuilder<MusicContext>();
-                var conf = Configuration.GetConnectionString("MySql");
-                optionsBuilder.UseMySql(conf);
-                return new MusicService(httpContext, new MusicContext(optionsBuilder.Options));
-            });
-            services.AddSingleton<Func<HttpContext, UserService>>((HttpContext httpContext) => new UserService(httpContext));
             services.AddScoped<MyAuthorFilter>();
             services.AddScoped<MyActionFilter>();
-            services.AddDbContext<MusicContext>(options =>
+
+            //TODO 将音乐信息持久化保存在MYSQL数据库
+            /*services.AddDbContext<MusicContext>(options =>
             {
                 //var optionsBuilder = new DbContextOptionsBuilder<MiguContext>();
                 options.UseMySql(Configuration.GetConnectionString("MySql"));
-            });
-            /*services.AddSingleton<Func<MiguContext>>(() =>
-            {
-                var optionsBuilder = new DbContextOptionsBuilder<MiguContext>();
-                optionsBuilder.UseMySql(Configuration.GetConnectionString("MySql"));
-                return new MiguContext(optionsBuilder.Options);
             });*/
 
             // In production, the Angular files will be served from this directory
@@ -56,15 +44,16 @@ namespace MuKai_Music
             {
                 configuration.RootPath = "mukaiMusic/dist/muKaiMusic";
             });
+            //添加内存缓存到DI容器
+            services.AddMemoryCache();
             services.AddMvc(option =>
             {
                 /*客户端缓存*/
                 option.CacheProfiles.Add("default", new Microsoft.AspNetCore.Mvc.CacheProfile
                 {
-                    Duration = 86400 /*24小时资源缓存*/
+                    Duration = 120 /*24小时资源缓存*/
                 });
             });
-            //响应式缓存
             services.AddResponseCaching();
         }
 
@@ -102,21 +91,12 @@ namespace MuKai_Music
                 builder.AllowAnyMethod();
                 builder.AllowAnyHeader();
             });
-            app.UseResponseCaching();
 
-            app.Use(async (context, next) =>
-            {
-                context.Response.GetTypedHeaders().CacheControl =
-                    new Microsoft.Net.Http.Headers.CacheControlHeaderValue()
-                    {
-                        Public = true,
-                        MaxAge = TimeSpan.FromSeconds(86400)
-                    };
-                context.Response.Headers[Microsoft.Net.Http.Headers.HeaderNames.Vary] =
-                    new string[] { "Accept-Encoding" };
-
-                await next();
-            });
+            app.UseApiCacheMiddleware(CacheType.Memory, options =>
+             {
+                //设置缓存两分钟
+                options.AbsoluteExpirationRelativeToNow = TimeSpan.FromMinutes(2);
+             });
             app.UseEndpoints(endpoints =>
             {
                 endpoints.MapControllerRoute(
@@ -125,7 +105,6 @@ namespace MuKai_Music
             });
 
             app.UseSpaStaticFiles();
-            
             app.UseSpa(spa =>
             {
                 // To learn more about options for serving an Angular SPA from ASP.NET Core,

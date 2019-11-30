@@ -17,9 +17,9 @@ namespace MuKai_Music.Service
     public class MusicController : ControllerBase
     {
         private readonly MusicService musicService;
-        public MusicController(MyAuthorFilter myAuthor, Func<HttpContext, MusicService> musicServiceFactory)
+        public MusicController(MyAuthorFilter myAuthor)
         {
-            this.musicService = musicServiceFactory.Invoke(myAuthor.HttpContext);
+            this.musicService = new MusicService(myAuthor.HttpContext);
         }
 
         /// <summary>
@@ -58,7 +58,7 @@ namespace MuKai_Music.Service
         /// </summary>
         /// <returns></returns>
         [HttpGet("music/personalized")]
-        [ResponseCache(Duration = 120)]
+        [ResponseCache(Duration = 36000)]
         public async Task<ObjectResult> PersonalizedMusic() => await musicService.GetPersonalizedNewMusic();
 
         /// <summary>
@@ -76,7 +76,6 @@ namespace MuKai_Music.Service
         /// <param name="br"></param>
         /// <returns></returns>
         [HttpGet("url")]
-        [ResponseCache(Duration = 3600)]
         public async Task<ObjectResult> MsuicUrl(int id, int br)
         {
             return await musicService.GetMusicUrl(id, br);
@@ -94,7 +93,6 @@ namespace MuKai_Music.Service
         /// </summary>
         /// <param name="id">歌曲id</param>
         [HttpGet("lyric")]
-        [ResponseCache(CacheProfileName = "default")]
         public async Task<ObjectResult> GetLyric(int id) => await musicService.GetLyric(id);
 
         /// <summary>
