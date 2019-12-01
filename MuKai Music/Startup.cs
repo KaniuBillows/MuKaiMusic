@@ -8,7 +8,7 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using MuKai_Music.DataContext;
 using MuKai_Music.Filter;
-using MuKai_Music.middleware;
+using MuKai_Music.Middleware;
 using MuKai_Music.Model.Service;
 using MuKai_Music.Service;
 using System;
@@ -92,11 +92,7 @@ namespace MuKai_Music
                 builder.AllowAnyHeader();
             });
 
-            app.UseApiCacheMiddleware(CacheType.Memory, options =>
-             {
-                //ÉèÖÃ»º´æÁ½·ÖÖÓ
-                options.AbsoluteExpirationRelativeToNow = TimeSpan.FromMinutes(2);
-             });
+            app.UseApiCacheMiddleware(Configuration);
             app.UseEndpoints(endpoints =>
             {
                 endpoints.MapControllerRoute(
@@ -105,18 +101,18 @@ namespace MuKai_Music
             });
 
             app.UseSpaStaticFiles();
-            app.UseSpa(spa =>
-            {
-                // To learn more about options for serving an Angular SPA from ASP.NET Core,
-                // see https://go.microsoft.com/fwlink/?linkid=864501
+            /*  app.UseSpa(spa =>
+              {
+                  // To learn more about options for serving an Angular SPA from ASP.NET Core,
+                  // see https://go.microsoft.com/fwlink/?linkid=864501
 
-                spa.Options.SourcePath = "mukaiMusic";
+                  spa.Options.SourcePath = "mukaiMusic";
 
-                if (env.IsDevelopment())
-                {
-                    spa.UseAngularCliServer(npmScript: "start");
-                }
-            });
+                  if (env.IsDevelopment())
+                  {
+                      spa.UseAngularCliServer(npmScript: "start");
+                  }
+              });*/
         }
     }
 }

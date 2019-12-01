@@ -1,10 +1,12 @@
 <div id='back-board'>
-    <img [src]='currentMusicInfo?.picUrl'>
+    <!-- <img [src]='currentMusicInfo?.picUrl'> -->
+    <mk-img id='back-board-img' [src]='currentMusicInfo?.picUrl' loadSrc='../../../assets/img/logo.png'></mk-img>
     <div id='back-board-mask'></div>
 </div>
 <div id='contents'>
     <div id='music-info'>
-        <img id='album-pic' [src]='currentMusicInfo?.picUrl' />
+        <!-- <img id='album-pic' [src]='currentMusicInfo?.picUrl' /> -->
+        <mk-img id='album-pic' [src]='currentMusicInfo?.picUrl' loadSrc='../../../assets/img/logo.png'></mk-img>
 
         <div id='lyric-box'>
             <div id='lyrics' #lyrics>

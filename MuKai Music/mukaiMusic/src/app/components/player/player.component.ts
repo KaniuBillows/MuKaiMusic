@@ -36,7 +36,7 @@ export class PlayerComponent implements OnInit {
     picUrl: string,
     artistName: string;
     artistId: number
-  } = {} as any;
+  } = { picUrl: '' } as any;
 
   private _currentLrcIndex: number = 0;
 
@@ -105,7 +105,6 @@ export class PlayerComponent implements OnInit {
   public get lyric_paras() {
     return this._lyric_paras;
   }
-
 
   /**
    * 音量
@@ -197,6 +196,13 @@ export class PlayerComponent implements OnInit {
   }
   public progressInput(ev: MatSliderChange) {
     this.player.seek(ev.value);
+  }
+  /**
+   * 下载歌曲
+   * @param id 
+   */
+  public downloadMusic(id: number) {
+
   }
   /**
    * 点击播放歌曲
@@ -295,7 +301,10 @@ export class PlayerComponent implements OnInit {
   private onTimeChange(time: number) {
     this.progrees.writeValue(time);
     this.currentLrcIndex = this.lyric_paras.findIndex(item => item.time > time) - 1;
-    this.lyrics.nativeElement.style.transform = `translateY(-${document.getElementById('par-' + this.currentLrcIndex).offsetTop}px)`;
+    let element = document.getElementById('par-' + this.currentLrcIndex);
+    if (element) {
+      this.lyrics.nativeElement.style.transform = `translateY(-${element.offsetTop}px)`;
+    }
   }
   //#endregion
 }

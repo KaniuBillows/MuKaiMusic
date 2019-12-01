@@ -5,7 +5,7 @@ using System.Threading.Tasks;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Http;
 
-namespace MuKai_Music.middleware
+namespace MuKai_Music.Middleware
 {
     public class OptionsMiddleware
     {

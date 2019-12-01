@@ -13,8 +13,9 @@ using Microsoft.Extensions.Caching.Memory;
 using Microsoft.Extensions.Primitives;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Hosting;
+using Microsoft.Extensions.Configuration;
 
-namespace MuKai_Music.middleware
+namespace MuKai_Music.Middleware
 {
     public enum CacheType
     {
@@ -62,16 +63,19 @@ namespace MuKai_Music.middleware
                 var item = httpContext.Response.HasStarted;
                 byte[] buffer = Encoding.UTF8.GetBytes(value);
                 httpContext.Response.ContentType = "application/json; charset=utf-8";
-                httpContext.Response.Headers.Add("Cache-Control", $"public; Max-Age={_options.AbsoluteExpirationRelativeToNow.Value.Seconds}");
-                if (env.IsDevelopment())
+                httpContext.Response.Headers.Add("Api-Cache", "hit");
+                httpContext.Response.Headers.Add("Api-Cache-Time", _options.AbsoluteExpirationRelativeToNow.Value.TotalSeconds.ToString());
+                /*if (env.IsDevelopment())
                 {
                     httpContext.Response.Headers.Add("Api-Cache", CacheType.ToString());
-                }
+                }*/
                 await httpContext.Response.Body.WriteAsync(buffer, 0, buffer.Length);
                 return;
             }
             else
             {
+                httpContext.Response.Headers.Add("Api-Cache", "miss");
+                httpContext.Response.Headers.Add("Api-Cache-Add", "true");
                 //将原本不可读取的响应流替换为可读
                 using var resBody = new MemoryStream();
                 httpContext.Response.Body = resBody;
@@ -156,6 +160,13 @@ namespace MuKai_Music.middleware
     // Extension method used to add the middleware to the HTTP request pipeline.
     public static class ApiCacheMiddlewareExtensions
     {
+        /// <summary>
+        /// 手动进行缓存设置
+        /// </summary>
+        /// <param name="builder"></param>
+        /// <param name="cacheType"></param>
+        /// <param name="options"></param>
+        /// <returns></returns>
         public static IApplicationBuilder UseApiCacheMiddleware(this IApplicationBuilder builder,
             CacheType cacheType,
             Action<MemoryCacheEntryOptions> options)
@@ -165,6 +176,45 @@ namespace MuKai_Music.middleware
             return builder.UseMiddleware<ApiCacheMiddleware>(cacheOptions, cacheType);
         }
 
+        /// <summary>
+        /// 读取配置文件设置缓存
+        /// </summary>
+        /// <param name="builder"></param>
+        /// <param name="configuration"></param>
+        /// <returns></returns>
+        public static IApplicationBuilder UseApiCacheMiddleware(this IApplicationBuilder builder,
+            IConfiguration configuration)
+        {
+            string age = configuration.GetSection("cache-age")?.Value;
+            string cacheType = configuration.GetSection("cache-type")?.Value;
+            if (age == null)
+            {
+                throw new KeyNotFoundException("there is no key:\"cache-age\" in appsettings.json");
+            }
+            CacheType type = CacheType.Memory;
+            if (cacheType == "redis")
+            {
+                type = CacheType.Redis;
+            }
+            var cacheOptions = new MemoryCacheEntryOptions
+            {
+                AbsoluteExpirationRelativeToNow = TimeSpan.FromSeconds(long.Parse(age))
+            };
+            return builder.UseMiddleware<ApiCacheMiddleware>(cacheOptions, type);
+        }
 
+        /// <summary>
+        /// 使用默认配置，采用MemoryCache,缓存过期时间为2分钟
+        /// </summary>
+        /// <param name="builder"></param>
+        /// <returns></returns>
+        public static IApplicationBuilder UseApiCacheMiddleware(this IApplicationBuilder builder)
+        {
+            var cacheOptions = new MemoryCacheEntryOptions
+            {
+                AbsoluteExpirationRelativeToNow = TimeSpan.FromMinutes(120)
+            };
+            return builder.UseMiddleware<ApiCacheMiddleware>(cacheOptions, CacheType.Memory);
+        }
     }
 }

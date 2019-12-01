@@ -9,10 +9,13 @@ import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { HttpClientModule } from '@angular/common/http';
 import { MatSliderModule } from '@angular/material/slider';
 import { GestureConfig } from '@angular/material/core';
+import { MkImgComponent } from './components/mk-img/mk-img.component';
+
 @NgModule({
   declarations: [
     AppComponent,
-    PlayerComponent
+    PlayerComponent,
+    MkImgComponent
   ],
   imports: [
     MatIconModule,
