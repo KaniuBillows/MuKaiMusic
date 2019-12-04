@@ -1,6 +1,7 @@
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.HttpOverrides;
 using Microsoft.AspNetCore.SpaServices.AngularCli;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
@@ -70,9 +71,10 @@ namespace MuKai_Music
                 // The default HSTS value is 30 days. You may want to change this for production scenarios, see https://aka.ms/aspnetcore-hsts.
                 app.UseHsts();
             }
-            //  app.UseOptions();
-            //配置https重定向
-            // app.UseHttpsRedirection();
+            app.UseForwardedHeaders(new ForwardedHeadersOptions
+            {
+                ForwardedHeaders = ForwardedHeaders.XForwardedFor | ForwardedHeaders.XForwardedProto
+            });
             //配置启用静态资源文件
             app.UseStaticFiles();
             app.UseOpenApi();
@@ -101,18 +103,18 @@ namespace MuKai_Music
             });
 
             app.UseSpaStaticFiles();
-            /*  app.UseSpa(spa =>
-              {
-                  // To learn more about options for serving an Angular SPA from ASP.NET Core,
-                  // see https://go.microsoft.com/fwlink/?linkid=864501
+            app.UseSpa(spa =>
+            {
+                // To learn more about options for serving an Angular SPA from ASP.NET Core,
+                // see https://go.microsoft.com/fwlink/?linkid=864501
 
-                  spa.Options.SourcePath = "mukaiMusic";
+                spa.Options.SourcePath = "mukaiMusic";
 
-                  if (env.IsDevelopment())
-                  {
-                      spa.UseAngularCliServer(npmScript: "start");
-                  }
-              });*/
+                if (env.IsDevelopment())
+                {
+                    spa.UseAngularCliServer(npmScript: "start");
+                }
+            });
         }
     }
 }

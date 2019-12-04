@@ -10,12 +10,14 @@ import { HttpClientModule } from '@angular/common/http';
 import { MatSliderModule } from '@angular/material/slider';
 import { GestureConfig } from '@angular/material/core';
 import { MkImgComponent } from './components/mk-img/mk-img.component';
+import { GithubComponent } from './components/github/github.component';
 
 @NgModule({
   declarations: [
     AppComponent,
     PlayerComponent,
-    MkImgComponent
+    MkImgComponent,
+    GithubComponent
   ],
   imports: [
     MatIconModule,

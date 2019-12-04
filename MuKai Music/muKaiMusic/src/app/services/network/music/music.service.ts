@@ -3,8 +3,8 @@ import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Observable } from 'rxjs';
 import 'src/app/entities/music';
 import { lyricInfo, musicDetailResult, personalizedResult, NetEaseUrlResult } from 'src/app/entities/music';
-export const baseUrl: string = 'http://localhost:2000'
-//export const baseUrl: string = '';
+//export const baseUrl: string = 'https://localhost:2001'
+export const baseUrl: string = '';
 
 @Injectable({
   providedIn: 'root'
@@ -37,7 +37,30 @@ export class MusicService {
     return this.httpClient.get<personalizedResult>(baseUrl + '/api/music/personalized');
   }
 
+  /**
+   * 获取网易云歌曲的URL
+   * @param id 
+   * @param br 
+   */
   public getNeteaseUrl(id: number, br?: number): Observable<NetEaseUrlResult> {
     return this.httpClient.get<NetEaseUrlResult>(baseUrl + `/api/url?id=${id}&br=${br || 128000}`);
+  }
+
+  /**
+   * 下载歌曲
+   * @param url 
+   */
+  public downloadFile(url: string, downloadInfo: string) {
+    let x = new XMLHttpRequest();
+    x.open("GET", url + '?t=' + new Date().getTime(), true);
+    x.responseType = 'blob';
+    x.onload = function (e) {
+      let url = window.URL.createObjectURL(x.response);
+      let a = document.createElement('a');
+      a.href = url;
+      a.download = downloadInfo;
+      a.click();
+    }
+    x.send();
   }
 }

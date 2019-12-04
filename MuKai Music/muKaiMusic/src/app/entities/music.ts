@@ -20,7 +20,9 @@ export class musicDetailResult {
 export class NetEaseUrlResult {
     data: {
         id: number;
-        url: string
+        url: string;
+        type: string;
+        encodeType: string;
     }[];
 }
 export class personalizedResult {

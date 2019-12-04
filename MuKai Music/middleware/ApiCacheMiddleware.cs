@@ -198,7 +198,7 @@ namespace MuKai_Music.Middleware
             }
             var cacheOptions = new MemoryCacheEntryOptions
             {
-                AbsoluteExpirationRelativeToNow = TimeSpan.FromSeconds(long.Parse(age))
+                AbsoluteExpirationRelativeToNow = TimeSpan.FromSeconds(long .Parse(age))
             };
             return builder.UseMiddleware<ApiCacheMiddleware>(cacheOptions, type);
         }
