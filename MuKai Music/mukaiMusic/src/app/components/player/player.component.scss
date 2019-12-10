@@ -1,4 +1,45 @@
 $control-button-color: rgba(225, 225, 225, .8);
+$them-color:#42b983;
+
+#github_icon {
+  cursor: pointer;
+  border-bottom: 0;
+  position: fixed;
+  right: 0;
+  text-decoration: none;
+  top: 0;
+  z-index: 4;
+
+  &:hover .octo-arm {
+    animation: shake .56s ease-in-out;
+  }
+
+
+  svg {
+    color: #fff;
+    height: 80px;
+    width: 80px;
+  }
+}
+
+@keyframes shake {
+
+  0%,
+  to {
+    transform: rotate(0)
+  }
+
+  20%,
+  60% {
+    transform: rotate(-25deg)
+  }
+
+  40%,
+  80% {
+    transform: rotate(10deg)
+  }
+}
+
 
 #back-board {
   display: flex;
@@ -30,6 +71,10 @@ $control-button-color: rgba(225, 225, 225, .8);
   margin-left: 5vw;
   display: flex;
   z-index: 3;
+}
+
+.control-item {
+  margin: auto;
 }
 
 #music-title-bottom {
@@ -113,10 +158,6 @@ $control-button-color: rgba(225, 225, 225, .8);
   overflow-y: visible;
   transition: -webkit-transform 0.1s ease-out 0s;
   font-size: 20px;
-
-  .current_lrc {
-    color: #ff9800;
-  }
 }
 
 #lyric-box {
@@ -195,6 +236,9 @@ $control-button-color: rgba(225, 225, 225, .8);
 }
 
 
+
+
+
 .playlist-item {
   clear: both;
   overflow: hidden;
@@ -212,7 +256,7 @@ $control-button-color: rgba(225, 225, 225, .8);
     overflow: hidden;
     text-overflow: ellipsis;
     white-space: nowrap;
-    width: 375;
+    width: 375px;
   }
 
   .current-playlist-name {
@@ -221,7 +265,7 @@ $control-button-color: rgba(225, 225, 225, .8);
     overflow: hidden;
     text-overflow: ellipsis;
     white-space: nowrap;
-    width: 375;
+    width: 375px;
     color: #fff;
   }
 

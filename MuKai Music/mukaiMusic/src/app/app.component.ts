@@ -1,4 +1,5 @@
 import { Component } from '@angular/core';
+import { ThemeService } from './services/theme/theme.service';
 
 @Component({
   selector: 'app-root',
@@ -7,4 +8,11 @@ import { Component } from '@angular/core';
 })
 export class AppComponent {
   title = 'Mukai Music';
+
+  constructor(private theme: ThemeService) {
+
+  }
+  public get themeClass(): string {
+    return this.theme.getThemeClass();
+  }
 }

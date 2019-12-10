@@ -3,8 +3,8 @@ import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Observable } from 'rxjs';
 import 'src/app/entities/music';
 import { lyricInfo, musicDetailResult, personalizedResult, NetEaseUrlResult } from 'src/app/entities/music';
-//export const baseUrl: string = 'https://localhost:2001'
-export const baseUrl: string = '';
+export const baseUrl: string = 'http://117.48.203.23:2000';
+//export const baseUrl: string = '';
 
 @Injectable({
   providedIn: 'root'

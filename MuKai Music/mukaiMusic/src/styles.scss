@@ -10,21 +10,155 @@
 // Define the palettes for your theme using the Material Design palettes available in palette.scss
 // (imported above). For each palette, you can optionally specify a default, lighter, and darker
 // hue. Available color palettes: https://material.io/design/color/
-$muKaiMusic-primary: mat-palette($mat-indigo);
-$muKaiMusic-accent: mat-palette($mat-orange);
+$app-primary: mat-palette($mat-indigo);
+$cyan-accent: mat-palette($mat-cyan);
+$app-warn: mat-palette($mat-red);
 
-// The warn palette is optional (defaults to red).
-$muKaiMusic-warn: mat-palette($mat-red);
 
-// Create the theme object (a Sass map containing all of the palettes).
-$muKaiMusic-theme: mat-light-theme($muKaiMusic-primary, $muKaiMusic-accent, $muKaiMusic-warn);
+$cyan-theme: mat-light-theme($app-primary, $cyan-accent, $app-warn);
 
-// Include theme styles for core and each component used in your app.
-// Alternatively, you can import and @include the theme mixins for each component
-// that you are using.
-@include angular-material-theme($muKaiMusic-theme);
+.cyan-theme {
+    @include angular-material-theme($cyan-theme);
+    color: #00bcd4;
 
-/* You can add global styles to this file, and also import other style files */
+    .colorful_svg {
+        fill: var(--theme-color, #00bcd4)
+    }
+}
+
+
+$light_blue-accent: mat-palette($mat-light-blue);
+$light_blue-theme: mat-light-theme($app-primary, $light_blue-accent, $app-warn);
+
+
+.light_blue-theme {
+    @include angular-material-theme($light_blue-theme);
+    color: #03a9f4;
+
+    .colorful_svg {
+        fill: var(--theme-color, #03a9f4)
+    }
+}
+
+$blue-accent:mat-palette($mat-blue);
+$blue-theme:mat-light-theme($app-primary, $blue-accent, $app-warn);
+
+.blue-theme {
+    @include angular-material-theme($blue-theme);
+    color: #2196f3;
+
+    .colorful_svg {
+        fill: var(--theme-color, #2196f3)
+    }
+}
+
+$pink-accent:mat-palette($mat-pink);
+$pink-theme: mat-light-theme($app-primary, $pink-accent, $app-warn);
+
+.pink-theme {
+    @include angular-material-theme($pink-theme);
+    color: #e91e63;
+
+    .colorful_svg {
+        fill: var(--theme-color, #e91e63)
+    }
+}
+
+$purple-accent:mat-palette($mat-purple);
+$purple-theme:mat-light-theme($app-primary, $purple-accent, $app-warn);
+
+.purple-theme {
+    @include angular-material-theme($purple-theme);
+    color: #9c27b0;
+
+    .colorful_svg {
+        fill: var(--theme-color, #9c27b0)
+    }
+}
+
+$teal-accent:mat-palette($mat-teal);
+$teal-theme:mat-light-theme($app-primary, $teal-accent, $app-warn);
+
+.teal-theme {
+    @include angular-material-theme($teal-theme);
+    color: #009688;
+
+    .colorful_svg {
+        fill: var(--theme-color, #009688)
+    }
+}
+
+$green-accent:mat-palette($mat-green);
+$green-theme:mat-light-theme($app-primary, $green-accent, $app-warn);
+
+.green-theme {
+    @include angular-material-theme($green-theme);
+    color: #4caf50;
+
+    .colorful_svg {
+        fill: var(--theme-color, #4caf50)
+    }
+}
+
+$light_green-accent:mat-palette($mat-light-green);
+$light_green-theme:mat-light-theme($app-primary, $light_green-accent, $app-warn);
+
+.light_green-theme {
+    @include angular-material-theme($light_green-theme);
+    color: #8bc34a;
+
+    .colorful_svg {
+        fill: var(--theme-color, #8bc34a)
+    }
+}
+
+$lime-accent:mat-palette($mat-lime);
+$lime-theme:mat-light-theme($app-primary, $lime-accent, $app-warn);
+
+.lime-theme {
+    @include angular-material-theme($lime-theme);
+    color: #cddc39;
+
+    .colorful_svg {
+        fill: var(--theme-color, #cddc39)
+    }
+}
+
+$yellow-accent:mat-palette($mat-yellow);
+$yellow-theme:mat-light-theme($app-primary, $yellow-accent, $app-warn);
+
+.yellow-theme {
+    @include angular-material-theme($yellow-theme);
+    color: #ffeb3b;
+
+    .colorful_svg {
+        fill: var(--theme-color, #ffeb3b)
+    }
+}
+
+$amber-accent:mat-palette($mat-amber);
+$amber-theme:mat-light-theme($app-primary, $amber-accent, $app-warn);
+
+.amber-theme {
+    @include angular-material-theme($amber-theme);
+    color: #ffc107;
+
+    .colorful_svg {
+        fill: var(--theme-color, #ffc107)
+    }
+}
+
+$orange-accent:mat-palette($mat-orange);
+$orange-theme:mat-light-theme($app-primary, $orange-accent, $app-warn);
+
+.orange-theme {
+    @include angular-material-theme($orange-theme);
+    color: #ff9800;
+
+    .colorful_svg {
+        fill: var(--theme-color, #ff9800)
+    }
+}
 
 html,
 body {
@@ -60,10 +194,3 @@ body {
         background-color: #fff;
     }
 }
-
-// .mat-slider-min-value:not(.mat-slider-thumb-label-showing) {
-//     .mat-slider-thumb {
-//         background-color: #ff9800;
-//         border-color:#ff9800
-//     }
-// }

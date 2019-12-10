@@ -3,6 +3,7 @@ import { PlayerService } from 'src/app/services/player/player.service';
 import { MatSlider, MatSliderChange } from '@angular/material/slider';
 import { MusicService } from 'src/app/services/network/music/music.service';
 import { song, musicDetailResult, album, artist } from 'src/app/entities/music';
+import { ThemeService } from 'src/app/services/theme/theme.service';
 
 
 @Component({
@@ -28,6 +29,8 @@ export class PlayerComponent implements OnInit {
         time: number,
     }[] = [];
 
+    private _showPalette: boolean = false;
+
     private _currentMusicInfo: {
         name: string,
         id: number,
@@ -44,6 +47,7 @@ export class PlayerComponent implements OnInit {
 
     constructor(
         private player: PlayerService,
+        public theme: ThemeService,
         private musicNet: MusicService) {
     }
     ngOnInit() {
@@ -61,6 +65,12 @@ export class PlayerComponent implements OnInit {
     public get playlist() {
         return this._playlist;
     }
+
+    public get showPalette() {
+        return this._showPalette;
+    }
+
+
 
     /**
      * 当前播放歌曲
@@ -130,10 +140,14 @@ export class PlayerComponent implements OnInit {
         return this.player.status;
     }
 
-
-    //#region public method
-
-    public getTimeString(time: number): string {
+    public get themeClass() {
+        return this.theme.getThemeClass();
+    }
+    /**
+     * 转换时间格式
+     * @param time 
+     */
+    public getTimeFormat(time: number): string {
         return Math.floor(time / 60000).toString().padStart(2, '0') +
             ':' + Math.floor((time % 60000) / 1000).toString().padStart(2, '0');
     }
@@ -199,6 +213,7 @@ export class PlayerComponent implements OnInit {
         this.player.seek(ev.value);
     }
 
+    //#region Actions
     /**
      * 点击播放歌曲
      * @param index 
@@ -219,8 +234,9 @@ export class PlayerComponent implements OnInit {
             }
         })
     }
-
     //#endregion
+
+
 
     //#region private method
 
