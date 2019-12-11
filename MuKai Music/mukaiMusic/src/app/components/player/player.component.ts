@@ -1,4 +1,4 @@
-import { Component, OnInit, Input, ViewChild, ElementRef } from '@angular/core';
+import { Component, OnInit, ViewChild, ElementRef } from '@angular/core';
 import { PlayerService } from 'src/app/services/player/player.service';
 import { MatSlider, MatSliderChange } from '@angular/material/slider';
 import { MusicService } from 'src/app/services/network/music/music.service';
@@ -51,7 +51,6 @@ export class PlayerComponent implements OnInit {
         private musicNet: MusicService) {
     }
     ngOnInit() {
-
         this.player.onCurrentTimeChange.subscribe((time: number) =>
             this.onTimeChange(time)
         );
@@ -59,6 +58,9 @@ export class PlayerComponent implements OnInit {
             this.progrees.max = duration;
             this.progrees.value = 0.1;
         });
+        this.player.onEnded.subscribe(() => {
+            this.onNextTrackButtonClick();
+        })
         this.getPersonalized();
     }
 
@@ -331,5 +333,6 @@ export class PlayerComponent implements OnInit {
             this.lyrics.nativeElement.style.transform = `translateY(-${element.offsetTop}px)`;
         }
     }
+
     //#endregion
 }

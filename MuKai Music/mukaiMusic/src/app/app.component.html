@@ -1,2 +1,22 @@
 <app-player [class]='themeClass'></app-player>
+
+<div class="{{themeClass}} open-icon-container">
+    <mat-icon (click)="showContent()" *ngIf="!contentOpened">
+        <svg t="1575953642500" class="icon" viewBox="0 0 1024 1024" version="1.1" xmlns="http://www.w3.org/2000/svg"
+            p-id="2589" width="24" height="24">
+            <path d="M512 614.656 857.344 960 945.344 872 512 438.656 78.656 872 166.656 959.872Z" p-id="2590"></path>
+            <path d="M512 240.064 857.344 585.344 945.344 497.344 512 64 78.656 497.344 166.656 585.344Z" p-id="2591">
+            </path>
+        </svg>
+    </mat-icon>
+    <mat-icon (click)="showContent()" *ngIf="contentOpened">
+        <svg t="1575953658282" class="icon" viewBox="0 0 1024 1024" version="1.1" xmlns="http://www.w3.org/2000/svg"
+            p-id="2708" width="24" height="24">
+            <path d="M512.064 409.344 166.72 64 78.72 152 512.064 585.344 945.28 152 857.28 64Z" p-id="2709"></path>
+            <path d="M512.064 783.872 166.72 438.656 78.72 526.656 512.064 960 945.28 526.656 857.28 438.72Z"
+                p-id="2710"></path>
+        </svg>
+    </mat-icon>
+</div>
+
 <router-outlet></router-outlet>

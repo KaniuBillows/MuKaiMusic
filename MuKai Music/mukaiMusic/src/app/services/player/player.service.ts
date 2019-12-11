@@ -17,6 +17,9 @@ export class PlayerService {
     this.player.ondurationchange = () => {
       this.onDurationChange.emit(this.player.duration);
     }
+    this.player.onended = () => {
+      this.onEnded.emit();
+    }
   }
 
   //#region public property
@@ -54,7 +57,7 @@ export class PlayerService {
     this.player.src = url;
     this.play();
   }
-  
+
   public setVolume(volume: number) {
     this.player.volume = volume;
   }
@@ -70,5 +73,7 @@ export class PlayerService {
   public onCurrentTimeChange = new EventEmitter<number>();
 
   public onDurationChange = new EventEmitter<number>();
+
+  public onEnded = new EventEmitter();
   //#endregion
 }

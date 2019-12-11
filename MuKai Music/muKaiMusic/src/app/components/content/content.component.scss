@@ -1,0 +1,55 @@
+$control-button-color: rgba(225, 225, 225, .8);
+
+.outlet-content {
+    bottom: 100px;
+    z-index: 3;
+}
+
+.outlet-content-board {
+    display: flex;
+    position: relative;
+    height: 80vh;
+    width: 80vw;
+    z-index: 3;
+    margin: auto;
+    background: rgba(0, 0, 0, 0.55);
+}
+
+.container {
+    position: absolute;
+    text-align: center;
+    width: 100%;
+
+
+    .mat-icon {
+        fill: currentColor;
+        cursor: pointer;
+
+    }
+}
+
+.nav-items {
+    user-select: none;
+    text-align: left;
+    width: 10%;
+    list-style: none;
+    display: block;
+    z-index: 3;
+    color: $control-button-color;
+}
+
+.nav-item {
+    padding: 10px;
+    white-space: nowrap;
+
+    a {
+        text-decoration: none;
+        cursor: pointer;
+        color: currentColor;
+    }
+}
+
+.display-item {
+    width: 90%;
+    height: 100%;
+}
