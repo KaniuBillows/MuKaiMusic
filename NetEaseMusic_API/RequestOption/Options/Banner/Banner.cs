@@ -3,6 +3,13 @@ using System.Collections;
 
 namespace NetEaseMusic_API.RequestOption.Options.Banner
 {
+    public enum BannerType
+    {
+        pc,
+        android,
+        iphone,
+        ipad
+    }
     /// <summary>
     /// 首页轮播图
     /// </summary>
@@ -12,18 +19,18 @@ namespace NetEaseMusic_API.RequestOption.Options.Banner
         /// 
         /// </summary>
         /// <param name="type">"pc","android","iphone","ipad"</param>
-        public Banner(Hashtable cookies, string type) : base(cookies)
+        public Banner(Hashtable cookies, BannerType type) : base(cookies)
         {
-            this.Params.Add("clientType", type);
+            this.Params.Add("clientType", type.ToString());
         }
 
         /// <summary>
         /// 
         /// </summary>
         /// <param name="type">"pc","android","iphone","ipad"</param>
-        public Banner(string type) : this(new Hashtable(), type) { }
+        public Banner(BannerType type) : this(new Hashtable(), type) { }
 
-        public Banner() : this("pc") { }
+        public Banner() : this(BannerType.pc) { }
 
         public override string Url => "https://music.163.com/api/v2/banner/get";
 

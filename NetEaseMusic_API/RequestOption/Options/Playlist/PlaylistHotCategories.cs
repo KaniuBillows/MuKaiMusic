@@ -15,7 +15,7 @@ namespace NetEaseMusic_API.RequestOption.Options.Playlist
         {
         }
 
-        public override string Url => "https://music.163.com/weapi/playlist/catalogue";
+        public override string Url => "https://music.163.com/weapi/playlist/hottags";
 
         public override CryptoType Crypto => CryptoType.Netease_weapi;
 

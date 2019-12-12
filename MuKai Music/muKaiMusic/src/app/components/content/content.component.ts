@@ -22,4 +22,7 @@ export class ContentComponent implements OnInit {
     return location.href.includes(value) ? this.themeClass : '';
   }
 
+  public current(value: string): string {
+    return location.href.includes(value) ? '' : 'normal';
+  }
 }

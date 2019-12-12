@@ -8,11 +8,13 @@ $control-button-color: rgba(225, 225, 225, .8);
 .outlet-content-board {
     display: flex;
     position: relative;
-    height: 80vh;
+    height: 85vh;
     width: 80vw;
     z-index: 3;
     margin: auto;
     background: rgba(0, 0, 0, 0.55);
+    border-radius: 25px;
+    box-shadow: 0 2px 4px -1px rgba(0, 0, 0, .2), 0 4px 5px 0 rgba(0, 0, 0, .14), 0 1px 10px 0 rgba(0, 0, 0, .12);
 }
 
 .container {
@@ -29,6 +31,7 @@ $control-button-color: rgba(225, 225, 225, .8);
 }
 
 .nav-items {
+    margin-top: 85px;
     user-select: none;
     text-align: left;
     width: 10%;
@@ -41,11 +44,18 @@ $control-button-color: rgba(225, 225, 225, .8);
 .nav-item {
     padding: 10px;
     white-space: nowrap;
+    text-decoration: none;
+    cursor: pointer;
+    color: currentColor;
 
-    a {
-        text-decoration: none;
-        cursor: pointer;
-        color: currentColor;
+    li {
+        display: flex;
+    }
+}
+
+.normal {
+    :hover {
+        color: #fff;
     }
 }
 
