@@ -31,6 +31,7 @@ $control-button-color: rgba(225, 225, 225, .8);
 }
 
 .nav-items {
+    margin-top: 85px;
     user-select: none;
     text-align: left;
     width: 10%;
@@ -49,6 +50,12 @@ $control-button-color: rgba(225, 225, 225, .8);
 
     li {
         display: flex;
+    }
+}
+
+.normal {
+    :hover {
+        color: #fff;
     }
 }
 

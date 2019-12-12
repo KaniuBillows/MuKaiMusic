@@ -6,6 +6,8 @@ import { Routes, RouterModule } from '@angular/router';
 import { MatSidenavModule } from '@angular/material/sidenav';
 import { MatIconModule } from '@angular/material/icon';
 import { ExploreComponent } from '../../components/explore/explore.component';
+import { UserComponent } from 'src/app/components/user/user.component';
+import { BannerComponent } from 'src/app/components/banner/banner.component';
 
 const routes: Routes = [
   {
@@ -29,7 +31,8 @@ const routes: Routes = [
 @NgModule({
   declarations: [
     ContentComponent,
-    PlaylistComponent
+    PlaylistComponent,
+    UserComponent
   ],
   imports: [
     CommonModule,

@@ -12,7 +12,7 @@ import { MkImgComponent } from './components/mk-img/mk-img.component';
 import { MatGridListModule } from '@angular/material/grid-list';
 import { PaletteComponent } from './components/palette/palette.component';
 import { AppRoutingModule } from './app-routing.module';
-import { BannerComponent } from './components/banner/banner.component';
+import { BoutiqueComponent } from './components/boutique/boutique.component';
 
 
 
@@ -21,8 +21,8 @@ import { BannerComponent } from './components/banner/banner.component';
     AppComponent,
     PlayerComponent,
     MkImgComponent,
-    PaletteComponent,
-    BannerComponent
+    PaletteComponent
+
   ],
   imports: [
     MatIconModule,
