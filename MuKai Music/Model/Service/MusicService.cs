@@ -3,6 +3,7 @@ using Microsoft.AspNetCore.Mvc;
 using MuKai_Music.DataContext;
 using NetEaseMusic_API.RequestOption.Options.Album;
 using NetEaseMusic_API.RequestOption.Options.Artist;
+using NetEaseMusic_API.RequestOption.Options.Banner;
 using NetEaseMusic_API.RequestOption.Options.Music;
 using NetEaseMusic_API.RequestOption.Options.Playlist;
 using NetEaseMusic_API.RequestOption.Options.Search;
@@ -121,6 +122,18 @@ namespace MuKai_Music.Model.Service
         }
 
         /// <summary>
+        /// 获取推荐歌单
+        /// </summary>
+        /// <param name="limit"></param>
+        /// <returns></returns>
+        public async Task<ObjectResult> GetPersonalizedPlaylist(int limit)
+        {
+            IRequestOption request = new PlaylistPersonalized(GetCookie(httpContext.Request), limit);
+            return await GetResult(httpContext.Response, request);
+        }
+
+
+        /// <summary>
         /// 获取歌曲歌词
         /// </summary>
         /// <param name="id"></param>
@@ -219,6 +232,17 @@ namespace MuKai_Music.Model.Service
         public async Task<ObjectResult> GetRecommendPlaylist()
         {
             IRequestOption request = new RecommendPlaylist(GetCookie(httpContext.Request));
+            return await GetResult(httpContext.Response, request);
+        }
+
+        /// <summary>
+        /// 获取首页轮播图
+        /// </summary>
+        /// <param name="type"></param>
+        /// <returns></returns>
+        public async Task<ObjectResult> GetBanner(BannerType type)
+        {
+            IRequestOption request = new Banner(GetCookie(httpContext.Request), type);
             return await GetResult(httpContext.Response, request);
         }
     }

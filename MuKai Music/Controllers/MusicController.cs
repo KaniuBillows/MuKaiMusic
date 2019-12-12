@@ -3,6 +3,7 @@ using Microsoft.AspNetCore.Mvc;
 using MuKai_Music.Filter;
 using MuKai_Music.Model.RequestEntity;
 using MuKai_Music.Model.Service;
+using NetEaseMusic_API.RequestOption.Options.Banner;
 using NetEaseMusic_API.RequestOption.Options.Search;
 using System;
 using System.Threading.Tasks;
@@ -68,6 +69,14 @@ namespace MuKai_Music.Service
         /// <param name="limit"></param>
         [HttpGet("playlist/highQuality")]
         public async Task<ObjectResult> HighQualityPlaylist(string category, int limit) => await musicService.GetHighQualityPlaylist(category, limit);
+
+        /// <summary>
+        /// 推荐歌单
+        /// </summary>
+        /// <param name="limit"></param>
+        /// <returns></returns>
+        [HttpGet("playlist/personalized")]
+        public async Task<ObjectResult> PersonalizedPlaylist(int limit) => await musicService.GetPersonalizedPlaylist(limit);
 
         /// <summary>
         /// 获取歌曲的URL
@@ -147,6 +156,13 @@ namespace MuKai_Music.Service
         /// <param name="offset"></param>
         [HttpGet("music/similar")]
         public async Task<ObjectResult> GetSimlarMusic(int id, int limit, int offset) => await musicService.GetSimilarMusics(id, limit, offset);
+
+        /// <summary>
+        /// 获取轮播图
+        /// </summary>
+        /// <param name="type"></param>
+        /// <returns></returns>
+        public async Task<ObjectResult> GetBanner(BannerType type) => await musicService.GetBanner(type);
 
         /// <summary>
         /// 获取日推歌曲，需要登录网易云账号

@@ -23,7 +23,7 @@ export class AppComponent implements OnInit {
   public _url_save: string = '/content/explore';
 
   public get contentOpened() {
-    return location.href.includes('/content');
+    return location.href.includes('/content/');
   }
 
   constructor(private theme: ThemeService,
