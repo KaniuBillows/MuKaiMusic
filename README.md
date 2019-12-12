@@ -3,8 +3,8 @@
 #DEMO 地址:
 http://music.kaniu.pro
 #界面展示
-![Image text](http://www.kaniu.pro/mukaimusic-display0.jpg)
+![Image text](http://117.48.203.23/mukaimusic-display0.jpg)
 
-![Image text](http://www.kaniu.pro/mukaimusic-display1.jpg)
+![Image text](http://117.48.203.23/mukaimusic-display1.jpg)
 
-![Image text](http://www.kaniu.pro/mukaimusic-display2.jpg)
+![Image text](http://117.48.203.23/mukaimusic-display2.jpg)
