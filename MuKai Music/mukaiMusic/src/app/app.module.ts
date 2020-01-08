@@ -12,7 +12,6 @@ import { MkImgComponent } from './components/mk-img/mk-img.component';
 import { MatGridListModule } from '@angular/material/grid-list';
 import { PaletteComponent } from './components/palette/palette.component';
 import { AppRoutingModule } from './app-routing.module';
-import { BoutiqueComponent } from './components/boutique/boutique.component';
 
 
 

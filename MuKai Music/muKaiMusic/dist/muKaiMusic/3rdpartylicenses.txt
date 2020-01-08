@@ -91,6 +91,8 @@ THE SOFTWARE.
 
 @angular/material/slider
 
+@angular/material/toolbar
+
 @angular/platform-browser
 MIT
 

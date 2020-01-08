@@ -8,6 +8,7 @@ using NetEaseMusic_API.RequestOption.Options.Music;
 using NetEaseMusic_API.RequestOption.Options.Playlist;
 using NetEaseMusic_API.RequestOption.Options.Search;
 using NetEaseMusic_API.RequestOption.Options.Similar;
+using NetEaseMusic_API.RequestOption.Options.User;
 using RequestHandler;
 using System.Threading.Tasks;
 
@@ -16,8 +17,6 @@ namespace MuKai_Music.Model.Service
     public class MusicService : ResultOperate
     {
         private readonly HttpContext httpContext;
-
-        //private readonly MusicContext miguContext;
 
         public MusicService(HttpContext httpContext)
         {
@@ -31,10 +30,10 @@ namespace MuKai_Music.Model.Service
         /// <param name="searchType"></param>
         /// <param name="limit"></param>
         /// <param name="offset"></param>
-        public async Task<ObjectResult> Search(string keyword, SearchType searchType, int limit, int offset)
+        public async Task Search(string keyword, SearchType searchType, int limit, int offset)
         {
             IRequestOption request = new Search(keyword, searchType, limit, offset);
-            return await GetResult(httpContext.Response, request);
+            await GetResult(httpContext.Response, request);
         }
 
         /// <summary>
@@ -43,11 +42,11 @@ namespace MuKai_Music.Model.Service
         /// <param name="id"></param>
         /// <param name="br"></param>
         /// <returns></returns>
-        public async Task<ObjectResult> GetMusicUrl(int id, int br)
+        public async Task GetMusicUrl(int id, int br)
         {
             int[] ids = { id };
             IRequestOption request = new MusicUrl(GetCookie(this.httpContext.Request), ids, br);
-            return await this.GetResult(httpContext.Response, request);
+            await this.GetResult(httpContext.Response, request);
         }
 
         /// <summary>
@@ -55,7 +54,7 @@ namespace MuKai_Music.Model.Service
         /// </summary>
         /// <param name="key"></param>
         /// <returns></returns>
-        public Task<ObjectResult> SearchUrl(string key)
+        public Task SearchUrl(string key)
         {
             return null;
         }
@@ -64,30 +63,30 @@ namespace MuKai_Music.Model.Service
         /// 获取歌手信息
         /// </summary>
         /// <param name="artistId">歌手Id</param>
-        public async Task<ObjectResult> GetArtistDescription(int artistId)
+        public async Task GetArtistDescription(int artistId)
         {
             IRequestOption request = new ArtistDescription(artistId);
-            return await GetResult(httpContext.Response, request);
+            await GetResult(httpContext.Response, request);
         }
 
         /// <summary>
         /// 获取歌手介绍信息
         /// </summary>
         /// <param name="artistId"></param>
-        public async Task<ObjectResult> GetArtistMusics(int artistId)
+        public async Task GetArtistMusics(int artistId)
         {
             IRequestOption request = new ArtistMusics(artistId);
-            return await GetResult(httpContext.Response, request);
+            await GetResult(httpContext.Response, request);
         }
 
         /// <summary>
         /// 获取相似歌手
         /// </summary>
         /// <param name="artistId"></param>
-        public async Task<ObjectResult> GetSimilarArtist(int artistId)
+        public async Task GetSimilarArtist(int artistId)
         {
             IRequestOption request = new SimilarArtist(artistId);
-            return await GetResult(httpContext.Response, request);
+            await GetResult(httpContext.Response, request);
         }
 
         /// <summary>
@@ -95,10 +94,10 @@ namespace MuKai_Music.Model.Service
         /// </summary>
         /// <param name="id">专辑Id</param>
         /// <returns></returns>
-        public async Task<ObjectResult> GetAlbumDetail(int id)
+        public async Task GetAlbumDetail(int id)
         {
             IRequestOption request = new Album(id);
-            return await GetResult(httpContext.Response, request);
+            await GetResult(httpContext.Response, request);
         }
 
         /// <summary>
@@ -106,19 +105,19 @@ namespace MuKai_Music.Model.Service
         /// </summary>
         /// <param name="category">种类，默认为全部</param>
         /// <param name="limit">数量</param>
-        public async Task<ObjectResult> GetHighQualityPlaylist(string category, int limit)
+        public async Task GetHighQualityPlaylist(string category, int limit)
         {
             IRequestOption request = new PlaylistHighQuality(GetCookie(httpContext.Request), category, limit);
-            return await GetResult(httpContext.Response, request);
+            await GetResult(httpContext.Response, request);
         }
 
         /// <summary>
         /// 获取推荐新歌
         /// </summary>
-        public async Task<ObjectResult> GetPersonalizedNewMusic()
+        public async Task GetPersonalizedNewMusic()
         {
             IRequestOption request = new NewMusicPersonalized(GetCookie(httpContext.Request));
-            return await GetResult(httpContext.Response, request);
+            await GetResult(httpContext.Response, request);
         }
 
         /// <summary>
@@ -126,49 +125,48 @@ namespace MuKai_Music.Model.Service
         /// </summary>
         /// <param name="limit"></param>
         /// <returns></returns>
-        public async Task<ObjectResult> GetPersonalizedPlaylist(int limit)
+        public async Task GetPersonalizedPlaylist(int limit)
         {
             IRequestOption request = new PlaylistPersonalized(GetCookie(httpContext.Request), limit);
-            return await GetResult(httpContext.Response, request);
+            await GetResult(httpContext.Response, request);
         }
-
 
         /// <summary>
         /// 获取歌曲歌词
         /// </summary>
         /// <param name="id"></param>
-        public async Task<ObjectResult> GetLyric(int id)
+        public async Task GetLyric(int id)
         {
             IRequestOption request = new Lyric(id);
-            return await GetResult(httpContext.Response, request);
+            await GetResult(httpContext.Response, request);
         }
 
         /// <summary>
         /// 获取歌曲详情
         /// </summary>
         /// <param name="musicId"></param>
-        public async Task<ObjectResult> GetMusicDetail(int[] musicId)
+        public async Task GetMusicDetail(int[] musicId)
         {
             IRequestOption request = new MusicInfo(musicId);
-            return await GetResult(httpContext.Response, request);
+            await GetResult(httpContext.Response, request);
         }
 
         /// <summary>
         /// 获取歌单全部分类
         /// </summary>
-        public async Task<ObjectResult> GetPlaylistCategories()
+        public async Task GetPlaylistCategories()
         {
             IRequestOption request = new PlaylistCategories();
-            return await GetResult(httpContext.Response, request);
+            await GetResult(httpContext.Response, request);
         }
 
         /// <summary>
         /// 获取热门歌单分类
         /// </summary>
-        public async Task<ObjectResult> GetHotCategories()
+        public async Task GetHotCategories()
         {
             IRequestOption request = new PlaylistHotCategories();
-            return await GetResult(httpContext.Response, request);
+            await GetResult(httpContext.Response, request);
         }
 
         /// <summary>
@@ -177,20 +175,20 @@ namespace MuKai_Music.Model.Service
         /// <param name="category"></param>
         /// <param name="limit"></param>
         /// <param name="offset"></param>
-        public async Task<ObjectResult> GetPlaylistInCategory(string category, int limit, int offset)
+        public async Task GetPlaylistInCategory(string category, int limit, int offset)
         {
             IRequestOption request = new PlaylistInCategory(category, limit, offset);
-            return await GetResult(httpContext.Response, request);
+            await GetResult(httpContext.Response, request);
         }
 
         /// <summary>
         /// 获取歌单详情
         /// </summary>
         /// <param name="playlistId"></param>
-        public async Task<ObjectResult> GetPlaylistDetail(int playlistId)
+        public async Task GetPlaylistDetail(int playlistId)
         {
             IRequestOption request = new PlaylistDetail(playlistId);
-            return await GetResult(httpContext.Response, request);
+            await GetResult(httpContext.Response, request);
         }
 
         /// <summary>
@@ -199,10 +197,10 @@ namespace MuKai_Music.Model.Service
         /// <param name="musicId">音乐Id</param>
         /// <param name="limit"></param>
         /// <param name="offset"></param>
-        public async Task<ObjectResult> GetSimilarPlaylist(int musicId, int limit, int offset)
+        public async Task GetSimilarPlaylist(int musicId, int limit, int offset)
         {
             IRequestOption request = new SimilarPlaylist(musicId, limit, offset);
-            return await GetResult(httpContext.Response, request);
+            await GetResult(httpContext.Response, request);
         }
 
         /// <summary>
@@ -211,28 +209,28 @@ namespace MuKai_Music.Model.Service
         /// <param name="musicId"></param>
         /// <param name="limit"></param>
         /// <param name="offset"></param>
-        public async Task<ObjectResult> GetSimilarMusics(int musicId, int limit, int offset)
+        public async Task GetSimilarMusics(int musicId, int limit, int offset)
         {
             IRequestOption request = new SimilarMusic(musicId, limit, offset);
-            return await GetResult(httpContext.Response, request);
+            await GetResult(httpContext.Response, request);
         }
 
         /// <summary>
         /// 获取日推歌曲,需要登录
         /// </summary>
-        public async Task<ObjectResult> GetRecommendMusics()
+        public async Task GetRecommendMusics()
         {
             IRequestOption request = new RecommendMusics(GetCookie(httpContext.Request));
-            return await GetResult(httpContext.Response, request);
+            await GetResult(httpContext.Response, request);
         }
 
         /// <summary>
         /// 获取日推歌单，需要登录
         /// </summary>
-        public async Task<ObjectResult> GetRecommendPlaylist()
+        public async Task GetRecommendPlaylist()
         {
             IRequestOption request = new RecommendPlaylist(GetCookie(httpContext.Request));
-            return await GetResult(httpContext.Response, request);
+            await GetResult(httpContext.Response, request);
         }
 
         /// <summary>
@@ -240,10 +238,23 @@ namespace MuKai_Music.Model.Service
         /// </summary>
         /// <param name="type"></param>
         /// <returns></returns>
-        public async Task<ObjectResult> GetBanner(BannerType type)
+        public async Task GetBanner(BannerType type)
         {
             IRequestOption request = new Banner(GetCookie(httpContext.Request), type);
-            return await GetResult(httpContext.Response, request);
+            await GetResult(httpContext.Response, request);
+        }
+
+        /// <summary>
+        /// 获取用户歌单列表，需要登录网易云账号
+        /// </summary>
+        /// <param name="userId"></param>
+        /// <param name="limit"></param>
+        /// <param name="offset"></param>
+        /// <returns></returns>
+        public async Task GetUserPlaylist(int userId, int limit, int offset)
+        {
+            IRequestOption request = new UserPlaylist(GetCookie(httpContext.Request), userId, limit, offset);
+            await GetResult(httpContext.Response, request);
         }
     }
 }

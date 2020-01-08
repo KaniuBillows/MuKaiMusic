@@ -47,9 +47,18 @@ $control-button-color: rgba(225, 225, 225, .8);
     text-decoration: none;
     cursor: pointer;
     color: currentColor;
+    display: block;
 
     li {
-        display: flex;
+        display: inline-flex;
+    }
+}
+
+#my-playlist {
+    white-space: nowrap;
+
+    .mat-expansion-panel-header {
+        padding: 0px 10px;
     }
 }
 

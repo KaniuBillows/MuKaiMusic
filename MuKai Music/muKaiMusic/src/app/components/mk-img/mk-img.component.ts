@@ -21,7 +21,7 @@ export class MkImgComponent implements OnInit {
 
   @Input()
   public get src() {
-    return this._src;
+    return this._src + "?param=240y240";
   }
   public set src(value: string) {
     this._src = value;
@@ -39,19 +39,23 @@ export class MkImgComponent implements OnInit {
     return this._complete;
   }
 
+
   constructor() {
-    window.setInterval(() => {
-      if (this.img.nativeElement.complete) {
-        this.img.nativeElement.style.opacity = '1';
-        this.loading.nativeElement.style.opacity = '0';
-      } else {
-        this.img.nativeElement.style.opacity = '0';
-        this.loading.nativeElement.style.opacity = '1';
-      }
-    }, 50);
   }
 
   ngOnInit() {
+    let img = this.img.nativeElement as HTMLImageElement;
+
+    img.onerror = ev => {
+      this.img.nativeElement.style.opacity = '0';
+      this.loading.nativeElement.style.opacity = '1';
+    }
+
+    img.onload = ev => {
+      this.img.nativeElement.style.opacity = '1';
+      this.loading.nativeElement.style.opacity = '0';
+    }
+
   }
 
 

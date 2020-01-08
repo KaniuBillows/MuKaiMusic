@@ -2,7 +2,7 @@ import { Component, OnInit, ViewChild, ElementRef } from '@angular/core';
 import { PlayerService } from 'src/app/services/player/player.service';
 import { MatSlider, MatSliderChange } from '@angular/material/slider';
 import { MusicService } from 'src/app/services/network/music/music.service';
-import { song, musicDetailResult, album, artist } from 'src/app/entities/music';
+import { song, musicDetailResult, album, artist } from 'src/app/entity/music';
 import { ThemeService } from 'src/app/services/theme/theme.service';
 
 
@@ -318,8 +318,8 @@ export class PlayerComponent implements OnInit {
                 this._currentMusicInfo.picUrl = res.songs[0].al.picUrl;
                 this._currentMusicInfo.artistId = res.songs[0].ar[0].id;
                 this._currentMusicInfo.artistName = res.songs[0].ar[0].name;
+                document.getElementById('back-board-mask').style.backgroundColor = 'rgba(0,0,0,.4)';
             }
-            document.getElementById('back-board-mask').style.backgroundColor = 'rgba(0,0,0,.35)';
         }, null, callback);
     }
     /**

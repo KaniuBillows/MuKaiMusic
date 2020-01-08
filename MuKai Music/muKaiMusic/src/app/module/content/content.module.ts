@@ -5,9 +5,8 @@ import { PlaylistComponent } from '../../components/playlist/playlist.component'
 import { Routes, RouterModule } from '@angular/router';
 import { MatSidenavModule } from '@angular/material/sidenav';
 import { MatIconModule } from '@angular/material/icon';
-import { ExploreComponent } from '../../components/explore/explore.component';
 import { UserComponent } from 'src/app/components/user/user.component';
-import { BannerComponent } from 'src/app/components/banner/banner.component';
+import { MatExpansionModule } from '@angular/material/expansion';
 
 const routes: Routes = [
   {
@@ -37,7 +36,8 @@ const routes: Routes = [
   imports: [
     CommonModule,
     MatIconModule,
-    MatSidenavModule,
+    MatExpansionModule,
+      MatSidenavModule,
     RouterModule.forChild(routes)
   ]
 })

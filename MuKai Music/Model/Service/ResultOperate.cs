@@ -5,6 +5,7 @@ using MuKai_Music.Interface;
 using RequestHandler;
 using System;
 using System.Collections;
+using System.Text;
 using System.Text.Json;
 using System.Threading.Tasks;
 
@@ -17,23 +18,26 @@ namespace MuKai_Music.Model.Service
     {
 
         /// <summary>
-        /// 获取结果 此方法适用于，不需要返回结果进行任何处理的http调用
+        /// 获取结果 将结果直接写入响应流中
         /// </summary>
         /// <param name="response">真客户端响应</param>
         /// <param name="request">待请求接口信息</param>
         /// <returns></returns>
-        public async Task<ObjectResult> GetResult(HttpResponse response, IRequestOption request)
+        public async Task GetResult(HttpResponse response, IRequestOption request)
         {
             var httpmessage = await request.Request();
 
-            // await response.WriteAsync(await httpmessage.Content.ReadAsStringAsync(), Encoding.UTF8);
-
             var cookies = httpmessage.Headers.Contains(HeaderNames.SetCookie) ? httpmessage.Headers.GetValues(HeaderNames.SetCookie) : Array.Empty<string>();
+
+            var builder = new StringBuilder();
             foreach (string cookie in cookies)
             {
-                response.Headers.Add(HeaderNames.SetCookie, cookie);
+                builder.Append(cookie);
             }
-            return new ObjectResult(JsonSerializer.Deserialize<object>(await httpmessage.Content.ReadAsStringAsync()));
+            response.Headers.Add(HeaderNames.SetCookie, builder.ToString());
+            response.Headers.Add(HeaderNames.ContentType, "application/json; charset=utf-8");
+            byte[] buffer = Encoding.UTF8.GetBytes(await httpmessage.Content.ReadAsStringAsync());
+            await response.Body.WriteAsync(buffer, 0, buffer.Length);
         }
 
         /// <summary>

@@ -1,5 +1,9 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using MuKai_Music.Model.DataEntity;
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Threading.Tasks;
 
 namespace MuKai_Music.DataContext
 {
@@ -7,13 +11,12 @@ namespace MuKai_Music.DataContext
     {
         public MusicContext(DbContextOptions<MusicContext> options) : base(options)
         {
+
         }
-
-        public DbSet<MusicInfo> Migu_Urls { get; set; }
-
+        public DbSet<MusicInfo> MusicInfos { get; set; }
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
-            modelBuilder.Entity<MusicInfo>().ToTable("MusicInfo");
+            base.OnModelCreating(modelBuilder);
         }
     }
 }

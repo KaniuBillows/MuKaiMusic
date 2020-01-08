@@ -57,7 +57,7 @@ namespace RequestHandler
                 case CryptoType.Netease_weapi:
                     {
                         requestOption.Params.Add("csrf_token", (string)requestOption.Cookies["_csrf"] ?? "");
-                        var url = Regex.Replace(requestOption.Url, "\\w*api", "weapi");
+                        string url = Regex.Replace(requestOption.Url, "\\w*api", "weapi");
                         httpClient.BaseAddress = new Uri(url);
                         httpClient.DefaultRequestHeaders.Add(HeaderNames.UserAgent, GetUserAgent(requestOption));
                         content = GetWeapiParams(requestOption.Params);
@@ -70,7 +70,7 @@ namespace RequestHandler
                     {
                         httpClient.BaseAddress = new Uri("https://music.163.com/api/linux/forward");
                         httpClient.DefaultRequestHeaders.Add(HeaderNames.UserAgent, "Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/60.0.3112.90 Safari/537.36");
-                        var url = Regex.Replace(requestOption.Url, "\\w*api", "api");
+                        string url = Regex.Replace(requestOption.Url, "\\w*api", "api");
                         var ob = new { method = requestOption.HttpMethod.ToString(), url, @params = requestOption.Params };
                         content = GetLinuxParams(ob);
                         if (requestOption.Url.Contains("music.163.com")) httpClient.DefaultRequestHeaders.Add(HeaderNames.Referer, "https://music.163.com");
@@ -80,7 +80,7 @@ namespace RequestHandler
                     break;
                 case CryptoType.Netease_eapi:
                     {
-                        var url = requestOption.Url;
+                        string url = requestOption.Url;
                         Regex.Replace(url, "\\w*api", "eapi");
                         httpClient.BaseAddress = new Uri(url);
                         if (requestOption.Url.Contains("music.163.com")) httpClient.DefaultRequestHeaders.Add(HeaderNames.Referer, "https://music.163.com");

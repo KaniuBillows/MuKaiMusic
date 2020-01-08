@@ -18,7 +18,7 @@ namespace MuKai_Music.Interface
         /// <param name="httpResponse"></param>
         /// <param name="request"></param>
         /// <returns></returns>
-        Task<ObjectResult> GetResult(HttpResponse httpResponse, IRequestOption request);
+        Task GetResult(HttpResponse httpResponse, IRequestOption request);
 
         /// <summary>
         /// 将请求中的Cookie信息提取成为Hashtable

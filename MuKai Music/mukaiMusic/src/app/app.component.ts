@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { ThemeService } from './services/theme/theme.service';
 import { Router, NavigationEnd } from '@angular/router';
+import { UserService } from './services/network/user/user.service';
 
 @Component({
   selector: 'app-root',
