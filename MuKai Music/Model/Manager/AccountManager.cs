@@ -7,6 +7,8 @@ using System.Collections.Generic;
 using System.Threading.Tasks;
 using MuKai_Music.Extensions.Store;
 using Microsoft.Extensions.DependencyInjection;
+using System.Threading;
+using System.Linq;
 
 namespace MuKai_Music.Model.Manager
 {
@@ -34,7 +36,7 @@ namespace MuKai_Music.Model.Manager
         public virtual async Task<UserInfo> FindByPhoneNumberAsync(string phoneNunmber)
         {
             ThrowIfDisposed();
-            PhoneNumberStore store = GetPhoneNumberStore();
+            IUserPhoneNumberStore<UserInfo> store = GetPhoneNumberStore();
             if (phoneNunmber == null)
             {
                 throw new ArgumentNullException(nameof(phoneNunmber));
@@ -48,9 +50,9 @@ namespace MuKai_Music.Model.Manager
                 var protector = services.GetService<ILookupProtector>();
                 if (keyRing != null && protector != null)
                 {
-                    foreach (var key in keyRing.GetAllKeyIds())
+                    foreach (string key in keyRing.GetAllKeyIds())
                     {
-                        var oldKey = protector.Protect(key, phoneNunmber);
+                        string oldKey = protector.Protect(key, phoneNunmber);
                         user = await store.FindByPhoneNumberAsync(oldKey, CancellationToken);
                         if (user != null)
                         {
@@ -63,10 +65,9 @@ namespace MuKai_Music.Model.Manager
         }
 
 
-        private PhoneNumberStore GetPhoneNumberStore()
+        private IUserPhoneNumberStore<UserInfo> GetPhoneNumberStore()
         {
-            var cast = this.Store as PhoneNumberStore;
-            if (cast == null)
+            if (!(this.Store is IUserPhoneNumberStore<UserInfo> cast))
             {
                 throw new NotSupportedException(Resources.StoreNotIUserPhoneNumberStore);
             }

@@ -14,34 +14,29 @@ namespace MuKai_Music.Extensions.Store
     public static class IUserPhoneNumberStoreExtentions
     {
         public static Task<UserInfo> FindByPhoneNumberAsync(
-            this PhoneNumberStore userPhoneNumberStore,
+            this IUserPhoneNumberStore<UserInfo> userPhoneNumberStore,
             string phoneNumber,
             CancellationToken cancellationToken = default
             )
         {
-            return userPhoneNumberStore.FindByPhoneNumberAsync(phoneNumber, cancellationToken);
+            if (userPhoneNumberStore is AccountStore store)
+                return store.FindByPhoneNumberAsync(phoneNumber, cancellationToken);
+            throw new NotSupportedException(Resources.StoreNotIUserPhoneNumberStore);
         }
     }
 
-    public class PhoneNumberStore : UserStore<UserInfo, UserRole, AccountContext, int>,
+    public class AccountStore : UserStore<UserInfo, UserRole, AccountContext, int>,
         IUserPhoneNumberStore<UserInfo>, IUserStore<UserInfo>
     {
-        public PhoneNumberStore(AccountContext context, IdentityErrorDescriber describer = null) : base(context, describer)
+        public AccountStore(AccountContext context, IdentityErrorDescriber describer = null) : base(context, describer)
         {
         }
 
-        /// <summary>
-        /// 扩展实现根据手机号查找用户
-        /// </summary>
-        /// <param name="phoneNumber"></param>
-        /// <param name="cancellationToken"></param>
-        /// <returns></returns>
         public Task<UserInfo> FindByPhoneNumberAsync(string phoneNumber, CancellationToken cancellationToken = default)
         {
             cancellationToken.ThrowIfCancellationRequested();
             ThrowIfDisposed();
             return Task.FromResult(Users.Where(u => u.PhoneNumber == phoneNumber).SingleOrDefault());
         }
-
     }
 }

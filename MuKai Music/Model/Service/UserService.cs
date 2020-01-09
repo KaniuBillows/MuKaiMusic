@@ -14,6 +14,12 @@ using System.Security.Claims;
 using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 using MuKai_Music.Extensions.Manager;
+using Microsoft.Extensions.Primitives;
+using Microsoft.IdentityModel.Tokens;
+using System.IdentityModel.Tokens.Jwt;
+using System;
+using Microsoft.Extensions.Configuration;
+using System.Text;
 
 namespace MuKai_Music.Service
 {
@@ -47,7 +53,6 @@ namespace MuKai_Music.Service
                     return new BaseResult<UserInfo>(null, 400, "该手机号码已经注册！");
                 }
             }
-
             //将用户保存数据库
             var result = await this.accountManager.CreateAsync(userInfo, userInfo.Password);
             if (result.Succeeded)
@@ -86,18 +91,68 @@ namespace MuKai_Music.Service
             else
             { //验证登录方式是否为手机号码登录
                 var phoneRegex = new Regex(@"^1(3[0-9]|4[56789]|5[0-9]|6[6]|7[0-9]|8[0-9]|9[189])\d{8}$");
-                if (phoneRegex.IsMatch(usr))
-                {
-                    userInfo = await this.accountManager.FindByPhoneNumberAsync(usr);
-                }
-                else
-                {
-                    userInfo = await this.accountManager.FindByNameAsync(usr);
-                }
+                userInfo = phoneRegex.IsMatch(usr)
+                    ? await this.accountManager.FindByPhoneNumberAsync(usr)
+                    : await this.accountManager.FindByNameAsync(usr);
             }
             if (userInfo == null) return new BaseResult<UserInfo>(null, 401, "用户不存在!");
             result = await this.signInManager.JwtSignInAsync(userInfo, password, false);
             return HandleResult(userInfo, result);
+        }
+
+        /// <summary>
+        /// 刷新Token
+        /// </summary>
+        /// <returns></returns>
+        public async Task<IResult<string>> RefreshToken()
+        {
+            httpContext.Request.Headers.TryGetValue("r_token", out StringValues refToken);
+            httpContext.Request.Headers.TryGetValue("Authorization", out StringValues Token);
+            var handler = new JwtSecurityTokenHandler();
+            if (!StringValues.IsNullOrEmpty(refToken))
+            {
+                try
+                {
+                    handler.ValidateToken(refToken, new TokenValidationParameters
+                    {
+                        ValidateIssuer = true,//是否验证Issuer
+                        ValidateAudience = true,//是否验证Audience
+                        ValidateLifetime = true,//是否验证失效时间
+                        ClockSkew = TimeSpan.FromSeconds(30),
+                        ValidateIssuerSigningKey = true,//是否验证SecurityKey
+                        ValidAudience = Startup.Config.GetValue<string>("Domain"),//Audience
+                        ValidIssuer = Startup.Config.GetValue<string>("Domain"),//Issuer，这两项和前面签发jwt的设置一致
+                        IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(Startup.Config.GetValue<string>("SecurityKey")))
+                    }, out SecurityToken securityToken);
+                    var token = securityToken as JwtSecurityToken;
+                    token.Payload.TryGetValue(ClaimTypes.Name, out object usrname);
+                    if (usrname == null) throw new NullReferenceException(nameof(usrname));
+                    //颁发新的token
+                    return new BaseResult<string>(TokenManager.GetAccessToken(usrname as string), 200, null);
+                }
+                catch (Exception)
+                {
+                    return new BaseResult<string>("令牌已过期,请重新登录！", 401, null);
+                }
+            }
+            else
+            {
+                handler.ValidateToken(Token, new TokenValidationParameters
+                {
+                    ValidateIssuer = true,//是否验证Issuer
+                    ValidateAudience = true,//是否验证Audience
+                    ValidateLifetime = true,//是否验证失效时间
+                    ClockSkew = TimeSpan.FromSeconds(30),
+                    ValidateIssuerSigningKey = true,//是否验证SecurityKey
+                    ValidAudience = Startup.Config.GetValue<string>("Domain"),//Audience
+                    ValidIssuer = Startup.Config.GetValue<string>("Domain"),//Issuer，这两项和前面签发jwt的设置一致
+                    IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(Startup.Config.GetValue<string>("SecurityKey")))
+                }, out SecurityToken securityToken);
+                var token = securityToken as JwtSecurityToken;
+                token.Payload.TryGetValue(ClaimTypes.Name, out object usrname);
+                await accountManager.SetLockoutEnabledAsync(await accountManager.FindByNameAsync(usrname as string), true);
+                return new BaseResult<string>("该账号已被永久封禁！", 403, null);
+            }
         }
 
         /// <summary>
@@ -151,7 +206,7 @@ namespace MuKai_Music.Service
         {
             if (signinResult.Succeeded)
             {
-                userInfo.Token = signinResult.Token;
+                userInfo.Token = signinResult.AccessToken;
                 userInfo.Password = null;
                 return new BaseResult<UserInfo>(userInfo, 200, null);
             }

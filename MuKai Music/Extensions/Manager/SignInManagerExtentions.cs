@@ -1,16 +1,10 @@
 ﻿using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Identity;
-using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Logging;
-using Microsoft.IdentityModel.Tokens;
 using MuKai_Music.Model.DataEntity;
 using MuKai_Music.Model.Manager;
 using System;
-using System.Collections.Generic;
-using System.IdentityModel.Tokens.Jwt;
-using System.Linq;
 using System.Security.Claims;
-using System.Text;
 using System.Threading.Tasks;
 
 namespace MuKai_Music.Extensions.Manager
@@ -48,22 +42,7 @@ namespace MuKai_Music.Extensions.Manager
                 }
 
                 //token
-                var claims = new[]
-                {
-                    new Claim(JwtRegisteredClaimNames.Nbf,$"{new DateTimeOffset(DateTime.Now).ToUnixTimeSeconds()}") ,
-                    new Claim (JwtRegisteredClaimNames.Exp,$"{new DateTimeOffset(DateTime.Now.AddMinutes(30)).ToUnixTimeSeconds()}"),
-                    new Claim(ClaimTypes.Name, user.UserName)
-                };
-                var key = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(Startup.Config.GetValue<string>("SecurityKey")));
-                var creds = new SigningCredentials(key, SecurityAlgorithms.HmacSha256);
-                var token = new JwtSecurityToken(
-                    issuer: Startup.Config.GetValue<string>("Domain"),
-                    audience: Startup.Config.GetValue<string>("Domain"),
-                    claims: claims,
-                    expires: DateTime.Now.AddMinutes(30),
-                    signingCredentials: creds);
-
-                return SigninResult.Success(new JwtSecurityTokenHandler().WriteToken(token));
+                return SigninResult.Success(TokenManager.GetAccessToken(user));
             }
             signInManager.Logger.LogWarning(2, "User {userId} failed to provide the correct password.", await signInManager.UserManager.GetUserIdAsync(user));
 
@@ -84,7 +63,7 @@ namespace MuKai_Music.Extensions.Manager
         private static async Task<SigninResult> PreSignInCheck(this SignInManager<UserInfo> signInManager,
             UserInfo user)
         {
-            if (!await signInManager.CanSignInAsync(user))
+            if (!await signInManager.CanSigninAsync(user))
             {
                 return SigninResult.NotAllowd();
             }

@@ -1,0 +1,4 @@
+﻿[*.cs]
+
+# BL0001: Component parameter should have public setters.
+dotnet_diagnostic.BL0001.severity = error
