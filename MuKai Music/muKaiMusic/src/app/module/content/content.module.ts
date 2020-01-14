@@ -7,7 +7,9 @@ import { MatSidenavModule } from '@angular/material/sidenav';
 import { MatIconModule } from '@angular/material/icon';
 import { UserComponent } from 'src/app/components/user/user.component';
 import { MatExpansionModule } from '@angular/material/expansion';
-
+import { MatDialogModule } from '@angular/material/dialog';
+import { MatInputModule } from '@angular/material/input';
+import { LoginComponent } from 'src/app/components/login/login.component';
 const routes: Routes = [
   {
     path: '',
@@ -31,13 +33,19 @@ const routes: Routes = [
   declarations: [
     ContentComponent,
     PlaylistComponent,
+    LoginComponent,
     UserComponent
+  ],
+  entryComponents: [
+    LoginComponent
   ],
   imports: [
     CommonModule,
+    MatDialogModule,
+    MatInputModule,
     MatIconModule,
     MatExpansionModule,
-      MatSidenavModule,
+    MatSidenavModule,
     RouterModule.forChild(routes)
   ]
 })

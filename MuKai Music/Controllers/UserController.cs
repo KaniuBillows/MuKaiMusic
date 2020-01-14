@@ -2,21 +2,12 @@
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.Extensions.Configuration;
-using Microsoft.Extensions.Primitives;
-using Microsoft.IdentityModel.Tokens;
 using MuKai_Music.Attribute;
-using MuKai_Music.DataContext;
 using MuKai_Music.Model.DataEntity;
 using MuKai_Music.Model.Manager;
 using MuKai_Music.Model.ResponseEntity;
-using MuKai_Music.Model.Service;
 using MuKai_Music.Service;
-using System;
-using System.IdentityModel.Tokens.Jwt;
-using System.Net.Http;
-using System.Security.Claims;
-using System.Text;
+using System.ComponentModel.DataAnnotations;
 using System.Threading.Tasks;
 
 // For more information on enabling Web API for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
@@ -63,7 +54,7 @@ namespace MuKai_Music.Controllers
         [ResponseCache(NoStore = true)]
         [ApiCache(NoStore = true)]
         [AllowAnonymous]
-        public async Task<IResult<UserInfo>> Login([FromForm]string username, [FromForm] string password)
+        public async Task<IResult<UserInfo>> Login([Required][FromForm]string username, [Required][FromForm] string password)
             => await this.userService.Login(username, password);
 
         /// <summary>

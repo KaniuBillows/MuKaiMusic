@@ -15,6 +15,7 @@ using Microsoft.IdentityModel.Tokens;
 using System.Text;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using MuKai_Music.Extensions.Store;
+using Microsoft.AspNetCore.SpaServices.AngularCli;
 
 namespace MuKai_Music
 {
@@ -152,7 +153,6 @@ namespace MuKai_Music
             //权限验证
             app.UseAuthorization();
 
-            app.UseApiCacheMiddleware(Configuration);
 
             //允许跨域
             app.UseCors(builder =>
@@ -161,6 +161,7 @@ namespace MuKai_Music
                 builder.AllowAnyMethod();
                 builder.AllowAnyHeader();
             });
+            app.UseApiCacheMiddleware(Configuration);
 
 
             app.UseEndpoints(endpoints =>
@@ -170,15 +171,15 @@ namespace MuKai_Music
                     pattern: "{controller}/{action=Index}/{id?}");
             });
             app.UseSpaStaticFiles();
-            /* app.UseSpa(spa =>
-             {
-                 spa.Options.SourcePath = "mukaiMusic";
+            app.UseSpa(spa =>
+            {
+                spa.Options.SourcePath = "mukaiMusic";
 
-                 if (env.IsDevelopment())
-                 {
-                     spa.UseAngularCliServer(npmScript: "start");
-                 }
-             });*/
+                if (env.IsDevelopment())
+                {
+                    spa.UseAngularCliServer(npmScript: "start");
+                }
+            });
         }
     }
 }

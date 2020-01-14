@@ -20,7 +20,7 @@ namespace MuKai_Music.Model.Manager
         /// <returns></returns>
         public static string GetAccessToken(UserInfo user)
         {
-            return GetAccessToken(user);
+            return GetAccessToken(user.UserName);
         }
 
         public static string GetAccessToken(string username)

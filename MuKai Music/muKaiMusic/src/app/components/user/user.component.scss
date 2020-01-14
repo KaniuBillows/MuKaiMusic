@@ -1,0 +1,53 @@
+$normal-color: rgba(225, 225, 225, .5);
+$hover-color:rgba(225, 225, 225, .8);
+
+.login {
+    display: inline-flex;
+    position: absolute;
+    top: 45px;
+    left: 30px;
+    width: 140px;
+    height: 30px;
+}
+
+.login-text {
+    font-size: 14px;
+    display: inline-flex;
+    line-height: 30px;
+    margin-left: 20px;
+    color: $normal-color;
+    cursor: pointer;
+
+    &:hover {
+        color: $hover-color;
+    }
+}
+
+#avatar {
+    border-radius: 50%;
+    width: 30px;
+    height: 30px;
+    cursor: pointer;
+}
+
+#nickName {
+    line-height: 30px;
+    display: inline-block;
+    vertical-align: top;
+    max-width: 80px;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    color: $normal-color;
+    user-select: none;
+    font-size: 14px;
+    cursor: pointer;
+
+    &:hover {
+        color: $hover-color;
+    }
+}
+
+.user-item {
+    margin-right: 15px;
+}

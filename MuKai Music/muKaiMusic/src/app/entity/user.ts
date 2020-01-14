@@ -1,4 +1,4 @@
-export class LoginUserInfo {
+export class NetEaseLoginUserInfo {
     loginType: number;
     code: number;
     token: string;
@@ -28,4 +28,22 @@ export class LoginUserInfo {
         playlistCount: number;
         playlistBeSubscribedCount: number;
     }
+}
+
+export class UserInfo {
+    id: number;
+    userName: string;
+    normalizedUserName: string;
+    email: string;
+    normalizedEmail: string;
+    emailConfirmed: boolean;
+    securityStamp: string;
+    concurrencyStamp: string;
+    phoneNumber: string;
+    phoneNumberConfirmed: boolean;
+    twoFactorEnabled: boolean;
+    ne_Id: number;
+    ncikName: string;
+    avatarUrl: string;
+    token: string;
 }

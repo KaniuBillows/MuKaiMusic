@@ -85,6 +85,12 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 THE SOFTWARE.
 
 
+@angular/material/dialog
+
+@angular/material/expansion
+
+@angular/material/form-field
+
 @angular/material/grid-list
 
 @angular/material/icon
@@ -377,6 +383,9 @@ Apache-2.0
  limitations under the License.
  
 
+
+ts-md5
+MIT
 
 tslib
 Apache-2.0
