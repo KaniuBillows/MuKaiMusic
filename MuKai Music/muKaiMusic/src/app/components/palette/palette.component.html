@@ -1,7 +1,7 @@
-<div *ngIf="showPalette" id='contain'>
+<div *ngIf="showPalette" id='palette-container'>
     <div id='colors'>
         <mat-grid-list cols='3'>
-            <mat-grid-tile *ngFor="let theme of theme.themes">
+            <mat-grid-tile *ngFor="let theme of Themes">
                 <div class='{{theme}} themeBlock' (click)="setTheme(theme)"></div>
             </mat-grid-tile>
         </mat-grid-list>

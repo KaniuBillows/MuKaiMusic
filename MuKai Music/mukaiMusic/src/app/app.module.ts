@@ -28,7 +28,6 @@ import { AppRoutingModule } from './app-routing.module';
     MatSlideToggleModule,
     BrowserModule,
     AppRoutingModule,
-
     HttpClientModule,
     MatSliderModule,
     MatGridListModule,

@@ -1,4 +1,4 @@
-import { Component, OnInit, Output, Input } from '@angular/core';
+import { Component, OnInit, Output, Input, ViewChild, ElementRef } from '@angular/core';
 import { ThemeService } from 'src/app/services/theme/theme.service';
 
 @Component({
@@ -9,21 +9,26 @@ import { ThemeService } from 'src/app/services/theme/theme.service';
 export class PaletteComponent implements OnInit {
 
   private _showPalette: boolean = false;
+
   constructor(public theme: ThemeService) {
-    window.addEventListener('click', (ev: MouseEvent) => {
-      let ele = ev.srcElement as HTMLElement
-      if (ele.id == 'contain' || ele.id == 'colors' || ele.className == 'mat-figure') {
+  }
+  ngOnInit() {
+    document.addEventListener("click", (e) => {
+      let palette = document.getElementById("palette-container");
+      //palette 为null则说明一定未展开调色板
+      //点击调色板区域内部
+      if (palette == null || palette.contains(e.target as HTMLElement)) {
         return;
-      }
-      if (ele.id != 'skin' && ele.id != 'skin-icon') {
-        if (this._showPalette) {
-          this._showPalette = false;
+      } else {
+        let skin = document.getElementById("skin");
+        //如果点击区域不属于目标区域
+        if (!skin.contains(e.target as HTMLElement)) {
+          this._showPalette = !this._showPalette;
         }
       }
-    })
-  }
+    });
 
-  @Input()
+  }
   public get showPalette(): boolean {
     return this._showPalette;
   }
@@ -32,9 +37,7 @@ export class PaletteComponent implements OnInit {
     this._showPalette = value;
   }
 
-  ngOnInit() {
 
-  }
   public setTheme(theme: string) {
     this.theme.setThemeClass(theme);
   }
@@ -43,5 +46,8 @@ export class PaletteComponent implements OnInit {
     this._showPalette = !this._showPalette;
   }
 
+  public get Themes() {
+    return this.theme.themes;
+  }
 
 }

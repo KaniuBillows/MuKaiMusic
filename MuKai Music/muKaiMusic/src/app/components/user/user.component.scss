@@ -27,6 +27,7 @@ $hover-color:rgba(225, 225, 225, .8);
     border-radius: 50%;
     width: 30px;
     height: 30px;
+    user-select: none;
     cursor: pointer;
 }
 
@@ -50,4 +51,31 @@ $hover-color:rgba(225, 225, 225, .8);
 
 .user-item {
     margin-right: 15px;
+}
+
+#options-container {
+    width: 80px;
+    position: absolute;
+    display: grid;
+    left: 30px;
+    top: 30px;
+    z-index: 1000;
+    background-color: rgba(0, 0, 0, .8);
+
+    .option-items {
+        margin-top: 2px;
+        font-size: 14px;
+        color: $normal-color;
+        cursor: pointer;
+
+        &:hover {
+            color: $hover-color;
+        }
+    }
+
+    .cutting-line {
+        width: 99%;
+        border-bottom: solid 1px rgba(225, 225, 225, 0.5);
+    }
+
 }

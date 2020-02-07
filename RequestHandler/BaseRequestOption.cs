@@ -2,7 +2,7 @@
 using System.Net.Http;
 using System.Threading.Tasks;
 
-namespace RequestHandler
+namespace MusicApi
 {
     public enum HttpMethod
     {
@@ -32,6 +32,17 @@ namespace RequestHandler
         {
             return await RequestSender.Send(this);
         }
+
+        /// <summary>
+        /// 使用指定httpClient发送请求
+        /// </summary>
+        /// <param name="httpClient"></param>
+        /// <returns></returns>
+        public async virtual Task<HttpResponseMessage> Request(HttpClient httpClient)
+        {
+            return await RequestSender.Send(this, httpClient);
+        }
+
         public virtual Hashtable Params { get; } = new Hashtable();
         public Hashtable Cookies { get; }
         public abstract string Url { get; }

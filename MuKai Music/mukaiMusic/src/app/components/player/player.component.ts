@@ -4,7 +4,7 @@ import { MatSlider, MatSliderChange } from '@angular/material/slider';
 import { MusicService } from 'src/app/services/network/music/music.service';
 import { song, musicDetailResult, album, artist } from 'src/app/entity/music';
 import { ThemeService } from 'src/app/services/theme/theme.service';
-import { UserService } from 'src/app/services/network/user/user.service';
+import { AccountService } from 'src/app/services/network/account/account.service';
 
 
 @Component({
@@ -72,7 +72,7 @@ export class PlayerComponent implements OnInit {
     public get showPalette() {
         return this._showPalette;
     }
-    
+
 
     /**
      * 当前播放歌曲
@@ -236,6 +236,11 @@ export class PlayerComponent implements OnInit {
             }
         })
     }
+
+    public async test() {
+        await this.musicNet.searchMusic("");
+    }
+
     //#endregion
 
 

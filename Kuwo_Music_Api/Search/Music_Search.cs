@@ -1,15 +1,23 @@
-﻿using RequestHandler;
-using System;
+﻿using System;
 using System.Collections;
 
-namespace Kuwo_Music_Api.Search
+namespace MusicApi.Kuwo.Search
 {
     public class Music_Search : BaseRequestOption
     {
-        public Music_Search(Hashtable cookies, string keyword) : base(cookies)
+        public Music_Search(string token, string keyword, int limit, int offset) : base(new Hashtable() {
+            { "kw_token",token }
+        })
         {
             var id = Guid.NewGuid();
-            this.Url = $"http://www.kuwo.cn/api/www/search/searchMusicBykeyWord?key={Uri.EscapeDataString(keyword)}pn=1&rn=30&reqId={id.ToString()}";
+            this.Url = $"http://www.kuwo.cn/api/www/search/searchMusicBykeyWord?key={Uri.EscapeDataString(keyword)}&pn={offset + 1}&rn={limit}&reqId={id.ToString()}";
+        }
+
+
+
+        public Music_Search(string token, string keyword) : this(token, keyword, 10, 0)
+        {
+
         }
 
         public override string Url { get; }

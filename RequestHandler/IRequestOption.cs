@@ -2,7 +2,7 @@
 using System.Net.Http;
 using System.Threading.Tasks;
 
-namespace RequestHandler
+namespace MusicApi
 {
     public interface IRequestOption
     {
@@ -15,5 +15,6 @@ namespace RequestHandler
         HttpMethod HttpMethod { get; }
         string GetQueryString();
         Task<HttpResponseMessage> Request();
+        Task<HttpResponseMessage> Request(HttpClient httpClient);
     }
 }

@@ -1,16 +1,46 @@
 #container {
+    border: 1px solid #bfbfbf;
     background-color: white;
     display: block;
     height: 30vh;
     width: 30vw;
+    text-align: center;
+    position: relative;
 }
 
-.example-form {
-    min-width: 150px;
-    max-width: 500px;
-    width: 100%;
+#login-title {
+    text-align: center;
+}
+
+.login-button {
+    width: 65px;
+    height: 30px;
+    margin: 0 auto;
+    border: 1px solid gray;
+    border-radius: 10px;
+    background-color: currentColor;
+    cursor: pointer;
+    box-shadow: 1px 1px 2px #888888;
+
+    span {
+        user-select: none;
+        color: white;
+        line-height: 30px;
+    }
 }
 
 .login-form-item {
+    width: 70%;
+}
+
+.item-contain {
     width: 100%;
+    position: absolute;
+    bottom: 20px;
+
+    #errorInfo {
+        margin-bottom: 40px;
+        font-size: 14px;
+        color: red;
+    }
 }

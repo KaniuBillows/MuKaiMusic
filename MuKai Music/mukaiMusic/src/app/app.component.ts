@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { ThemeService } from './services/theme/theme.service';
 import { Router, NavigationEnd } from '@angular/router';
-import { UserService } from './services/network/user/user.service';
+import { AccountService } from './services/network/account/account.service';
 
 @Component({
   selector: 'app-root',
@@ -28,7 +28,7 @@ export class AppComponent implements OnInit {
   }
 
   constructor(private theme: ThemeService,
-    private router: Router) {
+     private router: Router) {
   }
   public get themeClass(): string {
     return this.theme.getThemeClass();

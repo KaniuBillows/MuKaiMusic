@@ -11,7 +11,7 @@ using System.Text.Json;
 using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 
-namespace RequestHandler
+namespace MusicApi
 {
     internal class RequestSender
     {
@@ -51,6 +51,11 @@ namespace RequestHandler
         public static async Task<HttpResponseMessage> Send(IRequestOption requestOption)
         {
             using HttpClient httpClient = HttpClientFactory.Create();
+            return await Send(requestOption, httpClient);
+        }
+
+        public static async Task<HttpResponseMessage> Send(IRequestOption requestOption, HttpClient httpClient)
+        {
             StringContent content = null;
             switch (requestOption.Crypto)
             {
@@ -138,6 +143,9 @@ namespace RequestHandler
                         httpClient.DefaultRequestHeaders.Add("ua", requestOption.Ua);
                         httpClient.DefaultRequestHeaders.Add("User-Agent", GetUserAgent(requestOption));
                         httpClient.DefaultRequestHeaders.Add("Referer", "http://www.kuwo.cn");
+                        httpClient.DefaultRequestHeaders.Add("Origin", "www.kuwo.cn");
+                        httpClient.DefaultRequestHeaders.Add("csrf", requestOption.Cookies["kw_token"].ToString());
+                        httpClient.DefaultRequestHeaders.Add(HeaderNames.Cookie, GetCookieString(requestOption.Cookies));
                         return await httpClient.GetAsync(httpClient.BaseAddress);
                     }
             }

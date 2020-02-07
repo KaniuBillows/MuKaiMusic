@@ -1,13 +1,9 @@
 ﻿using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
-using MuKai_Music.DataContext;
-using MuKai_Music.Extensions.Store;
 using MuKai_Music.Model.DataEntity;
 using MuKai_Music.Model.Manager;
 using MuKai_Music.Model.ResponseEntity;
 using MuKai_Music.Model.Service;
-using NetEaseMusic_API.RequestOption.Options.User;
-using RequestHandler;
 using System.Collections.Generic;
 using System.Net.Http;
 using System.Security.Claims;
@@ -20,6 +16,8 @@ using System.IdentityModel.Tokens.Jwt;
 using System;
 using Microsoft.Extensions.Configuration;
 using System.Text;
+using MusicApi;
+using MusicApi.NetEase.User;
 
 namespace MuKai_Music.Service
 {
@@ -29,12 +27,16 @@ namespace MuKai_Music.Service
         private readonly SignInManager<UserInfo> signInManager;
         private readonly AccountManager accountManager;
 
+        protected override IHttpClientFactory HttpClientFactory { get; set; }
+
         public UserService(HttpContext httpContext,
             SignInManager<UserInfo> signInManager,
+            IHttpClientFactory httpClientFactory,
             AccountManager accountManager)
         {
             this.httpContext = httpContext;
             this.signInManager = signInManager;
+            this.HttpClientFactory = httpClientFactory;
             this.accountManager = accountManager;
         }
 

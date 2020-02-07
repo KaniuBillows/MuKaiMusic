@@ -10,6 +10,7 @@ import { MatExpansionModule } from '@angular/material/expansion';
 import { MatDialogModule } from '@angular/material/dialog';
 import { MatInputModule } from '@angular/material/input';
 import { LoginComponent } from 'src/app/components/login/login.component';
+import { FormsModule } from '@angular/forms';
 const routes: Routes = [
   {
     path: '',
@@ -40,6 +41,7 @@ const routes: Routes = [
     LoginComponent
   ],
   imports: [
+    FormsModule,
     CommonModule,
     MatDialogModule,
     MatInputModule,

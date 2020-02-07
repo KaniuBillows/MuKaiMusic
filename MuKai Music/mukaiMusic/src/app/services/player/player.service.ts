@@ -11,6 +11,7 @@ export class PlayerService {
 
   constructor() {
     this.player = document.createElement('audio');
+    this.player.preload = "load";
     this.player.ontimeupdate = () => {
       this.onCurrentTimeChange.emit(this.player.currentTime);
     }

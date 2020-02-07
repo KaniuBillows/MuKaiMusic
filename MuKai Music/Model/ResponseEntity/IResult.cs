@@ -5,10 +5,13 @@ using System.Threading.Tasks;
 
 namespace MuKai_Music.Model.ResponseEntity
 {
-    public interface IResult<Type>
+    public interface IResult<Type> : IResult
     {
         public Type Content { get; }
+    }
 
+    public interface IResult
+    {
         public int Code { get; }
 
         public string Error { get; }

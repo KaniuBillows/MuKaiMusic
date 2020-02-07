@@ -1,10 +1,11 @@
 ﻿using Microsoft.AspNetCore.Http;
-using Microsoft.AspNetCore.Mvc;
 using Microsoft.Net.Http.Headers;
 using MuKai_Music.Interface;
-using RequestHandler;
+using MuKai_Music.Model.ResponseEntity.SearchResult.Migu;
+using MusicApi;
 using System;
 using System.Collections;
+using System.Net.Http;
 using System.Text;
 using System.Text.Json;
 using System.Threading.Tasks;
@@ -16,6 +17,7 @@ namespace MuKai_Music.Model.Service
     /// </summary>
     public abstract class ResultOperate : IResultOpreate
     {
+        protected abstract IHttpClientFactory HttpClientFactory { get; set; }
 
         /// <summary>
         /// 获取结果 将结果直接写入响应流中
@@ -25,10 +27,17 @@ namespace MuKai_Music.Model.Service
         /// <returns></returns>
         public async Task GetResult(HttpResponse response, IRequestOption request)
         {
-            var httpmessage = await request.Request();
-
+            HttpResponseMessage httpmessage;
+            if (this.HttpClientFactory != null)
+            {
+                using HttpClient client = this.HttpClientFactory.CreateClient();
+                httpmessage = await request.Request(client);
+            }
+            else
+            {
+                httpmessage = await request.Request();
+            }
             var cookies = httpmessage.Headers.Contains(HeaderNames.SetCookie) ? httpmessage.Headers.GetValues(HeaderNames.SetCookie) : Array.Empty<string>();
-
             var builder = new StringBuilder();
             foreach (string cookie in cookies)
             {
@@ -59,7 +68,7 @@ namespace MuKai_Music.Model.Service
         }
 
         /// <summary>
-        /// 获取结果，并序列号目标类型
+        /// 获取结果，并序列化目标类型
         /// </summary>
         /// <typeparam name="TResult"></typeparam>
         /// <param name="request"></param>

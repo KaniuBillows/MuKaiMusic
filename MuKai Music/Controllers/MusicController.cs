@@ -1,9 +1,14 @@
 ﻿using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using MuKai_Music.Attribute;
+using MuKai_Music.Model.RequestEntity.Music;
+using MuKai_Music.Model.ResponseEntity;
+using MuKai_Music.Model.ResponseEntity.SearchResult;
 using MuKai_Music.Model.Service;
-using NetEaseMusic_API.RequestOption.Options.Banner;
-using NetEaseMusic_API.RequestOption.Options.Search;
+using MusicApi.NetEase.Banner;
+using MusicApi.NetEase.Search;
+using System.ComponentModel.DataAnnotations;
+using System.Net.Http;
 using System.Threading.Tasks;
 
 namespace MuKai_Music.Service
@@ -15,12 +20,14 @@ namespace MuKai_Music.Service
     public class MusicController : ControllerBase
     {
         private readonly MusicService musicService;
-        private readonly IHttpContextAccessor httpContextAccessor;
+        //   private readonly IHttpContextAccessor httpContextAccessor;
 
-        public MusicController(IHttpContextAccessor httpContextAccessor)
+        public MusicController(IHttpContextAccessor httpContextAccessor,
+            IHttpClientFactory httpClientFactory
+            )
         {
-            this.musicService = new MusicService(httpContextAccessor.HttpContext);
-            this.httpContextAccessor = httpContextAccessor;
+            this.musicService = new MusicService(httpContextAccessor.HttpContext, httpClientFactory);
+            //    this.httpContextAccessor = httpContextAccessor;
         }
 
         /// <summary>
@@ -81,20 +88,21 @@ namespace MuKai_Music.Service
         /// <summary>
         /// 获取歌曲的URL
         /// </summary>
-        /// <param name="id"></param>
-        /// <param name="br"></param>
+        /// <param name="param"></param>
         /// <returns></returns>
-        [HttpGet("url")]
+        [HttpPost("music/url")]
         [ApiCache(Duration = 600)]
-        public async Task MsuicUrl(int id, int br) => await musicService.GetMusicUrl(id, br);
+        public async Task MsuicUrl([Required]MusicUrl_Param param) => await musicService.GetMusicUrl(param);
 
-        //全网搜索歌曲Url
-        /*[HttpGet("search/Url")]
+        /// <summary>
+        /// 搜索歌曲信息
+        /// </summary>
+        /// <param name="token"></param>
+        /// <param name="key"></param>
+        /// <returns></returns>
+        [HttpGet("music/search")]
         [ResponseCache(Duration = 3600)]
-        public async Task<ObjectResult> SearchUrl(string keyInfo)
-        {
-            return await musicService.SearchUrl(keyInfo);
-        }*/
+        public async Task<IResult<SearchMusic[]>> SearchUrl(string token, string key) => await musicService.SearchMusic(key, token);
 
         /// <summary>
         /// 获取歌词
@@ -195,5 +203,25 @@ namespace MuKai_Music.Service
         [ApiCache(NoStore = true)]
         [ResponseCache(NoStore = true)]
         public async Task GetUserPlaylist(int userId, int limit, int offset) => await musicService.GetUserPlaylist(userId, limit, offset);
+
+        /// <summary>
+        /// 获取酷我token
+        /// </summary>
+        /// <returns></returns>
+        [HttpGet("kuwo/token")]
+        [ApiCache(NoStore = true)]
+        [ResponseCache(Duration = 3600)]
+        public async Task<IResult<string>> GetKuwoToken() => await musicService.GetKuwoToken();
+
+        /*/// <summary>
+        /// 酷我曲库搜索
+        /// </summary>
+        /// <param name="token"></param>
+        /// <param name="key"></param>
+        /// <returns></returns>
+        [HttpGet("kuwo/search")]
+        [ApiCache(Duration = 86400)]
+        [ResponseCache(CacheProfileName = "longTime")]
+        public async Task KuwoSearch(string token, string key) => await musicService.KuwoSearch(token, key);*/
     }
 }

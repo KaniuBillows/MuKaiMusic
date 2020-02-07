@@ -26,7 +26,14 @@
     </div>
     <div id='playlist'>
         <ul>
-            <li *ngFor='let item of playlist;let i = index'>
+            <li id="playlist-title">
+                <div class="playlist-item">
+                    <div class="playlist-name"><span>歌曲</span></div>
+                    <div class="playlist-artist"><span>艺术家</span></div>
+                    <div class="playlist-time"><span>时长</span></div>
+                </div>
+            </li>
+            <li class="playlist-li" *ngFor='let item of playlist;let i = index'>
                 <div class='playlist-item'>
                     <div class='playlist-number'>
                         {{i+1}}
@@ -71,6 +78,7 @@
         <mat-icon class="volumeIcon" *ngSwitchCase="'high'" (click)='onMuteClick()'>volume_up</mat-icon>
         <mat-slider id='volume-seek-bar' [(value)]='volume' max=100 min=0></mat-slider>
     </div>
-    <app-palette class="control-item" [showPalette]='showPalette'></app-palette>
+    <app-palette class="control-item"></app-palette>
 
 </div>
+<button (click)='test()'>TEST</button>

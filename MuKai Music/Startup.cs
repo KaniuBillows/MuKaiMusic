@@ -48,7 +48,7 @@ namespace MuKai_Music
                 options.UseNpgsql(this.Configuration.GetConnectionString("PostgreSql"))
             );
 
-
+            services.AddHttpClient();
             //注册身份验证
             services.AddIdentityCore<UserInfo>(options =>
             {
@@ -146,14 +146,12 @@ namespace MuKai_Music
             {
                 app.UseSpaStaticFiles();
             }
-
             app.UseRouting();
+            
             //身份验证
             app.UseAuthentication();
             //权限验证
             app.UseAuthorization();
-
-
             //允许跨域
             app.UseCors(builder =>
             {
@@ -171,7 +169,7 @@ namespace MuKai_Music
                     pattern: "{controller}/{action=Index}/{id?}");
             });
             app.UseSpaStaticFiles();
-            app.UseSpa(spa =>
+            /*app.UseSpa(spa =>
             {
                 spa.Options.SourcePath = "mukaiMusic";
 
@@ -179,7 +177,7 @@ namespace MuKai_Music
                 {
                     spa.UseAngularCliServer(npmScript: "start");
                 }
-            });
+            });*/
         }
     }
 }

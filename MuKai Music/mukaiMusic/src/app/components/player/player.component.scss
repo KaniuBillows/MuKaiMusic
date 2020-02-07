@@ -1,5 +1,4 @@
 $control-button-color: rgba(225, 225, 225, .8);
-$them-color:#42b983;
 
 #github_icon {
   cursor: pointer;
@@ -141,12 +140,15 @@ $them-color:#42b983;
   z-index: 3;
 }
 
+#music-info{
+  margin-top: 20vh;
+}
+
 #album-pic {
   width: 240px;
   height: 240px;
   object-fit: cover;
   position: relative;
-  margin-top: 120px;
   margin-left: 240px;
   display: block;
 }
@@ -161,8 +163,8 @@ $them-color:#42b983;
 }
 
 #lyric-box {
-  position: absolute;
-  top: 360px;
+  position: relative;
+  top: 10px;
   width: 240px;
   height: 220px;
   left: 240px;
@@ -177,18 +179,27 @@ $them-color:#42b983;
 #playlist {
   position: absolute;
   width: 55vw;
-  height: 65vh;
+  height: 50vh;
   left: 35vw;
-  top: 15vh;
+  top: 20vh;
   color: $control-button-color;
   user-select: none;
 
   ul {
+    margin-top: 0px;
     overflow: hidden;
     clear: both;
     height: 100%;
 
-    li {
+    #playlist-title{
+      list-style: none;
+      
+      .playlist-item{
+        margin-bottom: 20px;
+      }
+    }
+
+    .playlist-li{
       margin-top: 15px;
       margin-bottom: 15px;
       list-style: none;
@@ -203,6 +214,9 @@ $them-color:#42b983;
       }
 
       .playlist-item {
+        width: 100%;
+        height: 30px;
+
         .playlist-options {
           position: absolute;
           cursor: pointer;
@@ -241,7 +255,11 @@ $them-color:#42b983;
   display: inline-flex;
 
   .playlist-number {
-    margin-left: 10px;
+    line-height: 30px;
+    display: inline-block;
+    vertical-align: top;
+    font-size: 14px;
+    margin-left: 30px;
   }
 
 

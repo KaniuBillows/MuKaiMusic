@@ -9,7 +9,7 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <None Remove="RequestOption\Options\Playlist\PlaylistHotCategories.cs~RF28e4e13.TMP" />
+    <None Remove="Playlist\PlaylistHotCategories.cs~RF28e4e13.TMP" />
   </ItemGroup>
 
   <ItemGroup>

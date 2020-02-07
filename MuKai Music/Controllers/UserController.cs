@@ -8,6 +8,7 @@ using MuKai_Music.Model.Manager;
 using MuKai_Music.Model.ResponseEntity;
 using MuKai_Music.Service;
 using System.ComponentModel.DataAnnotations;
+using System.Net.Http;
 using System.Threading.Tasks;
 
 // For more information on enabling Web API for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
@@ -26,10 +27,12 @@ namespace MuKai_Music.Controllers
         public UserController(
             SignInManager<UserInfo> signInManager,
             IHttpContextAccessor httpContextAccessor,
+            IHttpClientFactory httpClientFactory,
             AccountManager accountManager)
         {
             this.HttpContextAccessor = httpContextAccessor;
-            this.userService = new UserService(HttpContextAccessor.HttpContext, signInManager, accountManager);
+            this.userService = new UserService(HttpContextAccessor.HttpContext,
+                 signInManager, httpClientFactory, accountManager);
         }
 
         /// <summary>
@@ -67,10 +70,17 @@ namespace MuKai_Music.Controllers
         [ApiCache(NoStore = true)]
         public async Task<IResult<string>> UploadAvatar(string fileData) => await this.userService.UploadAvatar(fileData);
 
+
+
+        /// <summary>
+        /// 刷新token
+        /// </summary>
+        /// <returns></returns>
         [HttpPut("account/verification")]
         [ApiCache(NoStore = true)]
         [ResponseCache(NoStore = true)]
         public async Task<IResult<string>> RefreshToken() => await userService.RefreshToken();
+
 
         /// <summary>
         /// 通过手机号码登录网易云

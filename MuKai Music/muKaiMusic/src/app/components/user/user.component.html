@@ -1,8 +1,14 @@
-<div class="login" *ngIf="!userInfo">
+<div class="login" *ngIf="!account.userInfo">
     <span class="login-text" (click)="loginClick()">登录</span>
     <span class="login-text" (click)="registerClick()">注册</span>
 </div>
-<div class="login" id="userInfo" *ngIf="userInfo">
-    <img class="user-item" id="avatar" src="https://blog.kaniu.pro/upload/2019/12/kaniu_avatar-41ef9fe66b1b4d4bb2a87b7de49db5e2.jpg">
-    <span class="user-item" id="nickName">采蘑菇的小男孩</span>
+<div class="login" id="userInfo" *ngIf="account.userInfo">
+    <img class="user-item" id="avatar"
+        src="https://blog.kaniu.pro/upload/2019/12/kaniu_avatar-41ef9fe66b1b4d4bb2a87b7de49db5e2.jpg">
+    <span class="user-item" id="nickName" (click)="nickNameClick()">{{account.userInfo.ncikName}}</span>
+    <div id="options-container" *ngIf="this.showOption">
+        <div class="option-items">个人资料</div>
+        <div class="cutting-line"></div>
+        <div class="option-items" (click)="logoutClick()">退出登录</div>
+    </div>
 </div>

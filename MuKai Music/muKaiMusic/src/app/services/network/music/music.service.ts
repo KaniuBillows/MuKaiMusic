@@ -4,9 +4,10 @@ import { Observable } from 'rxjs';
 import 'src/app/entity/music';
 import { lyricInfo, musicDetailResult, personalizedResult, NetEaseUrlResult } from 'src/app/entity/music';
 import { CategoryResult, HotCaegoryResult, PersonalizedPlaylistResult } from 'src/app/entity/playlist';
+import { Result } from 'src/app/entity/baseResult';
 //export const baseUrl: string = 'http://117.48.203.23:2000';
-//export const baseUrl: string = 'http://localhost:2000';
-export const baseUrl: string = '';
+export const baseUrl: string = 'http://localhost:2000';
+//export const baseUrl: string = '';
 
 @Injectable({
   providedIn: 'root'
@@ -16,6 +17,12 @@ export class MusicService {
   constructor(private httpClient: HttpClient) {
 
   }
+  private _kuwoToken: string = null;
+
+  public get kuwoToken(): string {
+    return this._kuwoToken;
+  }
+
   /**
    * 获取歌词
    * @param id 网易云歌曲Id
@@ -86,4 +93,24 @@ export class MusicService {
     }
     x.send();
   }
+
+
+  public async searchMusic(word: string) {
+    if(await this.getKuWoToken())
+    {
+
+    }
+  }
+
+  /**
+   * 获取酷我token
+   */
+  public async  getKuWoToken(): Promise<boolean> {
+    let result = await this.httpClient.get<Result<string>>(baseUrl + '/api/kuwo/token').toPromise();
+    if (result.code == 200) {
+      this._kuwoToken = result.content;
+      return true;
+    } else return false;
+  }
+
 }
