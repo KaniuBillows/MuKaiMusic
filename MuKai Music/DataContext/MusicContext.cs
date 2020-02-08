@@ -17,6 +17,11 @@ namespace MuKai_Music.DataContext
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             base.OnModelCreating(modelBuilder);
+            modelBuilder.Entity<MusicInfo>()
+                .ToTable("MusicInfo")
+                .HasIndex(e =>
+                    e.Ne_Id
+                );
         }
     }
 }

@@ -2,12 +2,11 @@ import { Injectable } from '@angular/core';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Observable } from 'rxjs';
 import 'src/app/entity/music';
-import { lyricInfo, musicDetailResult, personalizedResult, NetEaseUrlResult } from 'src/app/entity/music';
+import { lyricInfo, musicDetailResult, NetEaseUrlResult, Song, UrlInfo } from 'src/app/entity/music';
 import { CategoryResult, HotCaegoryResult, PersonalizedPlaylistResult } from 'src/app/entity/playlist';
 import { Result } from 'src/app/entity/baseResult';
-//export const baseUrl: string = 'http://117.48.203.23:2000';
-export const baseUrl: string = 'http://localhost:2000';
-//export const baseUrl: string = '';
+import { environment } from "src/environments/environment"
+import { MusicUrlParam } from 'src/app/entity/param/musicUrlParam';
 
 @Injectable({
   providedIn: 'root'
@@ -17,6 +16,8 @@ export class MusicService {
   constructor(private httpClient: HttpClient) {
 
   }
+
+
   private _kuwoToken: string = null;
 
   public get kuwoToken(): string {
@@ -28,7 +29,7 @@ export class MusicService {
    * @param id 网易云歌曲Id
    */
   public getLyric(id: number): Observable<lyricInfo> {
-    return this.httpClient.get<lyricInfo>(baseUrl + '/api/lyric?id=' + id);
+    return this.httpClient.get<lyricInfo>(environment.baseUrl + '/api/lyric?id=' + id);
   }
 
   /**
@@ -36,14 +37,14 @@ export class MusicService {
    * @param ids 
    */
   public getMusicDetail(ids: number[]): Observable<musicDetailResult> {
-    return this.httpClient.post<musicDetailResult>(baseUrl + '/api/music/detail', ids);
+    return this.httpClient.post<musicDetailResult>(environment.baseUrl + '/api/music/detail', ids);
   }
 
   /**
    * 获取推荐新歌
    */
-  public getPersonalizedMusics(): Observable<personalizedResult> {
-    return this.httpClient.get<personalizedResult>(baseUrl + '/api/music/personalized');
+  public getPersonalizedMusics(): Observable<Result<Song[]>> {
+    return this.httpClient.get<Result<Song[]>>(environment.baseUrl + '/api/music/personalized');
   }
 
   /**
@@ -51,29 +52,30 @@ export class MusicService {
    * @param limit 数量
    */
   public getPersonalizedPlaylist(limit?: number): Observable<PersonalizedPlaylistResult> {
-    return this.httpClient.get<PersonalizedPlaylistResult>(baseUrl + `/api/playlist/personalized?limit=${limit | 5}`);
+    return this.httpClient.get<PersonalizedPlaylistResult>(environment.baseUrl + `/api/playlist/personalized?limit=${limit | 5}`);
   }
+
   /**
-   * 获取网易云歌曲的URL
-   * @param id 
-   * @param br 
+   * 获取歌曲的URL
+   * @param parma
    */
-  public getNeteaseUrl(id: number, br?: number): Observable<NetEaseUrlResult> {
-    return this.httpClient.get<NetEaseUrlResult>(baseUrl + `/api/url?id=${id}&br=${br || 128000}`);
+  public getNeteaseUrl(parma: MusicUrlParam): Observable<Result<UrlInfo>> {
+    // return this.httpClient.get<NetEaseUrlResult>(environment.baseUrl + `/api/url?id=${id}&br=${br || 128000}`);
+    return this.httpClient.post<Result<UrlInfo>>(environment.baseUrl + '/api/music/url', parma);
   }
 
   /**
    * 获取热门歌单分类
    */
   public getHotCategories(): Observable<HotCaegoryResult> {
-    return this.httpClient.get<HotCaegoryResult>(baseUrl + '/api/playlist/hotCategories');
+    return this.httpClient.get<HotCaegoryResult>(environment.baseUrl + '/api/playlist/hotCategories');
   }
 
   /**
    * 获取全部歌单分类
    */
   public getAllCategories(): Observable<CategoryResult> {
-    return this.httpClient.get<CategoryResult>(baseUrl + '/api/playlist/categories');
+    return this.httpClient.get<CategoryResult>(environment.baseUrl + '/api/playlist/categories');
   }
 
   /**
@@ -96,8 +98,7 @@ export class MusicService {
 
 
   public async searchMusic(word: string) {
-    if(await this.getKuWoToken())
-    {
+    if (await this.getKuWoToken()) {
 
     }
   }
@@ -106,7 +107,7 @@ export class MusicService {
    * 获取酷我token
    */
   public async  getKuWoToken(): Promise<boolean> {
-    let result = await this.httpClient.get<Result<string>>(baseUrl + '/api/kuwo/token').toPromise();
+    let result = await this.httpClient.get<Result<string>>(environment.baseUrl + '/api/kuwo/token').toPromise();
     if (result.code == 200) {
       this._kuwoToken = result.content;
       return true;

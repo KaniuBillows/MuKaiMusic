@@ -1,10 +1,12 @@
-import { Component, OnInit, ViewChild, ElementRef } from '@angular/core';
+import { Component, OnInit, ViewChild, ElementRef, EventEmitter } from '@angular/core';
 import { PlayerService } from 'src/app/services/player/player.service';
 import { MatSlider, MatSliderChange } from '@angular/material/slider';
 import { MusicService } from 'src/app/services/network/music/music.service';
-import { song, musicDetailResult, album, artist } from 'src/app/entity/music';
+import { musicDetailResult, album, artist, Song, UrlInfo } from 'src/app/entity/music';
 import { ThemeService } from 'src/app/services/theme/theme.service';
 import { AccountService } from 'src/app/services/network/account/account.service';
+import { Result } from 'src/app/entity/baseResult';
+import { MusicUrlParam, DataSource } from 'src/app/entity/param/musicUrlParam';
 
 
 @Component({
@@ -32,19 +34,21 @@ export class PlayerComponent implements OnInit {
 
     private _showPalette: boolean = false;
 
-    private _currentMusicInfo: {
-        name: string,
-        id: number,
-        albumName: string,
-        albumId: number,
-        picUrl: string,
-        artistName: string;
-        artistId: number
-    } = { picUrl: '' } as any;
+    // private _currentMusicInfo: {
+    //     name: string,
+    //     id: number,
+    //     albumName: string,
+    //     albumId: number,
+    //     picUrl: string,
+    //     artistName: string;
+    //     artistId: number
+    // } = { picUrl: '' } as any;
+
+    private _currentMusicInfo: Song = { picUrl: "" } as any;
 
     private _currentLrcIndex: number = 0;
 
-    private _playlist: song[] = [];
+    private _playlist: Song[] = [];
 
     constructor(
         private player: PlayerService,
@@ -81,6 +85,11 @@ export class PlayerComponent implements OnInit {
         return this._currentMusicInfo;
     }
 
+    public set currentMusicInfo(value: Song) {
+        this._currentMusicInfo = value;
+        document.getElementById("back-board").style.backgroundImage = "Url(" + this._currentMusicInfo.picUrl + ")";
+    }
+
     public get currentLrcIndex() {
         return this._currentLrcIndex;
     }
@@ -91,7 +100,7 @@ export class PlayerComponent implements OnInit {
 
     public get currentMusicIndex() {
         return this._playlist.findIndex(item =>
-            item.id == this.currentMusicInfo.id
+            item.ne_Id == this.currentMusicInfo.ne_Id
         );
     }
 
@@ -161,7 +170,7 @@ export class PlayerComponent implements OnInit {
             this.player.play();
         }
         else {
-            this.startPlay();
+            this.startPlay(this.currentMusicIndex);
         }
     }
 
@@ -180,12 +189,12 @@ export class PlayerComponent implements OnInit {
             return;
         }
         if (this.isLastMusic) {
-            this.getMusicDetail(this._playlist[0].id, () =>
-                this.startPlay()
+            this.getLyric(this._playlist[0].ne_Id, () =>
+                this.startPlay(0)
             );
         } else {
-            this.getMusicDetail(this._playlist[this.currentMusicIndex + 1].id, () =>
-                this.startPlay()
+            this.getLyric(this._playlist[this.currentMusicIndex + 1].ne_Id, () =>
+                this.startPlay(this.currentMusicIndex + 1)
             );
         }
     }
@@ -197,11 +206,11 @@ export class PlayerComponent implements OnInit {
             return;
         }
         if (this.isFirstMusic) {
-            this.getMusicDetail(this._playlist[this._playlist.length - 1].id, () =>
-                this.startPlay());
+            this.getLyric(this._playlist[this._playlist.length - 1].ne_Id, () =>
+                this.startPlay(this._playlist.length - 1));
         } else {
-            this.getMusicDetail(this._playlist[this.currentMusicIndex - 1].id, () =>
-                this.startPlay());
+            this.getLyric(this._playlist[this.currentMusicIndex - 1].ne_Id, () =>
+                this.startPlay(this.currentMusicIndex - 1));
         }
     }
     public onMuteClick() {
@@ -221,7 +230,9 @@ export class PlayerComponent implements OnInit {
      * @param index 
      */
     public clickPlay(index: number) {
-        this.getMusicDetail(this._playlist[index].id, () => this.startPlay());
+        this.currentMusicInfo = this.playlist[index];
+        this.getLyric(this.playlist[index].ne_Id, () => this.startPlay(index))
+        //this.getMusicDetail(this._playlist[index].id, () => this.startPlay());
     }
 
     /**
@@ -230,9 +241,12 @@ export class PlayerComponent implements OnInit {
      */
     public clickDownload(index: number) {
         let item = this.playlist[index];
-        this.musicNet.getNeteaseUrl(item.id).subscribe(res => {
-            if (res.data[0].url) {
-                this.musicNet.downloadFile(res.data[0].url, item.name + " - " + item.artists[0].name);
+        this.musicNet.getNeteaseUrl({
+            neteaseId: item.ne_Id,
+            dataSource: DataSource.NetEase
+        } as MusicUrlParam).subscribe((res: Result<UrlInfo>) => {
+            if (res.content.url) {
+                this.musicNet.downloadFile(res.content.url, item.name + " - " + item.artistName);
             }
         })
     }
@@ -250,14 +264,19 @@ export class PlayerComponent implements OnInit {
     /**
      * 获取当前歌曲的播放链接并开始播放
      */
-    private startPlay() {
+    private startPlay(index: number) {
         this.player.status = 'loading';
-        this.musicNet.getNeteaseUrl(this.currentMusicInfo.id).subscribe(res => {
-            if (res.data[0].url) {
+        this.currentMusicInfo = this.playlist[index];
+
+        this.musicNet.getNeteaseUrl({
+            neteaseId: this.currentMusicInfo.ne_Id,
+            dataSource: DataSource.NetEase
+        } as MusicUrlParam).subscribe((res: Result<UrlInfo>) => {
+            if (res.content.url) {
                 this.player.onCurrentTimeChange.subscribe((time: number) =>
                     this.onTimeChange(time)
                 )
-                this.player.start(res.data[0].url);
+                this.player.start(res.content.url);
             } else {
                 alert('获取播放链接失败!');
                 this.player.status = 'stop';
@@ -271,7 +290,7 @@ export class PlayerComponent implements OnInit {
      * 获取歌词
      * @param id 
      */
-    private getLyric(id: number) {
+    private getLyric(id: number, callback?: () => void) {
         this._lyric_paras = [];
         this.musicNet.getLyric(id).subscribe(res => {
             //匹配包含[00:00.000]格式的时间字符串
@@ -295,38 +314,19 @@ export class PlayerComponent implements OnInit {
                     })
                 }
             })
-        });
+        }, null, callback);
     }
     /**
     * 获取推荐歌曲
     */
     private getPersonalized() {
-        this.musicNet.getPersonalizedMusics().subscribe(res => {
-            res.result.forEach(element => {
-                this._playlist.push(element.song);
-            });
-            this.getMusicDetail(this.playlist[0].id);
+        this.musicNet.getPersonalizedMusics().subscribe((res: Result<Song[]>) => {
+            if (res.content.length > 0) this.currentMusicInfo = res.content[0];
+            this._playlist = this._playlist.concat(res.content)
+            this.getLyric(this.playlist[0].ne_Id);
         });
     }
-    /**
-     * 获取详情以及歌词
-     * @param id 
-     */
-    private async getMusicDetail(id: number, callback?: () => void) {
-        this.getLyric(id);
-        return this.musicNet.getMusicDetail([id]).subscribe((res: musicDetailResult) => {
-            if (res.songs && res.songs.length > 0) {
-                this._currentMusicInfo.name = res.songs[0].name;
-                this._currentMusicInfo.id = res.songs[0].id;
-                this._currentMusicInfo.albumName = res.songs[0].al.name;
-                this._currentMusicInfo.albumId = res.songs[0].al.id;
-                this._currentMusicInfo.picUrl = res.songs[0].al.picUrl;
-                this._currentMusicInfo.artistId = res.songs[0].ar[0].id;
-                this._currentMusicInfo.artistName = res.songs[0].ar[0].name;
-                document.getElementById('back-board-mask').style.backgroundColor = 'rgba(0,0,0,.4)';
-            }
-        }, null, callback);
-    }
+
     /**
      * 播放时间改变事件
      */

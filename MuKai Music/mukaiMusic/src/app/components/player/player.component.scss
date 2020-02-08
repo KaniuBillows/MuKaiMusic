@@ -39,9 +39,22 @@ $control-button-color: rgba(225, 225, 225, .8);
   }
 }
 
+#contents-container {
+  height: 100%;
+  margin: 0px 10.638889%;
+  position: relative;
+  z-index: 3;
+}
 
 #back-board {
   display: flex;
+  position: absolute;
+  width: 100%;
+  z-index: -1;
+  height: 100%;
+  background-repeat: round;
+  background-size: cover;
+  filter: blur(40px);
 
   #back-board-img {
     display: block;
@@ -54,7 +67,8 @@ $control-button-color: rgba(225, 225, 225, .8);
 
   #back-board-mask {
     position: absolute;
-    background-color: #292a2b;
+    //background-color: #292a2b;
+    background-color: rgba(0, 0, 0, .4);
     z-index: 2;
     width: 100%;
     height: 100%;
@@ -62,23 +76,34 @@ $control-button-color: rgba(225, 225, 225, .8);
   }
 }
 
-#control {
-  user-select: none;
+#control-container {
+  width: 100%;
   position: absolute;
-  bottom: 20px;
-  min-width: 1000px;
-  margin-left: 5vw;
   display: flex;
-  z-index: 3;
+  bottom: 20px;
+  height: 11%;
 }
 
-.control-item {
+#control {
+  user-select: none;
+  position: relative;
+  display: flex;
+  z-index: 3;
   margin: auto;
 }
 
+
+#control-seek {
+  display: block;
+  position: relative;
+  width: 60%;
+  min-width: 650px;
+
+}
+
 #music-title-bottom {
-  left: 210px;
-  bottom: 40px;
+  top: -10px;
+  width: 100%;
   position: absolute;
   font-size: 16px;
   cursor: pointer;
@@ -90,12 +115,16 @@ $control-button-color: rgba(225, 225, 225, .8);
 }
 
 #seek-bar {
-  width: 60vw;
-  margin-left: 10px;
+  width: 100%;
   cursor: pointer;
+  position: absolute;
 }
 
 #control-buttons {
+  display: inline-flex;
+  width: 200px;
+
+
   mat-icon {
     color: $control-button-color;
     cursor: pointer;
@@ -112,6 +141,8 @@ $control-button-color: rgba(225, 225, 225, .8);
 
 #volume {
   display: flex;
+  min-width: 192px;
+  width: 10%;
 
   .volumeIcon {
     font-size: 24px;
@@ -126,22 +157,24 @@ $control-button-color: rgba(225, 225, 225, .8);
 
   #volume-seek-bar {
     display: inline-flex;
-    width: 10vw;
-    min-width: 120px;
+    width: 80%;
     cursor: pointer;
   }
 }
 
 #contents {
-  position: absolute;
-  top: 0;
-  height: 100%;
-  width: 100%;
-  z-index: 3;
+  position: relative;
+  top: 15%;
+  bottom: 18%;
+  min-height: 328px;
+  cursor: default;
+  display: flex;
 }
 
-#music-info{
-  margin-top: 20vh;
+#music-info {
+  width: 18%;
+  min-width: 240px;
+  margin: auto;
 }
 
 #album-pic {
@@ -149,7 +182,6 @@ $control-button-color: rgba(225, 225, 225, .8);
   height: 240px;
   object-fit: cover;
   position: relative;
-  margin-left: 240px;
   display: block;
 }
 
@@ -158,8 +190,12 @@ $control-button-color: rgba(225, 225, 225, .8);
   margin-top: 60px;
   cursor: -webkit-grab;
   overflow-y: visible;
-  transition: -webkit-transform 0.1s ease-out 0s;
+  transition-property: -webkit-transform;
+  transition-duration: 0.4s;
+  transition-timing-function: ease-out;
+  transition-delay: 0s;
   font-size: 20px;
+
 }
 
 #lyric-box {
@@ -167,7 +203,6 @@ $control-button-color: rgba(225, 225, 225, .8);
   top: 10px;
   width: 240px;
   height: 220px;
-  left: 240px;
   cursor: -webkit-grab;
   overflow-y: hidden;
   text-align: center;
@@ -177,29 +212,40 @@ $control-button-color: rgba(225, 225, 225, .8);
 }
 
 #playlist {
-  position: absolute;
-  width: 55vw;
-  height: 50vh;
-  left: 35vw;
-  top: 20vh;
+  position: relative;
+  margin: auto;
+  min-width: 780px;
   color: $control-button-color;
   user-select: none;
+
 
   ul {
     margin-top: 0px;
     overflow: hidden;
     clear: both;
     height: 100%;
+    width: 100%;
 
-    #playlist-title{
+    #playlist-title {
       list-style: none;
-      
-      .playlist-item{
+
+
+      #title-item {
+        width: 100%;
+        min-width: 630px;
+        height: 30px;
+      }
+
+      #title-artist {
+        margin-left: 138px;
+      }
+
+      .playlist-item {
         margin-bottom: 20px;
       }
     }
 
-    .playlist-li{
+    .playlist-li {
       margin-top: 15px;
       margin-bottom: 15px;
       list-style: none;
@@ -215,17 +261,21 @@ $control-button-color: rgba(225, 225, 225, .8);
 
       .playlist-item {
         width: 100%;
+        min-width: 630px;
         height: 30px;
 
         .playlist-options {
-          position: absolute;
-          cursor: pointer;
           color: $control-button-color;
+          position: relative;
+          cursor: pointer;
+          color: rgba(225, 225, 225, 0.8);
           opacity: 0;
-          right: 20vw;
+          width: 110px;
+          margin-left: 30px;
+
 
           .click_button {
-            font-size: 32px;
+            font-size: 27px;
             margin-right: 10px;
 
             &:hover {
@@ -255,22 +305,25 @@ $control-button-color: rgba(225, 225, 225, .8);
   display: inline-flex;
 
   .playlist-number {
+    position: absolute;
     line-height: 30px;
     display: inline-block;
     vertical-align: top;
     font-size: 14px;
-    margin-left: 30px;
+    left: 20px;
   }
 
 
 
   .playlist-name {
-    position: absolute;
-    left: 6vw;
+    position: relative;
+    left: 20px;
     overflow: hidden;
     text-overflow: ellipsis;
     white-space: nowrap;
-    width: 375px;
+    width: 35%;
+    max-width: 350px;
+    min-width: 240px;
   }
 
   .current-playlist-name {
@@ -285,9 +338,10 @@ $control-button-color: rgba(225, 225, 225, .8);
 
 
   .playlist-artist {
-    position: absolute;
-    left: 36vw;
-    width: 140px;
+    position: relative;
+    width: 30%;
+    max-width: 240px;
+    min-width: 166px;
     text-overflow: ellipsis;
     white-space: nowrap;
     overflow: hidden;
@@ -299,7 +353,12 @@ $control-button-color: rgba(225, 225, 225, .8);
   }
 
   .playlist-time {
-    position: absolute;
-    left: 48vw;
+    position: relative;
+    margin-left: 70px;
   }
+}
+
+#palette {
+  margin-top: 10px;
+  position: relative;
 }

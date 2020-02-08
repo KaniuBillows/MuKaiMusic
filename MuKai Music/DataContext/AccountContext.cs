@@ -27,8 +27,6 @@ namespace MuKai_Music.DataContext
                     u.Email,
                     u.Ne_Cellphone
                 }).IsUnique();
-            builder.Entity<MusicInfo>()
-                .ToTable("MusicInfo");
         }
     }
 }

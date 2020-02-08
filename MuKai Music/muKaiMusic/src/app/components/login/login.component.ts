@@ -43,7 +43,7 @@ export class LoginComponent implements OnInit {
     this.accountService.logIn(this.user.username, this.user.password);
   }
 
-  public onInputChange(e) {
+  public onInputChange() {
     this.errorInfo = "";
   }
 

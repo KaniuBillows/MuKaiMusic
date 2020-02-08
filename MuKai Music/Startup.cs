@@ -147,7 +147,7 @@ namespace MuKai_Music
                 app.UseSpaStaticFiles();
             }
             app.UseRouting();
-            
+
             //身份验证
             app.UseAuthentication();
             //权限验证
@@ -169,15 +169,18 @@ namespace MuKai_Music
                     pattern: "{controller}/{action=Index}/{id?}");
             });
             app.UseSpaStaticFiles();
-            /*app.UseSpa(spa =>
+            if (env.IsProduction())
             {
-                spa.Options.SourcePath = "mukaiMusic";
-
-                if (env.IsDevelopment())
+                app.UseSpa(spa =>
                 {
-                    spa.UseAngularCliServer(npmScript: "start");
-                }
-            });*/
+                    spa.Options.SourcePath = "mukaiMusic";
+
+                    /*if (env.IsDevelopment())
+                    {
+                        spa.UseAngularCliServer(npmScript: "start");
+                    }*/
+                });
+            }
         }
     }
 }

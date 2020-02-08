@@ -1,6 +1,7 @@
 ﻿using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using MuKai_Music.Attribute;
+using MuKai_Music.Model.DataEntity;
 using MuKai_Music.Model.RequestEntity.Music;
 using MuKai_Music.Model.ResponseEntity;
 using MuKai_Music.Model.ResponseEntity.SearchResult;
@@ -30,16 +31,16 @@ namespace MuKai_Music.Service
             //    this.httpContextAccessor = httpContextAccessor;
         }
 
-        /// <summary>
-        /// 关键词搜索
-        /// </summary>
-        /// <param name="keyword"></param>
-        /// <param name="type"></param>
-        /// <param name="limit"></param>
-        /// <param name="offset"></param>
-        [HttpGet("search")]
-        [ApiCache(Duration = 3600)]
-        public async Task Search(string keyword, SearchType type, int? limit, int? offset) => await musicService.Search(keyword, type, limit ?? 30, offset ?? 0);
+        /* /// <summary>
+         /// 关键词搜索
+         /// </summary>
+         /// <param name="keyword"></param>
+         /// <param name="type"></param>
+         /// <param name="limit"></param>
+         /// <param name="offset"></param>
+         [HttpGet("search")]
+         [ApiCache(Duration = 3600)]
+         public async Task Search(string keyword, SearchType type, int? limit, int? offset) => await musicService.Search(keyword, type, limit ?? 30, offset ?? 0);*/
 
         /// <summary>
         /// 获取歌手介绍
@@ -63,11 +64,11 @@ namespace MuKai_Music.Service
         public async Task GetInfo(int id) => await musicService.GetAlbumDetail(id);
 
         /// <summary>
-        /// 推荐新歌
+        /// 推荐新歌,作为首页默认显示
         /// </summary>
         /// <returns></returns>
         [HttpGet("music/personalized")]
-        public async Task PersonalizedMusic() => await musicService.GetPersonalizedNewMusic();
+        public async Task<IResult<MusicInfo[]>> PersonalizedMusic() => await musicService.GetPersonalizedNewMusic();
 
         /// <summary>
         /// 获取精品歌单
@@ -92,7 +93,8 @@ namespace MuKai_Music.Service
         /// <returns></returns>
         [HttpPost("music/url")]
         [ApiCache(Duration = 600)]
-        public async Task MsuicUrl([Required]MusicUrl_Param param) => await musicService.GetMusicUrl(param);
+        public async Task<IResult<Model.ResponseEntity.MusicUrlResult.MusicUrlInfo>> MsuicUrl([Required]MusicUrl_Param param)
+            => await musicService.GetMusicUrl(param);
 
         /// <summary>
         /// 搜索歌曲信息

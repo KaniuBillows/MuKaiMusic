@@ -1,3 +1,5 @@
+import { DataSource } from './param/musicUrlParam';
+
 export class lyricInfo {
     lrc: {
         version: number,
@@ -25,29 +27,36 @@ export class NetEaseUrlResult {
         encodeType: string;
     }[];
 }
-export class personalizedResult {
-    code: number;
-    category: number;
-    result: {
-        id: number,
-        type: number,
-        name: string,
-        song: song
-    }[]
+
+export class UrlInfo {
+    public url: string;
+    public dataSource: DataSource;
+    public netEaseId: number;
+    public kuwoId: number;
+    public miguId: string;
 }
-export class song {
-    name: string;
-    id: number;
-    artists: artist[];
-    album: album;
-    duration: number;
+
+export class Song {
+    public id: number;
+    public name: string;
+    public ne_Id: number;
+    public kuWo_Id: number;
+    public migu_Id: number;
+    public migu_Url: string;
+    public duration: number;
+    public ne_ArtistId: number;
+    public artistName: string;
+    public ne_AlbumId: string
+    public albumName: string;
+    public picUrl: string;
 }
+
 export class artist {
-    name: string;
-    id: number;
+    public name: string;
+    public id: number;
 }
 export class album {
-    name: string;
-    id: number;
-    picUrl: string
+    public name: string;
+    public id: number;
+    public picUrl: string
 }

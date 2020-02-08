@@ -1,4 +1,5 @@
-﻿using System.ComponentModel.DataAnnotations;
+﻿using MuKai_Music.Model.ResponseEntity;
+using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 
 namespace MuKai_Music.Model.DataEntity
@@ -19,8 +20,19 @@ namespace MuKai_Music.Model.DataEntity
 
         public string ArtistName { get; set; }
 
+        public int? Ne_AlbumId { get; set; }
+
+        public string AlbumName { get; set; }
+
+        public string PicUrl { get; set; }
+
         public int? Ne_ArtistId { get; set; }
 
         public string Migu_Url { get; set; }
+
+        public int? Duration { get; set; }
+
+        [NotMapped]
+        public DataSource DataSource { get; set; }
     }
 }

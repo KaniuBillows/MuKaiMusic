@@ -22,6 +22,7 @@ using MuKai_Music.Model.ResponseEntity.MusicUrlResult.Migu;
 using MuKai_Music.Model.ResponseEntity.SearchResult.Migu;
 using MusicApi.Migu.Search;
 using MuKai_Music.Model.RequestEntity.Music;
+using MuKai_Music.Model.ResponseEntity.PersonlizedResult;
 
 namespace MuKai_Music.Model.Service
 {
@@ -225,10 +226,11 @@ namespace MuKai_Music.Model.Service
         /// <summary>
         /// 获取推荐新歌
         /// </summary>
-        public async Task GetPersonalizedNewMusic()
+        public async Task<IResult<DataEntity.MusicInfo[]>> GetPersonalizedNewMusic()
         {
             IRequestOption request = new NewMusicPersonalized(GetCookie(httpContext.Request));
-            await GetResult(httpContext.Response, request);
+            Netease_PersonlizedResult res = await GetResult<Netease_PersonlizedResult>(request);
+            return new BaseResult<DataEntity.MusicInfo[]>(res.ToProcessedData(), 200, null);
         }
 
         /// <summary>
