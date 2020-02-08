@@ -15,7 +15,8 @@
 <div id="contents-container">
     <div id='contents'>
         <div id='music-info'>
-            <mk-img id='album-pic' [src]='currentMusicInfo?.picUrl' loadSrc='../../../assets/img/logo.png'></mk-img>
+            <!-- <mk-img id='album-pic' [src]='currentMusicInfo?.picUrl' loadSrc='../../../assets/img/logo.png'></mk-img> -->
+            <img id='album-pic' [src]='currentMusicInfo?.picUrl' />
             <div id='lyric-box'>
                 <div id='lyrics' #lyrics>
                     <P *ngIf="lyric_paras.length==0">正在加载歌词...</P>
