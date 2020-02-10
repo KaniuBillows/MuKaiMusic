@@ -128,12 +128,12 @@ namespace MusicApi
                     }
                 case CryptoType.MiGU_Web:
                     {
-                        var s = requestOption.GetQueryString();
+                        string s = requestOption.GetQueryString();
                         httpClient.BaseAddress = new Uri(requestOption.Url + s);
                         httpClient.DefaultRequestHeaders.Add("ua", requestOption.Ua);
                         httpClient.DefaultRequestHeaders.Add("User-Agent", GetUserAgent(requestOption));
                         httpClient.DefaultRequestHeaders.Add("Origin", "http://music.migu.cn/");
-                        httpClient.DefaultRequestHeaders.Add("Referer", "http://music.migu.cn/");
+                        httpClient.DefaultRequestHeaders.Add("Referer", "http://music.migu.cn/v3/music/player/audio");
                         httpClient.DefaultRequestHeaders.Add("channel", "0231111");
                         return await httpClient.GetAsync(httpClient.BaseAddress);
                     }
@@ -144,12 +144,12 @@ namespace MusicApi
                         httpClient.DefaultRequestHeaders.Add("User-Agent", GetUserAgent(requestOption));
                         httpClient.DefaultRequestHeaders.Add("Referer", "http://www.kuwo.cn");
                         httpClient.DefaultRequestHeaders.Add("Origin", "www.kuwo.cn");
-                        httpClient.DefaultRequestHeaders.Add("csrf", requestOption.Cookies["kw_token"].ToString());
+                        httpClient.DefaultRequestHeaders.Add("csrf", requestOption.Cookies["kw_token"]?.ToString());
                         httpClient.DefaultRequestHeaders.Add(HeaderNames.Cookie, GetCookieString(requestOption.Cookies));
                         return await httpClient.GetAsync(httpClient.BaseAddress);
                     }
             }
-            var result = await httpClient.PostAsync(httpClient.BaseAddress, content);
+            HttpResponseMessage result = await httpClient.PostAsync(httpClient.BaseAddress, content);
             return result;
         }
 
@@ -223,7 +223,7 @@ namespace MusicApi
                 s += key + "=";
                 s += cookies[key].ToString() + ";";
             }
-            s = s.Substring(0, s.LastIndexOf(";"));
+            s = s.Substring(0, s.LastIndexOf(";") == -1 ? 0 : s.LastIndexOf(";"));
             return s;
         }
     }

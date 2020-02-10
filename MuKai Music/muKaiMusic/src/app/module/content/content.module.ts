@@ -1,7 +1,6 @@
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { ContentComponent } from '../../components/content/content.component';
-import { PlaylistComponent } from '../../components/playlist/playlist.component';
 import { Routes, RouterModule } from '@angular/router';
 import { MatSidenavModule } from '@angular/material/sidenav';
 import { MatIconModule } from '@angular/material/icon';
@@ -17,10 +16,6 @@ const routes: Routes = [
     component: ContentComponent,
     children: [
       {
-        path: 'playlist',
-        component: PlaylistComponent
-      },
-      {
         path: 'explore',
         loadChildren: () =>
           import('../explore/explore.module').then(m => m.ExploreModule)
@@ -33,7 +28,6 @@ const routes: Routes = [
 @NgModule({
   declarations: [
     ContentComponent,
-    PlaylistComponent,
     LoginComponent,
     UserComponent
   ],

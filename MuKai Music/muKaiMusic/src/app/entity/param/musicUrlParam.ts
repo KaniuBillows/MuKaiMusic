@@ -1,4 +1,4 @@
-export class MusicUrlParam {
+export class MusicParam {
     public dataSource: DataSource;
     public miguId: string;
     public neteaseId: number;

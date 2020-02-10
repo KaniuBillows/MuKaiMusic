@@ -84,19 +84,21 @@ namespace MuKai_Music.Middleware
             IMemoryCache memoryCache)
         {
             //暂存原始响应流
-            var originResponseStream = httpContext.Response.Body;
+            Stream originResponseStream = httpContext.Response.Body;
             //在内存中开辟缓冲区暂存请求体
             httpContext.Request.EnableBuffering();
             using var requestReader = new StreamReader(httpContext.Request.Body);
-            Endpoint endpoint = httpContext.GetEndpoint();
             string apikey = httpContext.Request.Path.Value;
+            //获取请求的key
             string key = await RequestHandle(requestReader, httpContext);
             if (key == null)
             {
                 await _next(httpContext);
                 return;
             }
+            //将请求body归位
             httpContext.Request.Body.Position = 0;
+            //检查是否存在缓存,如存在缓存则读取缓存内容，并写入响应流
             if (Check(key, out string value, memoryCache, out string duration, apikey))
             {
                 bool item = httpContext.Response.HasStarted;
@@ -116,7 +118,8 @@ namespace MuKai_Music.Middleware
                 await _next(httpContext);
                 using var responseReader = new StreamReader(resBody);
                 resBody.Position = 0;
-                await Cache(key, await ResponseHandle(responseReader, httpContext), memoryCache, apikey);
+                //异步进行缓存
+                CacheAsync(key, await ResponseHandle(responseReader, httpContext), memoryCache, apikey);
                 resBody.Position = 0;
                 await resBody.CopyToAsync(originResponseStream);
                 httpContext.Response.Body = originResponseStream;
@@ -136,7 +139,7 @@ namespace MuKai_Music.Middleware
             {
                 return null;
             }
-            //TODO post传入多个参数，对每个参数都生成key
+            //读取body内容，生成key
             string requestContent = await requestReader.ReadToEndAsync();
             string key = stringBuilder.Append(requestContent).ToString();
             return key;
@@ -151,14 +154,8 @@ namespace MuKai_Music.Middleware
         private async Task<string> ResponseHandle(StreamReader responseReader, HttpContext httpContext)
         {
             string responseContent = await responseReader.ReadToEndAsync();
-            if (httpContext.Response.ContentType != "application/json; charset=utf-8")
-            {
-                return null;
-            }
-            else
-            {
-                return responseContent;
-            }
+            return httpContext.Response.ContentType != "application/json; charset=utf-8"
+                ? null : responseContent;
         }
 
         /// <summary>
@@ -172,7 +169,7 @@ namespace MuKai_Music.Middleware
         /// <returns></returns>
         private bool Check(string key, out string value, IMemoryCache memoryCache, out string duration, string apikey)
         {
-            this.ApiMap.TryGetValue(apikey, out var entry);
+            this.ApiMap.TryGetValue(apikey, out ApiCacheAttribute entry);
             if (entry != null)
             {
                 if (entry.NoStore)
@@ -198,22 +195,22 @@ namespace MuKai_Music.Middleware
         /// <param name="memoryCache"></param>
         /// <param name="apikey"></param>
         /// <returns></returns>
-        private async Task Cache(string key, string value, IMemoryCache memoryCache, string apikey)
+        private async void CacheAsync(string key, string value, IMemoryCache memoryCache, string apikey)
         {
+            if (value == null) return;
             await Task.Run(() =>
-            {
-                this.ApiMap.TryGetValue(apikey, out var entry);
-                if (entry != null)
-                {
-                    if (entry.NoStore) return;
-                    memoryCache.Set(key, value, TimeSpan.FromSeconds(entry.Duration));
-                }
-                else
-                {
-                    memoryCache.Set(key, value, _options);
-                }
-            });
-
+              {
+                  this.ApiMap.TryGetValue(apikey, out ApiCacheAttribute entry);
+                  if (entry != null)
+                  {
+                      if (entry.NoStore) return;
+                      memoryCache.Set(key, value, TimeSpan.FromSeconds(entry.Duration));
+                  }
+                  else
+                  {
+                      memoryCache.Set(key, value, _options);
+                  }
+              });
         }
     }
 }

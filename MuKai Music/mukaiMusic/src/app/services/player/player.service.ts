@@ -49,6 +49,11 @@ export class PlayerService {
     }
   }
 
+  public stop() {
+    this.player.pause();
+    this.status = "stop";
+  }
+
   public pause() {
     this.status = 'pause';
     this.player.pause();
@@ -76,5 +81,6 @@ export class PlayerService {
   public onDurationChange = new EventEmitter<number>();
 
   public onEnded = new EventEmitter();
+
   //#endregion
 }

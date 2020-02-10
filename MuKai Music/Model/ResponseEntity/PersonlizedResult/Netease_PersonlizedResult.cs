@@ -26,7 +26,7 @@ namespace MuKai_Music.Model.ResponseEntity.PersonlizedResult
                 {
                     Ne_Id = this.Result[i].Id,
                     ArtistName = this.Result[i].Song.Artists[0].Name,
-                    PicUrl = this.Result[i].PicUrl,
+                    PicUrl = this.Result[i].PicUrl + "?param=240y240",
                     Name = this.Result[i].Name,
                     Duration = this.Result[i].Song.Duration,
                     Ne_ArtistId = this.Result[i].Song.Artists[0].Id,

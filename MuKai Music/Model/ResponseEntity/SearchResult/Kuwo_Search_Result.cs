@@ -1,10 +1,11 @@
-﻿using System;
+﻿using MuKai_Music.Model.DataEntity;
+using System;
 using System.Collections.ObjectModel;
 using System.Text.Json.Serialization;
 
 namespace MuKai_Music.Model.ResponseEntity.SearchResult.Kuwo
 {
-    public sealed class Kuwo_Search_Result : UnProcessedData<SearchMusic[]>
+    public sealed class Kuwo_Search_Result : UnProcessedData<MusicInfo[]>
     {
         [JsonPropertyName("code")]
         public int Code { get; set; }
@@ -21,30 +22,24 @@ namespace MuKai_Music.Model.ResponseEntity.SearchResult.Kuwo
         [JsonPropertyName("data")]
         public Data Data { get; set; }
 
-        public override SearchMusic[] ToProcessedData()
+        public override MusicInfo[] ToProcessedData()
         {
             if (this.Code != 200)
             {
-                return Array.Empty<SearchMusic>();
+                return Array.Empty<MusicInfo>();
             }
-            SearchMusic[] res = new SearchMusic[this.Data.List.Count];
+            MusicInfo[] res = new MusicInfo[this.Data.List.Count];
             for (int i = 0; i < res.Length; i++)
             {
-                res[i] = new SearchMusic(DataSource.Kuwo)
+                res[i] = new MusicInfo()
                 {
                     Name = this.Data.List[i].Name,
-                    KuwoId = this.Data.List[i].Rid,
-                    Aritst = new Artist(DataSource.Kuwo)
-                    {
-                        KuwoId = this.Data.List[i].ArtistId,
-                        Name = this.Data.List[i].Artist,
-                    },
-                    Album = new Album(DataSource.Kuwo)
-                    {
-                        KuwoId = this.Data.List[i].AlbumId,
-                        Name = this.Data.List[i].Name,
-                        Pic = this.Data.List[i].Pic
-                    }
+                    KuWo_Id = this.Data.List[i].Rid,
+                    ArtistName = this.Data.List[i].Artist,
+                    Duration = this.Data.List[i].Duration,
+                    AlbumName = this.Data.List[i].Album,
+                    PicUrl = this.Data.List[i].Pic,
+                    DataSource = DataSource.Kuwo
                 };
             }
             return res;

@@ -14,77 +14,14 @@
 </div>
 <div id="contents-container">
     <div id='contents'>
-        <div id='music-info'>
-            <!-- <mk-img id='album-pic' [src]='currentMusicInfo?.picUrl' loadSrc='../../../assets/img/logo.png'></mk-img> -->
-            <img id='album-pic' [src]='currentMusicInfo?.picUrl' />
-            <div id='lyric-box'>
-                <div id='lyrics' #lyrics>
-                    <P *ngIf="lyric_paras.length==0">正在加载歌词...</P>
-                    <p [id]='"par-"+i' [class]='currentLrcIndex == i? themeClass :"lrc"'
-                        *ngFor='let lrc of lyric_paras; let i = index'>{{lrc.text}}</p>
-                </div>
-            </div>
-        </div>
-        <div id='playlist'>
-            <ul>
-                <li id="playlist-title">
-                    <div class="playlist-item" id="title-item">
-                        <div class="playlist-name"><span>歌曲</span></div>
-                        <div class="playlist-artist" id="title-artist"><span>艺术家</span></div>
-                        <div class="playlist-time"><span>时长</span></div>
-                    </div>
-                </li>
-                <li class="playlist-li" *ngFor='let item of playlist;let i = index'>
-                    <div class='playlist-item'>
-                        <div class='playlist-number'>
-                            {{i+1}}
-                        </div>
-                        <div class='{{currentMusicIndex==i? themeClass:"playlist-name"}} playlist-name'>
-                            <span>{{item.name}}</span>
-                        </div>
-                        <!-- 操作选项 -->
-                        <div [id]="'option-'+i" class="playlist-options">
-                            <mat-icon class="click_button" (click)='clickPlay(i)'>play_circle_outline</mat-icon>
-                            <mat-icon class="click_button" (click)='clickDownload(i)'>play_for_work</mat-icon>
-                            <mat-icon class="click_button">delete</mat-icon>
-                        </div>
-                        <div class='playlist-artist'>
-                            <span>{{item.artistName}}</span>
-                        </div>
-                        <div class='playlist-time'>{{getTimeFormat(item.duration)}}</div>
-                    </div>
-                    <!-- 元素分割线 -->
-                    <i></i>
-                </li>
-            </ul>
-        </div>
+        <app-music-info id='music-info' [lyric_paras]='this.lyric_paras' [musicInfo]='this.currentMusicInfo'
+            (pictureChange)="onPictureChange($event)">
+        </app-music-info>
+        <app-playlist id='playlist' [(playlist)]=" this.playlist" [currentPlayIndex]="this.currentMusicIndex"
+            (item_download_Click)="this.clickDownload($event)" (item_play_Click)="this.clickPlay($event)"
+            (currentMusicDelete)="this.onCurrentMusicDelete()">
+        </app-playlist>
     </div>
 </div>
-<div id="control-container">
-    <div id='control'>
-        <div class="control-item" id="control-buttons">
-            <mat-icon (click)='onLastTrackButtonClick()'>skip_previous</mat-icon>
-            <mat-icon *ngIf="stauts=='pause'||stauts=='stop'" (click)='onPlayButtonClick()'>play_circle_outline
-            </mat-icon>
-            <mat-icon *ngIf="stauts=='playing'||stauts=='loading'" (click)='onPauseButtonClick()'>
-                pause_circle_outline
-            </mat-icon>
-            <mat-icon (click)='onNextTrackButtonClick()'>skip_next</mat-icon>
-        </div>
-        <div class="control-item" id="control-seek">
-            <span id='music-title-bottom'>{{currentMusicInfo?.name+' - '+currentMusicInfo?.artistName}}</span>
-            <mat-slider #playProgress value='0.1' id='seek-bar' (input)='progressInput($event)'>
-            </mat-slider>
-        </div>
-        <div class="control-item" id='volume' [ngSwitch]='volumeStatus'>
-            <mat-icon class="volumeIcon" *ngSwitchCase="'off'" (click)='onReductionClick()'>volume_off</mat-icon>
-            <mat-icon class="volumeIcon" *ngSwitchCase="'mid'" (click)='onMuteClick()'>volume_down</mat-icon>
-            <mat-icon class="volumeIcon" *ngSwitchCase="'high'" (click)='onMuteClick()'>volume_up</mat-icon>
-            <mat-slider id='volume-seek-bar' [(value)]='volume' max=100 min=0></mat-slider>
-        </div>
-        <app-palette class="control-item" id="palette"></app-palette>
-
-    </div>
-</div>
-
-<!-- <button (click)='test()'>TEST</button> -->
+<app-control [currentMusicInfo]="this.currentMusicInfo" (startPlay)="startPlay($event)"
+    (nextButtonClick)="onNextTrackButtonClick()" (lastButtonClick)="onLastTrackButtonClick()"></app-control>

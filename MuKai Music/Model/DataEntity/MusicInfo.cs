@@ -10,11 +10,11 @@ namespace MuKai_Music.Model.DataEntity
         [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
         public int Id { get; set; }
 
-        public int Ne_Id { get; set; }
+        public int? Ne_Id { get; set; }
 
         public int? KuWo_Id { get; set; }
 
-        public int? Migu_Id { get; set; }
+        public string Migu_Id { get; set; }
 
         public string Name { get; set; }
 
@@ -27,8 +27,6 @@ namespace MuKai_Music.Model.DataEntity
         public string PicUrl { get; set; }
 
         public int? Ne_ArtistId { get; set; }
-
-        public string Migu_Url { get; set; }
 
         public int? Duration { get; set; }
 

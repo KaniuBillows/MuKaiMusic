@@ -1,10 +1,8 @@
 import { DataSource } from './param/musicUrlParam';
 
-export class lyricInfo {
-    lrc: {
-        version: number,
-        lyric: string,
-    }
+export class Lyric {
+    public time: number
+    public text: string
 }
 /**
  * 歌曲详情信息
@@ -41,19 +39,21 @@ export class Song {
     public name: string;
     public ne_Id: number;
     public kuWo_Id: number;
-    public migu_Id: number;
-    public migu_Url: string;
+    public migu_Id: string;
     public duration: number;
     public ne_ArtistId: number;
     public artistName: string;
     public ne_AlbumId: string
     public albumName: string;
     public picUrl: string;
+    public dataSource: DataSource
 }
 
 export class artist {
     public name: string;
     public id: number;
+    public dataSource: DataSource;
+    public migu_Id: string;
 }
 export class album {
     public name: string;

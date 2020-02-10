@@ -12,6 +12,10 @@ import { MkImgComponent } from './components/mk-img/mk-img.component';
 import { MatGridListModule } from '@angular/material/grid-list';
 import { PaletteComponent } from './components/palette/palette.component';
 import { AppRoutingModule } from './app-routing.module';
+import { PlaylistComponent } from './components/playlist/playlist.component';
+import { ControlComponent } from './components/control/control.component';
+import { MusicInfoComponent } from './components/music-info/music-info.component';
+
 
 
 
@@ -21,7 +25,10 @@ import { AppRoutingModule } from './app-routing.module';
     AppComponent,
     PlayerComponent,
     MkImgComponent,
-    PaletteComponent
+    PlaylistComponent,
+    PaletteComponent,
+    ControlComponent,
+    MusicInfoComponent
   ],
   imports: [
     MatIconModule,

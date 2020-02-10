@@ -11,7 +11,20 @@ namespace MuKai_Music.Model.ResponseEntity.MusicUrlResult.Migu
         [JsonPropertyName("data")]
         public Data Data { get; set; }
 
-        public override MusicUrlInfo ToProcessedData() => throw new System.NotImplementedException();
+        public override MusicUrlInfo ToProcessedData()
+        {
+            return this.ReturnCode != "000000"
+                ? new MusicUrlInfo(DataSource.Migu)
+                : new MusicUrlInfo(DataSource.Migu)
+                {
+                    Url = this.Data.SqPlayInfo != null
+                    ? this.Data.SqPlayInfo.PlayUrl
+                    : this.Data.HqPlayInfo != null
+                    ? this.Data.HqPlayInfo.PlayUrl
+                    : this.Data.BqPlayInfo?.PlayUrl
+                };
+
+        }
     }
 
 

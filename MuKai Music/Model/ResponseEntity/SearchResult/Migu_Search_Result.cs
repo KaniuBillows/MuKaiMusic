@@ -1,24 +1,25 @@
-﻿using MuKai_Music.Model.ResponseEntity.SearchResult;
+﻿using MuKai_Music.Model.DataEntity;
+using MuKai_Music.Model.ResponseEntity.SearchResult;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Text.Json.Serialization;
 
 namespace MuKai_Music.Model.ResponseEntity.SearchResult.Migu
 {
-    public sealed class Migu_Search_Result : UnProcessedData<SearchMusic[]>
+    public sealed class Migu_Search_Result : UnProcessedData<MusicInfo[]>
     {
         [JsonPropertyName("searchResult")]
         public Content SearchResult { get; set; }
 
-        public override SearchMusic[] ToProcessedData()
+        public override MusicInfo[] ToProcessedData()
         {
             if (this.SearchResult.Code != "000000")
             {
-                return System.Array.Empty<SearchMusic>();
+                return System.Array.Empty<MusicInfo>();
             }
             else
             {
-                SearchMusic[] res = new SearchMusic[this.SearchResult.Object.SongList.Count];
+                MusicInfo[] res = new MusicInfo[this.SearchResult.Object.SongList.Count];
                 for (int i = 0; i < res.Length; i++)
                 {
                     string name = this.SearchResult.Object.SongList[i].MusicName;
@@ -31,14 +32,12 @@ namespace MuKai_Music.Model.ResponseEntity.SearchResult.Migu
                         int index3 = name.IndexOf(">");
                         name = name.Replace(name.Substring(index2, index3 - index2 + 1), "");
                     }
-                    res[i] = new SearchMusic(DataSource.Migu)
+                    res[i] = new MusicInfo()
                     {
-                        MiguId = this.SearchResult.Object.SongList[i].CopyrightId,
+                        DataSource = DataSource.Migu,
+                        Migu_Id = this.SearchResult.Object.SongList[i].CopyrightId,
                         Name = name,
-                        Aritst = new SearchResult.Artist(DataSource.Migu)
-                        {
-                            Name = this.SearchResult.Object.SongList[i].ArtistName
-                        },
+                        ArtistName = this.SearchResult.Object.SongList[i].ArtistName,
                     };
                 }
 

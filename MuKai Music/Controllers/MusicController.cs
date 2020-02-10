@@ -4,6 +4,7 @@ using MuKai_Music.Attribute;
 using MuKai_Music.Model.DataEntity;
 using MuKai_Music.Model.RequestEntity.Music;
 using MuKai_Music.Model.ResponseEntity;
+using MuKai_Music.Model.ResponseEntity.LyricResult;
 using MuKai_Music.Model.ResponseEntity.SearchResult;
 using MuKai_Music.Model.Service;
 using MusicApi.NetEase.Banner;
@@ -31,16 +32,6 @@ namespace MuKai_Music.Service
             //    this.httpContextAccessor = httpContextAccessor;
         }
 
-        /* /// <summary>
-         /// 关键词搜索
-         /// </summary>
-         /// <param name="keyword"></param>
-         /// <param name="type"></param>
-         /// <param name="limit"></param>
-         /// <param name="offset"></param>
-         [HttpGet("search")]
-         [ApiCache(Duration = 3600)]
-         public async Task Search(string keyword, SearchType type, int? limit, int? offset) => await musicService.Search(keyword, type, limit ?? 30, offset ?? 0);*/
 
         /// <summary>
         /// 获取歌手介绍
@@ -71,6 +62,14 @@ namespace MuKai_Music.Service
         public async Task<IResult<MusicInfo[]>> PersonalizedMusic() => await musicService.GetPersonalizedNewMusic();
 
         /// <summary>
+        /// 获取网易云歌曲详情信息，包含图片等信息
+        /// </summary>
+        /// <param name="id"></param>
+        /// <returns></returns>
+        [HttpGet("music/ne_detail")]
+        public async Task MusicDetail(int id) => await musicService.GetMusicDetail(id);
+
+        /// <summary>
         /// 获取精品歌单
         /// </summary>
         /// <param name="category"></param>
@@ -93,32 +92,26 @@ namespace MuKai_Music.Service
         /// <returns></returns>
         [HttpPost("music/url")]
         [ApiCache(Duration = 600)]
-        public async Task<IResult<Model.ResponseEntity.MusicUrlResult.MusicUrlInfo>> MsuicUrl([Required]MusicUrl_Param param)
+        public async Task<IResult<Model.ResponseEntity.MusicUrlResult.MusicUrlInfo>> MsuicUrl([Required]Music_Param param)
             => await musicService.GetMusicUrl(param);
 
         /// <summary>
-        /// 搜索歌曲信息
+        /// 全曲库搜索歌曲信息
         /// </summary>
         /// <param name="token"></param>
         /// <param name="key"></param>
         /// <returns></returns>
         [HttpGet("music/search")]
         [ResponseCache(Duration = 3600)]
-        public async Task<IResult<SearchMusic[]>> SearchUrl(string token, string key) => await musicService.SearchMusic(key, token);
+        public async Task<IResult<MusicInfo[]>> SearchUrl(string token, string key) => await musicService.SearchMusic(key, token);
 
         /// <summary>
         /// 获取歌词
         /// </summary>
-        /// <param name="id">歌曲id</param>
-        [HttpGet("lyric")]
-        public async Task GetLyric(int id) => await musicService.GetLyric(id);
+        /// <param name="param"></param>
+        [HttpPost("music/lyric")]
+        public async Task<IResult<Lyric[]>> GetLyric([Required]Music_Param param) => await musicService.GetLyric(param);
 
-        /// <summary>
-        /// 获取歌曲详情
-        /// </summary>
-        /// <param name="ids"></param>
-        [HttpPost("music/detail")]
-        public async Task Detail([FromBody]int[] ids) => await musicService.GetMusicDetail(ids);
 
         /// <summary>
         /// 获取全部歌单分类

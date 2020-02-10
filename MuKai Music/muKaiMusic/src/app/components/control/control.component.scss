@@ -1,0 +1,92 @@
+$control-button-color: rgba(225, 225, 225, .8);
+
+#control-container {
+    width: 100%;
+    position: absolute;
+    display: flex;
+    bottom: 20px;
+    height: 11%;
+}
+
+#control {
+    user-select: none;
+    position: relative;
+    display: flex;
+    z-index: 3;
+    margin: auto;
+}
+
+#control-seek {
+    display: block;
+    position: relative;
+    width: 50vw;
+    min-width: 450px;
+
+}
+
+#music-title-bottom {
+    top: -10px;
+    width: 100%;
+    position: absolute;
+    font-size: 16px;
+    cursor: pointer;
+    color: $control-button-color;
+
+    &:hover {
+        color: #fff;
+    }
+}
+
+#seek-bar {
+    width: 100%;
+    cursor: pointer;
+    position: absolute;
+}
+
+#control-buttons {
+    display: inline-flex;
+    width: 200px;
+
+
+    mat-icon {
+        color: $control-button-color;
+        cursor: pointer;
+        margin-left: 20px;
+        margin-right: 20px;
+        font-size: 48px;
+        display: inline-flex;
+    }
+
+    mat-icon:hover {
+        color: #fff;
+    }
+}
+
+#volume {
+    display: flex;
+    min-width: 170px;
+    width: 10vw;
+    position: relative;
+
+    .volumeIcon {
+        font-size: 24px;
+        color: $control-button-color;
+        cursor: pointer;
+        margin-top: 10px;
+
+        &:hover {
+            color: #fff;
+        }
+    }
+
+    #volume-seek-bar {
+        display: inline-flex;
+        width: 80%;
+        cursor: pointer;
+    }
+}
+
+#palette {
+    margin-top: 10px;
+    position: relative;
+}

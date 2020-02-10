@@ -1,4 +1,8 @@
-﻿using MusicApi.Migu.Search;
+﻿using MusicApi.Migu.Music;
+using MusicApi.Migu.Search;
+using MusicApi.NetEase.Search;
+using System.Net.Http;
+using System.Text.RegularExpressions;
 
 namespace Test
 {
@@ -8,9 +12,10 @@ namespace Test
 
         static async System.Threading.Tasks.Task Main(string[] args)
         {
-            Mobile_Search search = new Mobile_Search(1, 30, "周杰伦");
-            var message = await search.Request();
-            System.Console.WriteLine(await message.Content.ReadAsStringAsync());
+
+            Search search = new Search("海阔天空");
+            System.Console.WriteLine(await search.Request().Result.Content.ReadAsStringAsync());
+
         }
 
 

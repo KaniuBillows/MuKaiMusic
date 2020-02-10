@@ -2,11 +2,11 @@ import { Component, OnInit, ViewChild, ElementRef, EventEmitter } from '@angular
 import { PlayerService } from 'src/app/services/player/player.service';
 import { MatSlider, MatSliderChange } from '@angular/material/slider';
 import { MusicService } from 'src/app/services/network/music/music.service';
-import { musicDetailResult, album, artist, Song, UrlInfo } from 'src/app/entity/music';
+import { musicDetailResult, album, artist, Song, UrlInfo, Lyric } from 'src/app/entity/music';
 import { ThemeService } from 'src/app/services/theme/theme.service';
 import { AccountService } from 'src/app/services/network/account/account.service';
 import { Result } from 'src/app/entity/baseResult';
-import { MusicUrlParam, DataSource } from 'src/app/entity/param/musicUrlParam';
+import { MusicParam, DataSource } from 'src/app/entity/param/musicUrlParam';
 
 
 @Component({
@@ -15,228 +15,153 @@ import { MusicUrlParam, DataSource } from 'src/app/entity/param/musicUrlParam';
     styleUrls: ['./player.component.scss']
 })
 export class PlayerComponent implements OnInit {
-    @ViewChild('playProgress', { static: true })
-    progrees: MatSlider;
+
 
     @ViewChild('lyrics', { static: true })
     lyrics: ElementRef;
 
-    private _volumeStatus: 'off' | 'mid' | 'high' = 'mid';
 
-    private _volume: number = 45;
+    private _lyric_paras: Lyric[] = [];
 
-    private _stagingVolume: number;
-
-    private _lyric_paras: {
-        text: string,
-        time: number,
-    }[] = [];
-
-    private _showPalette: boolean = false;
-
-    // private _currentMusicInfo: {
-    //     name: string,
-    //     id: number,
-    //     albumName: string,
-    //     albumId: number,
-    //     picUrl: string,
-    //     artistName: string;
-    //     artistId: number
-    // } = { picUrl: '' } as any;
-
-    private _currentMusicInfo: Song = { picUrl: "" } as any;
+    private _currentMusicInfo: Song = {} as any;
 
     private _currentLrcIndex: number = 0;
 
     private _playlist: Song[] = [];
 
     constructor(
-        private player: PlayerService,
+        public player: PlayerService,
         public theme: ThemeService,
         private musicNet: MusicService) {
     }
     ngOnInit() {
-        this.player.onCurrentTimeChange.subscribe((time: number) =>
-            this.onTimeChange(time)
-        );
-        this.player.onDurationChange.subscribe((duration: number) => {
-            this.progrees.max = duration;
-            this.progrees.value = 0.1;
-        });
         this.player.onEnded.subscribe(() => {
             this.onNextTrackButtonClick();
         })
         this.getPersonalized();
     }
 
+    /**
+     * 播放列表
+     */
     public get playlist() {
         return this._playlist;
     }
 
-    public get showPalette() {
-        return this._showPalette;
-    }
-
-
     /**
-     * 当前播放歌曲
+     * 当前播放歌曲,当前播放歌曲改变时，会调用获取歌词方法，加载歌词
+     * 并且会更改背景图片
      */
     public get currentMusicInfo() {
         return this._currentMusicInfo;
     }
-
     public set currentMusicInfo(value: Song) {
         this._currentMusicInfo = value;
-        document.getElementById("back-board").style.backgroundImage = "Url(" + this._currentMusicInfo.picUrl + ")";
+        this.getLyric(value);
     }
 
+    /**
+     * 当前歌词索引
+     */
     public get currentLrcIndex() {
         return this._currentLrcIndex;
     }
-
     public set currentLrcIndex(value: number) {
         this._currentLrcIndex = value;
     }
 
+    /**
+     * 当前歌曲索引
+     */
     public get currentMusicIndex() {
-        return this._playlist.findIndex(item =>
+        this._currentMusicIndex = this._playlist.findIndex(item =>
             item.ne_Id == this.currentMusicInfo.ne_Id
         );
+        return this._currentMusicIndex;
     }
+    private _currentMusicIndex: number = this.currentMusicIndex;
 
+    /**
+     * 获取当前歌曲是否为最后一首
+     */
     public get isLastMusic() {
         return this.currentMusicIndex == this._playlist.length - 1;
     }
+
+    /**
+     * 当前歌曲是否为第一首
+     */
     public get isFirstMusic() {
         return this.currentMusicIndex == 0;
     }
+
     /**
-     * 音量状态
+     * 获取当前主题class
      */
-    public get volumeStatus() {
-        return this._volumeStatus;
-    }
-
-    public set volumeStatus(value: 'off' | 'mid' | 'high') {
-        this._volumeStatus = value;
+    public get themeClass() {
+        return this.theme.getThemeClass();
     }
 
     /**
-     * 显示歌词
+     * 歌词段落
      */
     public get lyric_paras() {
         return this._lyric_paras;
     }
 
     /**
-     * 音量
-     */
-    public set volume(value: number) {
-        this._volume = value;
-        let v = value / 100;
-        this.player.setVolume(v);
-        if (value == 0) this.volumeStatus = 'off';
-        if (0 < value && value <= 60) this.volumeStatus = 'mid';
-        if (60 < value) this.volumeStatus = 'high';
-    }
-
-    public get volume() {
-        return this._volume;
-    }
-
-    /**
-     * 播放状态
-     */
-    public get stauts() {
-        return this.player.status;
-    }
-
-    public get themeClass() {
-        return this.theme.getThemeClass();
-    }
-    /**
-     * 转换时间格式
-     * @param time 
-     */
-    public getTimeFormat(time: number): string {
-        return Math.floor(time / 60000).toString().padStart(2, '0') +
-            ':' + Math.floor((time % 60000) / 1000).toString().padStart(2, '0');
-    }
-    /**
-     * 播放按钮点击事件
-     */
-    public onPlayButtonClick() {
-        if (this.player.src != '') {
-            this.player.play();
-        }
-        else {
-            this.startPlay(this.currentMusicIndex);
-        }
-    }
-
-    /**
-     * 暂停
-     */
-    public onPauseButtonClick() {
-        this.player.pause();
-    }
-
-    /**
-     * 下一首
+     * 订阅control组件的下一首事件
+     * 当位于最后时，跳转到第一首播放
      */
     public onNextTrackButtonClick() {
         if (this._playlist.length < 1) {
             return;
         }
         if (this.isLastMusic) {
-            this.getLyric(this._playlist[0].ne_Id, () =>
-                this.startPlay(0)
+            this.getLyric(this._playlist[0], () =>
+                this.startPlay(this._playlist[0])
             );
         } else {
-            this.getLyric(this._playlist[this.currentMusicIndex + 1].ne_Id, () =>
-                this.startPlay(this.currentMusicIndex + 1)
+            this.getLyric(this._playlist[this.currentMusicIndex + 1], () =>
+                this.startPlay(this._playlist[this.currentMusicIndex + 1])
             );
         }
     }
+
     /**
-     * 上一首
+     * 订阅control组件的下一首事件
+     * 当位于首位时，跳转到最后一首播放
      */
     public onLastTrackButtonClick() {
         if (this._playlist.length < 1) {
             return;
         }
         if (this.isFirstMusic) {
-            this.getLyric(this._playlist[this._playlist.length - 1].ne_Id, () =>
-                this.startPlay(this._playlist.length - 1));
+            this.getLyric(this._playlist[this._playlist.length - 1], () =>
+                this.startPlay(this._playlist[this._playlist.length - 1]));
         } else {
-            this.getLyric(this._playlist[this.currentMusicIndex - 1].ne_Id, () =>
-                this.startPlay(this.currentMusicIndex - 1));
+            this.getLyric(this._playlist[this.currentMusicIndex - 1], () =>
+                this.startPlay(this._playlist[this.currentMusicIndex - 1]));
         }
     }
-    public onMuteClick() {
-        this._stagingVolume = this._volume;
-        this.volume = 0;
-    }
-    public onReductionClick() {
-        this.volume = this._stagingVolume;
-    }
-    public progressInput(ev: MatSliderChange) {
-        this.player.seek(ev.value);
-    }
+
 
     //#region Actions
+
     /**
-     * 点击播放歌曲
+     * 订阅playlist组件点击播放歌曲事件
+     * 设置当前播放歌曲到对应歌曲
+     * 并开始获取歌词，获取歌词完成后，开始播放
      * @param index 
      */
     public clickPlay(index: number) {
         this.currentMusicInfo = this.playlist[index];
-        this.getLyric(this.playlist[index].ne_Id, () => this.startPlay(index))
-        //this.getMusicDetail(this._playlist[index].id, () => this.startPlay());
+        this.getLyric(this.playlist[index], () => this.startPlay(this.currentMusicInfo))
     }
 
     /**
-     * 点击下载歌曲
+     * 订阅playlist点击下载歌曲事件
+     * 首先获取播放连接，然后读取歌曲名称和歌手名称，生成下载
      * @param index 
      */
     public clickDownload(index: number) {
@@ -244,11 +169,38 @@ export class PlayerComponent implements OnInit {
         this.musicNet.getNeteaseUrl({
             neteaseId: item.ne_Id,
             dataSource: DataSource.NetEase
-        } as MusicUrlParam).subscribe((res: Result<UrlInfo>) => {
+        } as MusicParam).subscribe((res: Result<UrlInfo>) => {
             if (res.content.url) {
                 this.musicNet.downloadFile(res.content.url, item.name + " - " + item.artistName);
             }
         })
+    }
+
+    /**
+     * 订阅playlist当前歌曲被删除事件
+     * 停止当前歌曲的播放，并将播放器状态设置为’stop‘
+     * 如果此时播放列表已经为空，则将当前歌曲设置为空对象
+     * 否则将下一首歌设置为当前歌曲,此时播放状态仍为'stop'
+     */
+    public onCurrentMusicDelete() {
+        //此时playlist的length已经-1
+        this.player.stop();
+        if (this.playlist.length == 0) {
+            this.currentMusicInfo = {} as any;
+        } else {
+            if (this._currentMusicIndex == this.playlist.length)
+                this.currentMusicInfo = this.playlist[0];
+            else this.currentMusicInfo = this.playlist[this._currentMusicIndex];
+        }
+    }
+
+    /**
+     * 订阅music-info组件产生的音乐图片改变事件
+     * @param pic 
+     */
+    public onPictureChange(pic: string) {
+        document.getElementById("back-board").style.backgroundImage = "Url(" + pic + ")";
+
     }
 
     public async test() {
@@ -262,20 +214,16 @@ export class PlayerComponent implements OnInit {
     //#region private method
 
     /**
-     * 获取当前歌曲的播放链接并开始播放
+     * 获取歌曲的播放链接并开始播放
      */
-    private startPlay(index: number) {
+    public startPlay(song: Song) {
         this.player.status = 'loading';
-        this.currentMusicInfo = this.playlist[index];
-
+        this.currentMusicInfo = song;
         this.musicNet.getNeteaseUrl({
-            neteaseId: this.currentMusicInfo.ne_Id,
+            neteaseId: song.ne_Id,
             dataSource: DataSource.NetEase
-        } as MusicUrlParam).subscribe((res: Result<UrlInfo>) => {
+        } as MusicParam).subscribe((res: Result<UrlInfo>) => {
             if (res.content.url) {
-                this.player.onCurrentTimeChange.subscribe((time: number) =>
-                    this.onTimeChange(time)
-                )
                 this.player.start(res.content.url);
             } else {
                 alert('获取播放链接失败!');
@@ -287,56 +235,26 @@ export class PlayerComponent implements OnInit {
         });
     }
     /**
-     * 获取歌词
-     * @param id 
+     * 获取歌词，并在歌词获取完毕之后，对callback进行调用
+     * 一般用于获取完毕歌词进行播放
+     * @param song
      */
-    private getLyric(id: number, callback?: () => void) {
+    private getLyric(song: Song, callback?: () => void) {
         this._lyric_paras = [];
-        this.musicNet.getLyric(id).subscribe(res => {
-            //匹配包含[00:00.000]格式的时间字符串
-            let regex = /^\[[0-9]{2}\:[0-9]{2}\.[0-9]{2,3}\]/;
-            let lrcs: string[] = res.lrc.lyric.split('\n');
-            lrcs.forEach(lrc => {
-                if (regex.test(lrc)) {
-                    //时间信息字符串
-                    let timeString = lrc.substring(lrc.indexOf('[') + 1, lrc.indexOf(']'));
-                    //分析字符串得到时间信息
-                    let time = Number.parseInt(timeString.substr(0, 2)) * 60
-                        + Number.parseFloat(timeString.substring(timeString.indexOf(':') + 1));
-                    this._lyric_paras.push({
-                        text: lrc.substring(timeString.length + 2),
-                        time: time
-                    });
-                } else {
-                    this._lyric_paras.push({
-                        text: lrc.substring(lrc.indexOf('[') + 1, lrc.indexOf(']')),
-                        time: null
-                    })
-                }
-            })
+        this.musicNet.getLyric(song).subscribe((res: Result<Lyric[]>) => {
+            this._lyric_paras = res.content
         }, null, callback);
-    }
-    /**
-    * 获取推荐歌曲
-    */
-    private getPersonalized() {
-        this.musicNet.getPersonalizedMusics().subscribe((res: Result<Song[]>) => {
-            if (res.content.length > 0) this.currentMusicInfo = res.content[0];
-            this._playlist = this._playlist.concat(res.content)
-            this.getLyric(this.playlist[0].ne_Id);
-        });
     }
 
     /**
-     * 播放时间改变事件
+     * 在默认情况下
+     * 获取推荐歌曲，并将获取到的第一首歌作为当前歌曲
      */
-    private onTimeChange(time: number) {
-        this.progrees.writeValue(time);
-        this.currentLrcIndex = this.lyric_paras.findIndex(item => item.time > time) - 1;
-        let element = document.getElementById('par-' + this.currentLrcIndex);
-        if (element) {
-            this.lyrics.nativeElement.style.transform = `translateY(-${element.offsetTop}px)`;
-        }
+    private getPersonalized() {
+        this.musicNet.getPersonalizedMusics().subscribe((res: Result<Song[]>) => {
+            if (res.content.length > 0) this.currentMusicInfo = res.content[0];
+            this._playlist = this._playlist.concat(res.content);
+        });
     }
 
     //#endregion

@@ -23,6 +23,9 @@ using MuKai_Music.Model.ResponseEntity.SearchResult.Migu;
 using MusicApi.Migu.Search;
 using MuKai_Music.Model.RequestEntity.Music;
 using MuKai_Music.Model.ResponseEntity.PersonlizedResult;
+using MuKai_Music.Model.ResponseEntity.LyricResult;
+using MiGu_Music_API.Music;
+using MusicApi.Kuwo.Music;
 
 namespace MuKai_Music.Model.Service
 {
@@ -38,25 +41,14 @@ namespace MuKai_Music.Model.Service
             this.HttpClientFactory = httpClientFactory;
         }
 
-        /// <summary>
-        /// 搜索网易云曲库
-        /// </summary>
-        /// <param name="keyword"></param>
-        /// <param name="searchType"></param>
-        /// <param name="limit"></param>
-        /// <param name="offset"></param>
-        public async Task Search(string keyword, SearchType searchType, int limit, int offset)
-        {
-            IRequestOption request = new Search(keyword, searchType, limit, offset);
-            await GetResult(httpContext.Response, request);
-        }
+
 
         /// <summary>
         /// 获取歌曲的URL
         /// </summary>
         /// <param name="param"></param>
         /// <returns></returns>
-        public async Task<IResult<MusicUrlInfo>> GetMusicUrl(MusicUrl_Param param)
+        public async Task<IResult<MusicUrlInfo>> GetMusicUrl(Music_Param param)
         {
             BaseResult<MusicUrlInfo> res = null;
             IRequestOption req;
@@ -73,7 +65,7 @@ namespace MuKai_Music.Model.Service
                 case DataSource.NetEase:
                     {
                         if (!param.NeteaseId.HasValue) break;
-                        req = new Music_Url(param.NeteaseId.Value);
+                        req = new MusicApi.NetEase.Music.Music_Url(param.NeteaseId.Value);
                         NetEaseUrl_Result netEaseResult = await GetResult<NetEaseUrl_Result>(req);
                         res = new BaseResult<MusicUrlInfo>(netEaseResult.ToProcessedData(), 200, null);
                     }
@@ -86,12 +78,9 @@ namespace MuKai_Music.Model.Service
                         res = new BaseResult<MusicUrlInfo>(miguResult.ToProcessedData(), 200, null);
                     }
                     break;
-                default:
-                    {
-                    }
-                    break;
+                default: break;
             }
-            return res ?? new BaseResult<MusicUrlInfo>(null, 400, "数据源参数错误!");
+            return res ?? new BaseResult<MusicUrlInfo>(null, 400, "参数错误!");
         }
 
         /// <summary>
@@ -100,16 +89,16 @@ namespace MuKai_Music.Model.Service
         /// <param name="key"></param>
         /// <param name="kuwoToken"></param>
         /// <returns></returns>
-        public async Task<IResult<SearchMusic[]>> SearchMusic(string key, string kuwoToken)
+        public async Task<IResult<DataEntity.MusicInfo[]>> SearchMusic(string key, string kuwoToken)
         {
             Kuwo_Search_Result kuwoResult = await GetResult<Kuwo_Search_Result>(new Music_Search(kuwoToken, key, 10, 0));
             NetEase_Search_Result netEaseResult = await GetResult<NetEase_Search_Result>(new Search(new System.Collections.Hashtable(), key, SearchType.Song, 10, 0));
             Migu_Search_Result miguResult = await GetResult<Migu_Search_Result>(new Web_Search(key));
-            SearchMusic[] kuwo = kuwoResult.ToProcessedData();
-            SearchMusic[] netease = netEaseResult.ToProcessedData();
-            SearchMusic[] migu = miguResult.ToProcessedData();
+            DataEntity.MusicInfo[] kuwo = kuwoResult.ToProcessedData();
+            DataEntity.MusicInfo[] netease = netEaseResult.ToProcessedData();
+            DataEntity.MusicInfo[] migu = miguResult.ToProcessedData();
             int length = kuwo.Length + netease.Length + migu.Length;
-            SearchMusic[] res = new SearchMusic[length];
+            DataEntity.MusicInfo[] res = new DataEntity.MusicInfo[length];
             //合并结果 1.网易，2.酷我，3.咪咕 
             for (int i = 0, x = 0, y = 0, w = 0; i < length;)
             {
@@ -168,7 +157,7 @@ namespace MuKai_Music.Model.Service
                     }
                 }
             }
-            return new BaseResult<SearchMusic[]>(res, 200, null);
+            return new BaseResult<DataEntity.MusicInfo[]>(res, 200, null);
         }
 
         /// <summary>
@@ -247,18 +236,48 @@ namespace MuKai_Music.Model.Service
         /// <summary>
         /// 获取歌曲歌词
         /// </summary>
-        /// <param name="id"></param>
-        public async Task GetLyric(int id)
+        /// <param name="param"></param>
+        /// <returns></returns>
+        public async Task<IResult<ResponseEntity.LyricResult.Lyric[]>> GetLyric(Music_Param param)
         {
-            IRequestOption request = new Lyric(id);
-            await GetResult(httpContext.Response, request);
+            IRequestOption request;
+            ResponseEntity.LyricResult.Lyric[] lyricInfo = null;
+            switch (param.DataSource)
+            {
+                case DataSource.NetEase:
+                    {
+                        if (!param.NeteaseId.HasValue) break;
+                        request = new MusicApi.NetEase.Music.Lyric(param.NeteaseId.Value);
+                        lyricInfo = (await GetResult<NetEase_Lyric_Result>(request)).ToProcessedData();
+
+                    }
+                    break;
+                case DataSource.Migu:
+                    {
+                        request = new Web_Lyric(param.MiguId);
+                        lyricInfo = (await GetResult<Migu_Lyric_Result>(request)).ToProcessedData();
+                    }
+                    break;
+                case DataSource.Kuwo:
+                    {
+                        if (!param.KuwoId.HasValue) break;
+                        request = new Music_Lyric(param.KuwoId.Value);
+                        lyricInfo = (await GetResult<Kuwo_Lyric_Result>(request)).ToProcessedData();
+                    }
+                    break;
+                default:
+                    break;
+            }
+            return lyricInfo == null ?
+                new BaseResult<ResponseEntity.LyricResult.Lyric[]>(null, 400, "参数不完整！")
+                : new BaseResult<ResponseEntity.LyricResult.Lyric[]>(lyricInfo, 200, null);
         }
 
         /// <summary>
         /// 获取歌曲详情
         /// </summary>
         /// <param name="musicId"></param>
-        public async Task GetMusicDetail(int[] musicId)
+        public async Task GetMusicDetail(int musicId)
         {
             IRequestOption request = new MusicInfo(musicId);
             await GetResult(httpContext.Response, request);

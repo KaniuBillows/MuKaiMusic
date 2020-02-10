@@ -1,10 +1,11 @@
-﻿using System;
+﻿using MuKai_Music.Model.DataEntity;
+using System;
 using System.Collections.ObjectModel;
 using System.Text.Json.Serialization;
 
 namespace MuKai_Music.Model.ResponseEntity.SearchResult.NetEase
 {
-    public sealed class NetEase_Search_Result : UnProcessedData<SearchMusic[]>
+    public sealed class NetEase_Search_Result : UnProcessedData<MusicInfo[]>
     {
         [JsonPropertyName("code")]
         public int Code { get; set; }
@@ -12,29 +13,25 @@ namespace MuKai_Music.Model.ResponseEntity.SearchResult.NetEase
         [JsonPropertyName("result")]
         public Result Content { get; set; }
 
-        public override SearchMusic[] ToProcessedData()
+        public override MusicInfo[] ToProcessedData()
         {
             if (this.Code != 200)
             {
-                return Array.Empty<SearchMusic>();
+                return Array.Empty<MusicInfo>();
             }
-            SearchMusic[] res = new SearchMusic[this.Content.Songs.Count];
+            MusicInfo[] res = new MusicInfo[this.Content.Songs.Count];
             for (int i = 0; i < res.Length; i++)
             {
-                res[i] = new SearchMusic(DataSource.NetEase)
+                res[i] = new MusicInfo()
                 {
+                    DataSource = DataSource.NetEase,
                     Name = this.Content.Songs[i].Name,
-                    NetEaseId = this.Content.Songs[i].Id,
-                    Aritst = new SearchResult.Artist(DataSource.NetEase)
-                    {
-                        NetEaseId = this.Content.Songs[i].Artists[0].Id,
-                        Name = this.Content.Songs[i].Artists[0].Name
-                    },
-                    Album = new SearchResult.Album(DataSource.NetEase)
-                    {
-                        NetEaseId = this.Content.Songs[i].Album.Id,
-                        Name = this.Content.Songs[i].Album.Name
-                    }
+                    Ne_Id = this.Content.Songs[i].Id,
+                    ArtistName = this.Content.Songs[i].Artists[0].Name,
+                    Ne_ArtistId = this.Content.Songs[i].Artists[0].Id,
+                    AlbumName = this.Content.Songs[i].Album.Name,
+                    Ne_AlbumId = this.Content.Songs[i].Album.Id,
+                    Duration = this.Content.Songs[i].Duration/1000
                 };
             }
             return res;
@@ -53,6 +50,9 @@ namespace MuKai_Music.Model.ResponseEntity.SearchResult.NetEase
 
     public class Song
     {
+        [JsonPropertyName("duration")]
+        public int Duration { get; set; }
+
         [JsonPropertyName("id")]
         public int Id { get; set; }
 

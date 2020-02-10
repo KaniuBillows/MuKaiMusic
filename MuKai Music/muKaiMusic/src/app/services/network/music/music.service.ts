@@ -2,11 +2,11 @@ import { Injectable } from '@angular/core';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Observable } from 'rxjs';
 import 'src/app/entity/music';
-import { lyricInfo, musicDetailResult, NetEaseUrlResult, Song, UrlInfo } from 'src/app/entity/music';
+import { musicDetailResult, NetEaseUrlResult, Song, UrlInfo, Lyric } from 'src/app/entity/music';
 import { CategoryResult, HotCaegoryResult, PersonalizedPlaylistResult } from 'src/app/entity/playlist';
 import { Result } from 'src/app/entity/baseResult';
 import { environment } from "src/environments/environment"
-import { MusicUrlParam } from 'src/app/entity/param/musicUrlParam';
+import { MusicParam, DataSource } from 'src/app/entity/param/musicUrlParam';
 
 @Injectable({
   providedIn: 'root'
@@ -26,18 +26,18 @@ export class MusicService {
 
   /**
    * 获取歌词
-   * @param id 网易云歌曲Id
+   * @param song 
    */
-  public getLyric(id: number): Observable<lyricInfo> {
-    return this.httpClient.get<lyricInfo>(environment.baseUrl + '/api/lyric?id=' + id);
+  public getLyric(song: Song): Observable<Result<Lyric[]>> {
+    return this.httpClient.post<Result<Lyric[]>>(environment.baseUrl + '/api/music/lyric', this.getParma(song));
   }
 
   /**
-   * 获取歌曲详情
-   * @param ids 
+   * 获取网易云歌曲详情
+   * @param id 网易云歌曲Id
    */
-  public getMusicDetail(ids: number[]): Observable<musicDetailResult> {
-    return this.httpClient.post<musicDetailResult>(environment.baseUrl + '/api/music/detail', ids);
+  public getMusicDetail(id: number): Observable<musicDetailResult> {
+    return this.httpClient.get<musicDetailResult>(environment.baseUrl + `/api/music/ne_detail?id=${id}`);
   }
 
   /**
@@ -59,8 +59,7 @@ export class MusicService {
    * 获取歌曲的URL
    * @param parma
    */
-  public getNeteaseUrl(parma: MusicUrlParam): Observable<Result<UrlInfo>> {
-    // return this.httpClient.get<NetEaseUrlResult>(environment.baseUrl + `/api/url?id=${id}&br=${br || 128000}`);
+  public getNeteaseUrl(parma: MusicParam): Observable<Result<UrlInfo>> {
     return this.httpClient.post<Result<UrlInfo>>(environment.baseUrl + '/api/music/url', parma);
   }
 
@@ -77,6 +76,7 @@ export class MusicService {
   public getAllCategories(): Observable<CategoryResult> {
     return this.httpClient.get<CategoryResult>(environment.baseUrl + '/api/playlist/categories');
   }
+
 
   /**
    * 下载歌曲
@@ -96,7 +96,10 @@ export class MusicService {
     x.send();
   }
 
-
+  /**
+   * 搜索歌曲
+   * @param word 
+   */
   public async searchMusic(word: string) {
     if (await this.getKuWoToken()) {
 
@@ -112,6 +115,55 @@ export class MusicService {
       this._kuwoToken = result.content;
       return true;
     } else return false;
+  }
+
+
+  public async getPicture(song: Song): Promise<string> {
+    let url: string = "";
+    if (song.picUrl) return song.picUrl;
+    try {
+      switch (song.dataSource) {
+        case DataSource.Kuwo: {
+          url = `http://www.kuwo.cn/api/www/music/musicInfo?mid=${song.kuWo_Id}&reqId=${this.get_uuid()}`;
+          let res = await this.httpClient.get<any>(url).toPromise();
+          if (res.code != 200) return null;
+          return res.data.pic;
+        }
+        case DataSource.Migu: {
+          url = `http://music.migu.cn/v3/api/music/audioPlayer/getSongPic?songId=${song.migu_Id}`;
+          let res = await this.httpClient.get<any>(url).toPromise();
+          if (res.returnCode != "000000") return null;
+          return "http:" + res.smallPic;
+        }
+        case DataSource.NetEase: {
+          let res = await this.getMusicDetail(song.ne_Id).toPromise();
+          return res.songs[0].al.picUrl + '?param=240y240';
+        }
+      }
+    } catch{
+      return "../../../assets/img/logo.png";
+    }
+  }
+
+  private getParma(song: Song): MusicParam {
+    let res = new MusicParam();
+    res.dataSource = song.dataSource;
+    switch (song.dataSource) {
+      case DataSource.Kuwo: res.kuwoId = song.kuWo_Id;
+        break;
+      case DataSource.Migu: res.miguId = song.migu_Id;
+        break;
+      case DataSource.NetEase: res.neteaseId = song.ne_Id;
+        break;
+    }
+    return res;
+  }
+
+  private S4() {
+    return (((1 + Math.random()) * 0x10000) | 0).toString(16).substring(1);
+  }
+  private get_uuid() {
+    return (this.S4() + this.S4() + "-" + this.S4() + "-" + this.S4() + "-" + this.S4() + "-" + this.S4() + this.S4() + this.S4());
   }
 
 }

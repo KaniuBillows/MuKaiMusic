@@ -8,13 +8,13 @@ namespace MusicApi.NetEase.Music
     /// </summary>
     public sealed class MusicInfo : BaseRequestOption
     {
-        public MusicInfo(Hashtable cookies, int[] ids) : base(cookies)
+        public MusicInfo(Hashtable cookies, int id) : base(cookies)
         {
-
+            int[] ids = { id };
             Params.Add("c", "[" + string.Join(",", ids.Select(id => "{\"id\":" + id + "}")) + "]");
             Params.Add("ids", "[" + string.Join(",", ids) + "]");
         }
-        public MusicInfo(int[] ids) : this(new Hashtable(), ids)
+        public MusicInfo(int id) : this(new Hashtable(), id)
         {
 
         }

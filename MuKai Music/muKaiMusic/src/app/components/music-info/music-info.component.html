@@ -1,0 +1,9 @@
+<img id='album-pic' [src]='picUrl' />
+
+<div id='lyric-box'>
+    <div id='lyrics' #lyrics>
+        <P *ngIf="lyric_paras.length==0">正在加载歌词...</P>
+        <p [id]='"par-"+i' [class]='currentLrcIndex == i? themeClass :"lrc"'
+            *ngFor='let lrc of lyric_paras; let i = index'> {{lrc.text}} </p>
+    </div>
+</div>

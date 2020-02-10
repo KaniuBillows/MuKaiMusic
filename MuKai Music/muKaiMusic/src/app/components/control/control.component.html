@@ -1,0 +1,28 @@
+<div id="control-container">
+    <div id='control'>
+        <div class="control-item" id="control-buttons">
+            <mat-icon (click)='onLastTrackButtonClick()'>skip_previous</mat-icon>
+            <mat-icon *ngIf="playStatus=='pause'||playStatus=='stop'" (click)='onPlayButtonClick()'>play_circle_outline
+            </mat-icon>
+            <mat-icon *ngIf="playStatus=='playing'||playStatus=='loading'" (click)='onPauseButtonClick()'>
+                pause_circle_outline
+            </mat-icon>
+            <mat-icon (click)='onNextTrackButtonClick()'>skip_next</mat-icon>
+        </div>
+        <div class="control-item" id="control-seek">
+            <span id='music-title-bottom'>
+                {{currentMusicInfo.name!=null?currentMusicInfo.name+' - '+currentMusicInfo.artistName:""}}
+            </span>
+            <mat-slider #playProgress value='0.1' id='seek-bar' (input)='progressInput($event)'>
+            </mat-slider>
+        </div>
+        <div class="control-item" id='volume' [ngSwitch]='volumeStatus'>
+            <mat-icon class="volumeIcon" *ngSwitchCase="'off'" (click)='onReductionClick()'>volume_off</mat-icon>
+            <mat-icon class="volumeIcon" *ngSwitchCase="'mid'" (click)='onMuteClick()'>volume_down</mat-icon>
+            <mat-icon class="volumeIcon" *ngSwitchCase="'high'" (click)='onMuteClick()'>volume_up</mat-icon>
+            <mat-slider id='volume-seek-bar' [(value)]='volume' max=100 min=0></mat-slider>
+        </div>
+        <app-palette class="control-item" id="palette"></app-palette>
+
+    </div>
+</div>

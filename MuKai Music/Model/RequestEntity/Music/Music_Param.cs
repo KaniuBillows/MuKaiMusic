@@ -8,7 +8,10 @@ using System.Threading.Tasks;
 
 namespace MuKai_Music.Model.RequestEntity.Music
 {
-    public class MusicUrl_Param
+    /// <summary>
+    /// 用于请求音乐信息，例如URL，歌词等不同平台统一请求
+    /// </summary>
+    public class Music_Param
     {
         [Required]
         [JsonPropertyName("dataSource")]
