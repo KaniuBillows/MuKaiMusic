@@ -47,6 +47,9 @@ export class PlayerComponent implements OnInit {
     public get playlist() {
         return this._playlist;
     }
+    public set playlist(value) {
+        this._playlist = value;
+    }
 
     /**
      * 当前播放歌曲,当前播放歌曲改变时，会调用获取歌词方法，加载歌词
