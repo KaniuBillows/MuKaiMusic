@@ -1,6 +1,5 @@
 import { Component, OnInit, ViewChild, ElementRef, EventEmitter } from '@angular/core';
 import { PlayerService } from 'src/app/services/player/player.service';
-import { MatSlider, MatSliderChange } from '@angular/material/slider';
 import { MusicService } from 'src/app/services/network/music/music.service';
 import { musicDetailResult, album, artist, Song, UrlInfo, Lyric } from 'src/app/entity/music';
 import { ThemeService } from 'src/app/services/theme/theme.service';
