@@ -70,6 +70,14 @@ namespace MuKai_Music.Service
         public async Task MusicDetail(int id) => await musicService.GetMusicDetail(id);
 
         /// <summary>
+        /// 获取咪咕音乐图片信息
+        /// </summary>
+        /// <param name="id"></param>
+        /// <returns></returns>
+        [HttpGet("music/migu_pic")]
+        public async Task MiguMusicPic(string id) => await musicService.GetMiguMusicPic(id);
+
+        /// <summary>
         /// 获取精品歌单
         /// </summary>
         /// <param name="category"></param>
@@ -91,7 +99,7 @@ namespace MuKai_Music.Service
         /// <param name="param"></param>
         /// <returns></returns>
         [HttpPost("music/url")]
-        [ApiCache(Duration = 600)]
+        [ApiCache(Duration = 1200)]
         public async Task<IResult<Model.ResponseEntity.MusicUrlResult.MusicUrlInfo>> MsuicUrl([Required]Music_Param param)
             => await musicService.GetMusicUrl(param);
 
@@ -185,7 +193,7 @@ namespace MuKai_Music.Service
         [HttpGet("playlist/recommend")]
         [ApiCache(Duration = 43200)]
         [ResponseCache(Duration = 43200)]
-        public async Task GetRecommendPlaylist() => await this.musicService.GetRecommendMusics();
+        public async Task GetRecommendPlaylist() => await this.musicService.GetRecommendPlaylist();
 
         /// <summary>
         /// 获取用户创建的歌单列表
@@ -204,7 +212,7 @@ namespace MuKai_Music.Service
         /// </summary>
         /// <returns></returns>
         [HttpGet("kuwo/token")]
-        [ApiCache(NoStore = true)]
+        [ApiCache(Duration = 3600)]
         [ResponseCache(Duration = 3600)]
         public async Task<IResult<string>> GetKuwoToken() => await musicService.GetKuwoToken();
 

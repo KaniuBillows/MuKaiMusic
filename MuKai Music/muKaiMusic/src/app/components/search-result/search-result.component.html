@@ -1,0 +1,27 @@
+<div [class]="themeClass" id="search-container">
+    <li class="result-title">
+        <div class="result-item" id="title-item">
+            <div class="result-name"><span>歌曲</span></div>
+            <div class="result-artist"><span>艺术家</span></div>
+            <div class="result-album"><span>专辑</span></div>
+            <div class="result-time"><span>时长</span></div>
+        </div>
+    </li>
+    <div id="result-container">
+        <ul>
+            <li class="result-title" *ngFor='let song of searchResult'>
+                <div class="option">
+                    <mat-icon matTooltip="添加到播放列表" (click)="addToPlaylist(song)">add</mat-icon>
+                    <mat-icon matTooltip="播放此曲" (click)="startPlay(song)">play_circle_outline</mat-icon>
+                </div>
+                <div class="result-item">
+                    <div class="result-name"><span>{{song.name}}</span></div>
+                    <div class="result-artist"><span>{{song.artistName}}</span></div>
+                    <div class="result-album"><span>{{song.albumName||"未知专辑"}}</span></div>
+                    <div class="result-time"><span>{{getTimeFormat(song.duration)||"未知"}}</span></div>
+                </div>
+            </li>
+        </ul>
+    </div>
+    <mat-spinner *ngIf="isloading" value='100' color='accent' id="spinner"></mat-spinner>
+</div>

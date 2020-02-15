@@ -26,6 +26,7 @@ using MuKai_Music.Model.ResponseEntity.PersonlizedResult;
 using MuKai_Music.Model.ResponseEntity.LyricResult;
 using MiGu_Music_API.Music;
 using MusicApi.Kuwo.Music;
+using System;
 
 namespace MuKai_Music.Model.Service
 {
@@ -91,12 +92,21 @@ namespace MuKai_Music.Model.Service
         /// <returns></returns>
         public async Task<IResult<DataEntity.MusicInfo[]>> SearchMusic(string key, string kuwoToken)
         {
-            Kuwo_Search_Result kuwoResult = await GetResult<Kuwo_Search_Result>(new Music_Search(kuwoToken, key, 10, 0));
+            key = Uri.UnescapeDataString(key);
+            DataEntity.MusicInfo[] kuwo = null;
+            if (kuwoToken != null)
+            {
+                Kuwo_Search_Result kuwoResult = await GetResult<Kuwo_Search_Result>(new Music_Search(kuwoToken, key, 10, 0));
+                kuwo = kuwoResult.ToProcessedData();
+            }
             NetEase_Search_Result netEaseResult = await GetResult<NetEase_Search_Result>(new Search(new System.Collections.Hashtable(), key, SearchType.Song, 10, 0));
             Migu_Search_Result miguResult = await GetResult<Migu_Search_Result>(new Web_Search(key));
-            DataEntity.MusicInfo[] kuwo = kuwoResult.ToProcessedData();
             DataEntity.MusicInfo[] netease = netEaseResult.ToProcessedData();
             DataEntity.MusicInfo[] migu = miguResult.ToProcessedData();
+            if (kuwo == null)
+            {
+                kuwo = Array.Empty<DataEntity.MusicInfo>();
+            }
             int length = kuwo.Length + netease.Length + migu.Length;
             DataEntity.MusicInfo[] res = new DataEntity.MusicInfo[length];
             //合并结果 1.网易，2.酷我，3.咪咕 
@@ -280,6 +290,17 @@ namespace MuKai_Music.Model.Service
         public async Task GetMusicDetail(int musicId)
         {
             IRequestOption request = new MusicInfo(musicId);
+            await GetResult(httpContext.Response, request);
+        }
+
+        /// <summary>
+        /// 获取咪咕音乐图片信息
+        /// </summary>
+        /// <param name="id"></param>
+        /// <returns></returns>
+        public async Task GetMiguMusicPic(string id)
+        {
+            IRequestOption request = new Web_Music_Pic(id);
             await GetResult(httpContext.Response, request);
         }
 

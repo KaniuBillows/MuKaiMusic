@@ -14,6 +14,14 @@ namespace MuKai_Music.Model.DataEntity
 
         public int? KuWo_Id { get; set; }
 
+        /// <summary>
+        /// 咪咕版权Id用于请求歌词，url等信息
+        /// </summary>
+        public string Migu_CopyrightId { get; set; }
+
+        /// <summary>
+        /// 咪咕歌曲Id，用于请求图片信息
+        /// </summary>
         public string Migu_Id { get; set; }
 
         public string Name { get; set; }

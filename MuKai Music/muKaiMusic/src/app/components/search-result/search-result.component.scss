@@ -1,0 +1,85 @@
+#search-container {
+    height: 85%;
+    position: relative;
+    padding: 0 16px;
+    display: block;
+}
+
+#spinner {
+    margin: auto;
+}
+
+.result-title {
+    color: rgba(255, 255, 255, 0.6);
+    list-style: none;
+    width: 85%;
+    min-width: 670px;
+    position: relative;
+    margin: 20px auto;
+    height: 30px;
+
+    .result-item {
+        min-width: 520px;
+        width: 70%;
+        margin: auto;
+        display: flex;
+    }
+
+    #title-item {
+        color: rgba(255, 255, 255, 0.4);
+        user-select: none;
+    }
+}
+
+#result-container {
+    max-height: 90%;
+    overflow: hidden;
+
+    ul {
+        padding: unset;
+    }
+}
+
+.option {
+    width: 10%;
+    position: absolute;
+
+    mat-icon {
+        margin: 0 10px;
+        cursor: pointer;
+
+        &:hover {
+            color: rgba(255, 255, 255, 1);
+        }
+    }
+
+}
+
+.result-name {
+    width: 50%;
+    text-align: left;
+    position: relative;
+    overflow: hidden;
+    white-space: nowrap;
+    text-overflow: ellipsis;
+}
+
+.result-artist {
+    width: 25%;
+    text-align: left;
+    overflow: hidden;
+    white-space: nowrap;
+    text-overflow: ellipsis;
+}
+
+.result-album {
+    width: 20%;
+    text-align: left;
+    overflow: hidden;
+    white-space: nowrap;
+    text-overflow: ellipsis;
+}
+
+.result-time {
+    min-width: 40px;
+}

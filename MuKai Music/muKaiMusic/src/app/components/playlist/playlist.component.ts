@@ -49,7 +49,7 @@ export class PlaylistComponent implements OnInit {
       document.onmousemove = null;
     }
     //当播放列表元素改变时,更新scroll bar状态
-    this.playlistChange.subscribe(() => {
+    this.player.playlistChange.subscribe(() => {
       this.initScroll();
     });
     //设定是否允许鼠标滚动
@@ -73,9 +73,14 @@ export class PlaylistComponent implements OnInit {
         ul.style.transform = `translateY(-${offsetY}px)`;
       }
     }
-    //播放结束时，自动进行滑动
-    this.player.onEnded.subscribe(() => {
-      this.currentPlayIndex
+    //播放歌曲切换时，自动进行滑动
+    this.player.onMusicChange.subscribe(() => {
+      let barY = (this.currentPlayIndex - 9) * 46;
+      barY = barY < 0 ? 0 : barY;
+      barY = barY > scroll.clientHeight - bar.clientHeight ? scroll.clientHeight - bar.clientHeight : barY;
+      bar.style.top = barY + 'px';
+      let offsetY = (ul.clientHeight + 46 - playlist_container.clientHeight) * (barY / (playlist_container.clientHeight - bar.clientHeight));
+      ul.style.transform = `translateY(-${offsetY}px)`;
     });
   }
 
@@ -123,7 +128,7 @@ export class PlaylistComponent implements OnInit {
   }
   public set playlist(value: Song[]) {
     this._playlist = value;
-    this.playlistChange.emit();
+    //this.playlistChange.emit();
   }
   private _playlist: Song[] = [];
 
@@ -139,8 +144,8 @@ export class PlaylistComponent implements OnInit {
    * @param time 
    */
   public getTimeFormat(time: number): string {
-    return Math.floor(time / 60000).toString().padStart(2, '0') +
-      ':' + Math.floor((time % 60000) / 1000).toString().padStart(2, '0');
+    return Math.floor(time / 60).toString().padStart(2, '0') +
+      ':' + Math.floor((time % 60)).toString().padStart(2, '0');
   }
 
   /** 
@@ -165,11 +170,7 @@ export class PlaylistComponent implements OnInit {
    * @param index 歌曲索引
    */
   public deleteMusic(index: number) {
-    this.playlist.splice(index, 1);
-    this.playlistChange.emit();
-    if (index == this.currentPlayIndex) {
-      this.currentMusicDelete.emit();
-    }
+    this.player.deleteFromPlaylist(index);
   }
 
   /**
@@ -232,19 +233,6 @@ export class PlaylistComponent implements OnInit {
    */
   @Output()
   public item_download_Click = new EventEmitter<number>();
-
-  /**
-   * 内部事件，当播放列表内容改变时触发
-   * 主要用于对scroll bar进行调整
-   */
-  private playlistChange = new EventEmitter();
-
-  /**
-   * 当前歌曲被删除事件，由player组件进行调度处理
-   * 涉及到music-info组件的内容显示，播放器的播放状态更改，control组件的内容显示
-   */
-  @Output()
-  private currentMusicDelete = new EventEmitter();
 
   //#endregion
 }

@@ -9,6 +9,10 @@ import { AccountService } from './services/network/account/account.service';
   styleUrls: ['./app.component.scss']
 })
 export class AppComponent implements OnInit {
+  constructor(private theme: ThemeService,
+    private router: Router) {
+  }
+
   ngOnInit(): void {
     this.router.events.subscribe((ev) => {
       //暂存content面板中打开页面的URL
@@ -27,9 +31,7 @@ export class AppComponent implements OnInit {
     return location.href.includes('/content/');
   }
 
-  constructor(private theme: ThemeService,
-     private router: Router) {
-  }
+
   public get themeClass(): string {
     return this.theme.getThemeClass();
   }
@@ -37,7 +39,8 @@ export class AppComponent implements OnInit {
   //打开content面板
   public showContent() {
     if (!this.contentOpened) {
-      this.router.navigate([this._url_save]);
+      //this.router.navigate([this._url_save]);
+      this.router.navigate(['/content/explore'])
     } else {
       this.router.navigate(['/']);
     }

@@ -22,11 +22,9 @@ export class PlayerComponent implements OnInit {
 
     private _lyric_paras: Lyric[] = [];
 
-    private _currentMusicInfo: Song = {} as any;
 
     private _currentLrcIndex: number = 0;
 
-    private _playlist: Song[] = [];
 
     constructor(
         public player: PlayerService,
@@ -38,16 +36,20 @@ export class PlayerComponent implements OnInit {
             this.onNextTrackButtonClick();
         })
         this.getPersonalized();
+        this.player.addMusicAndPlay.subscribe((song) => {
+            this.getLyric(song, () => this.startPlay(song))
+        });
+        this.player.currentMusicDelete.subscribe(() => this.onCurrentMusicDelete());
     }
 
     /**
      * 播放列表
      */
     public get playlist() {
-        return this._playlist;
+        return this.player.playlist;
     }
     public set playlist(value) {
-        this._playlist = value;
+        this.player.playlist = value;
     }
 
     /**
@@ -55,10 +57,10 @@ export class PlayerComponent implements OnInit {
      * 并且会更改背景图片
      */
     public get currentMusicInfo() {
-        return this._currentMusicInfo;
+        return this.player.currentMusic;
     }
     public set currentMusicInfo(value: Song) {
-        this._currentMusicInfo = value;
+        this.player.currentMusic = value;
         this.getLyric(value);
     }
 
@@ -76,8 +78,8 @@ export class PlayerComponent implements OnInit {
      * 当前歌曲索引
      */
     public get currentMusicIndex() {
-        this._currentMusicIndex = this._playlist.findIndex(item =>
-            item.ne_Id == this.currentMusicInfo.ne_Id
+        this._currentMusicIndex = this.playlist.findIndex(item =>
+            item === this.currentMusicInfo
         );
         return this._currentMusicIndex;
     }
@@ -87,7 +89,7 @@ export class PlayerComponent implements OnInit {
      * 获取当前歌曲是否为最后一首
      */
     public get isLastMusic() {
-        return this.currentMusicIndex == this._playlist.length - 1;
+        return this.currentMusicIndex == this.playlist.length - 1;
     }
 
     /**
@@ -116,16 +118,16 @@ export class PlayerComponent implements OnInit {
      * 当位于最后时，跳转到第一首播放
      */
     public onNextTrackButtonClick() {
-        if (this._playlist.length < 1) {
+        if (this.playlist.length < 1) {
             return;
         }
         if (this.isLastMusic) {
-            this.getLyric(this._playlist[0], () =>
-                this.startPlay(this._playlist[0])
+            this.getLyric(this.playlist[0], () =>
+                this.startPlay(this.playlist[0])
             );
         } else {
-            this.getLyric(this._playlist[this.currentMusicIndex + 1], () =>
-                this.startPlay(this._playlist[this.currentMusicIndex + 1])
+            this.getLyric(this.playlist[this.currentMusicIndex + 1], () =>
+                this.startPlay(this.playlist[this.currentMusicIndex + 1])
             );
         }
     }
@@ -135,15 +137,15 @@ export class PlayerComponent implements OnInit {
      * 当位于首位时，跳转到最后一首播放
      */
     public onLastTrackButtonClick() {
-        if (this._playlist.length < 1) {
+        if (this.playlist.length < 1) {
             return;
         }
         if (this.isFirstMusic) {
-            this.getLyric(this._playlist[this._playlist.length - 1], () =>
-                this.startPlay(this._playlist[this._playlist.length - 1]));
+            this.getLyric(this.playlist[this.playlist.length - 1], () =>
+                this.startPlay(this.playlist[this.playlist.length - 1]));
         } else {
-            this.getLyric(this._playlist[this.currentMusicIndex - 1], () =>
-                this.startPlay(this._playlist[this.currentMusicIndex - 1]));
+            this.getLyric(this.playlist[this.currentMusicIndex - 1], () =>
+                this.startPlay(this.playlist[this.currentMusicIndex - 1]));
         }
     }
 
@@ -168,10 +170,7 @@ export class PlayerComponent implements OnInit {
      */
     public clickDownload(index: number) {
         let item = this.playlist[index];
-        this.musicNet.getNeteaseUrl({
-            neteaseId: item.ne_Id,
-            dataSource: DataSource.NetEase
-        } as MusicParam).subscribe((res: Result<UrlInfo>) => {
+        this.musicNet.getUrl(this.musicNet.getParma(item)).subscribe((res: Result<UrlInfo>) => {
             if (res.content.url) {
                 this.musicNet.downloadFile(res.content.url, item.name + " - " + item.artistName);
             }
@@ -187,6 +186,7 @@ export class PlayerComponent implements OnInit {
     public onCurrentMusicDelete() {
         //此时playlist的length已经-1
         this.player.stop();
+        console.log(this._currentMusicIndex)
         if (this.playlist.length == 0) {
             this.currentMusicInfo = {} as any;
         } else {
@@ -205,10 +205,6 @@ export class PlayerComponent implements OnInit {
 
     }
 
-    public async test() {
-        await this.musicNet.searchMusic("");
-    }
-
     //#endregion
 
 
@@ -221,12 +217,9 @@ export class PlayerComponent implements OnInit {
     public startPlay(song: Song) {
         this.player.status = 'loading';
         this.currentMusicInfo = song;
-        this.musicNet.getNeteaseUrl({
-            neteaseId: song.ne_Id,
-            dataSource: DataSource.NetEase
-        } as MusicParam).subscribe((res: Result<UrlInfo>) => {
+        this.musicNet.getUrl(this.musicNet.getParma(song)).subscribe((res: Result<UrlInfo>) => {
             if (res.content.url) {
-                this.player.start(res.content.url);
+                this.player.start(res.content.url, song);
             } else {
                 alert('获取播放链接失败!');
                 this.player.status = 'stop';
@@ -255,7 +248,7 @@ export class PlayerComponent implements OnInit {
     private getPersonalized() {
         this.musicNet.getPersonalizedMusics().subscribe((res: Result<Song[]>) => {
             if (res.content.length > 0) this.currentMusicInfo = res.content[0];
-            this._playlist = this._playlist.concat(res.content);
+            this.playlist = this.playlist.concat(res.content);
         });
     }
 

@@ -18,8 +18,7 @@
             (pictureChange)="onPictureChange($event)">
         </app-music-info>
         <app-playlist id='playlist' [(playlist)]=" this.playlist" [currentPlayIndex]="this.currentMusicIndex"
-            (item_download_Click)="this.clickDownload($event)" (item_play_Click)="this.clickPlay($event)"
-            (currentMusicDelete)="this.onCurrentMusicDelete()">
+            (item_download_Click)="this.clickDownload($event)" (item_play_Click)="this.clickPlay($event)">
         </app-playlist>
     </div>
 </div>

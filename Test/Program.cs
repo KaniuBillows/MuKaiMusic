@@ -13,9 +13,11 @@ namespace Test
         static async System.Threading.Tasks.Task Main(string[] args)
         {
 
-            Search search = new Search("海阔天空");
-            System.Console.WriteLine(await search.Request().Result.Content.ReadAsStringAsync());
-
+            HttpClient client = new HttpClient();
+            //client.DefaultRequestHeaders.Add("Referer", "http://music.migu.cn/v3/music/player/audio");
+            string id = "3215";
+            var result = await client.GetAsync($"http://music.migu.cn/v3/api/music/audioPlayer/getSongPic?songId={id}");
+            System.Console.WriteLine(await result.Content.ReadAsStringAsync());
         }
 
 

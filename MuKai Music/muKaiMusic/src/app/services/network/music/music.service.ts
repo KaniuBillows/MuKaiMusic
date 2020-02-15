@@ -18,11 +18,6 @@ export class MusicService {
   }
 
 
-  private _kuwoToken: string = null;
-
-  public get kuwoToken(): string {
-    return this._kuwoToken;
-  }
 
   /**
    * 获取歌词
@@ -59,7 +54,7 @@ export class MusicService {
    * 获取歌曲的URL
    * @param parma
    */
-  public getNeteaseUrl(parma: MusicParam): Observable<Result<UrlInfo>> {
+  public getUrl(parma: MusicParam): Observable<Result<UrlInfo>> {
     return this.httpClient.post<Result<UrlInfo>>(environment.baseUrl + '/api/music/url', parma);
   }
 
@@ -98,26 +93,30 @@ export class MusicService {
 
   /**
    * 搜索歌曲
-   * @param word 
+   * @param key 
    */
-  public async searchMusic(word: string) {
-    if (await this.getKuWoToken()) {
-
-    }
+  public searchMusic(key: string, kuwoToken: string): Observable<Result<Song[]>> {
+    return this.httpClient.get<Result<Song[]>>(environment.baseUrl + '/api/music/search?', {
+      params: {
+        token: kuwoToken,
+        key: key
+      }
+    });
   }
 
   /**
    * 获取酷我token
    */
-  public async  getKuWoToken(): Promise<boolean> {
-    let result = await this.httpClient.get<Result<string>>(environment.baseUrl + '/api/kuwo/token').toPromise();
-    if (result.code == 200) {
-      this._kuwoToken = result.content;
-      return true;
-    } else return false;
+  public async getKuWoToken(): Promise<string> {
+    let res = await this.httpClient.get<Result<string>>(environment.baseUrl + '/api/kuwo/token').toPromise();
+    if (res.code == 200) return res.content;
+    else return null;
   }
 
-
+  /**
+   * 请求歌曲的图片信息
+   * @param song 
+   */
   public async getPicture(song: Song): Promise<string> {
     let url: string = "";
     if (song.picUrl) return song.picUrl;
@@ -130,7 +129,7 @@ export class MusicService {
           return res.data.pic;
         }
         case DataSource.Migu: {
-          url = `http://music.migu.cn/v3/api/music/audioPlayer/getSongPic?songId=${song.migu_Id}`;
+          url = environment.baseUrl + `/api/music/migu_pic?id=${song.migu_Id}`;
           let res = await this.httpClient.get<any>(url).toPromise();
           if (res.returnCode != "000000") return null;
           return "http:" + res.smallPic;
@@ -145,13 +144,16 @@ export class MusicService {
     }
   }
 
-  private getParma(song: Song): MusicParam {
+  /**
+   * 生成请求参数
+   */
+  public getParma(song: Song): MusicParam {
     let res = new MusicParam();
     res.dataSource = song.dataSource;
     switch (song.dataSource) {
       case DataSource.Kuwo: res.kuwoId = song.kuWo_Id;
         break;
-      case DataSource.Migu: res.miguId = song.migu_Id;
+      case DataSource.Migu: res.miguId = song.migu_CopyrightId;
         break;
       case DataSource.NetEase: res.neteaseId = song.ne_Id;
         break;
@@ -159,6 +161,9 @@ export class MusicService {
     return res;
   }
 
+  /**
+   * 用于获取UUID 辅助函数
+   */
   private S4() {
     return (((1 + Math.random()) * 0x10000) | 0).toString(16).substring(1);
   }

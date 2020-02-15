@@ -28,7 +28,7 @@ namespace MuKai_Music.Model.ResponseEntity.PersonlizedResult
                     ArtistName = this.Result[i].Song.Artists[0].Name,
                     PicUrl = this.Result[i].PicUrl + "?param=240y240",
                     Name = this.Result[i].Name,
-                    Duration = this.Result[i].Song.Duration,
+                    Duration = this.Result[i].Song.Duration / 1000,
                     Ne_ArtistId = this.Result[i].Song.Artists[0].Id,
                     Ne_AlbumId = this.Result[i].Song.Album.Id,
                     AlbumName = this.Result[i].Song.Album.Name,

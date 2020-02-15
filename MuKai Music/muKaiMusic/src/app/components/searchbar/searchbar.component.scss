@@ -1,0 +1,36 @@
+#search-box {
+    width: 100%;
+    height: 100%;
+    display: -webkit-box;
+    display: flex;
+    border-radius: 10px;
+    background-color: rgb(60, 60, 60);
+    position: relative;
+}
+
+#search-icon {
+    color: rgba(255, 255, 255, 0.3);
+    margin: auto 0px auto 10px;
+    cursor: pointer;
+    user-select: none;
+
+    &:hover {
+        color: currentColor;
+    }
+}
+
+#search {
+    color: rgba(255, 255, 255, 0.3);
+    position: relative;
+    margin-left: 10px;
+    max-width: 65%;
+    border: none;
+    background-color: #3c3c3c;
+    height: 95%;
+    outline: none;
+    font-size: 16px;
+
+    &:focus {
+        color: white;
+    }
+}

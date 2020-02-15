@@ -39,6 +39,7 @@ export class Song {
     public name: string;
     public ne_Id: number;
     public kuWo_Id: number;
+    public migu_CopyrightId: string;
     public migu_Id: string;
     public duration: number;
     public ne_ArtistId: number;

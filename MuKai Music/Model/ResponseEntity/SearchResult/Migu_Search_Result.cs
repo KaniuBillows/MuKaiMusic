@@ -35,7 +35,8 @@ namespace MuKai_Music.Model.ResponseEntity.SearchResult.Migu
                     res[i] = new MusicInfo()
                     {
                         DataSource = DataSource.Migu,
-                        Migu_Id = this.SearchResult.Object.SongList[i].CopyrightId,
+                        Migu_CopyrightId = this.SearchResult.Object.SongList[i].CopyrightId,
+                        Migu_Id = this.SearchResult.Object.SongList[i].MusicId,
                         Name = name,
                         ArtistName = this.SearchResult.Object.SongList[i].ArtistName,
                     };
@@ -76,6 +77,9 @@ namespace MuKai_Music.Model.ResponseEntity.SearchResult.Migu
     {
         [JsonPropertyName("fullSongCopyrightId")]
         public string CopyrightId { get; set; }
+
+        [JsonPropertyName("musicId")]
+        public string MusicId { get; set; }
 
         [JsonPropertyName("artistName")]
         public string ArtistName { get; set; }

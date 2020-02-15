@@ -1,4 +1,5 @@
 import { Injectable, EventEmitter } from '@angular/core';
+import { Song } from 'src/app/entity/music';
 
 @Injectable({
   providedIn: 'root'
@@ -24,6 +25,11 @@ export class PlayerService {
   }
 
   //#region public property
+
+  public playlist: Song[] = [];
+
+  public currentMusic: Song = {} as any;
+
   public set status(value: 'pause' | 'loading' | 'playing' | 'stop') {
     this._status = value;
   }
@@ -59,9 +65,32 @@ export class PlayerService {
     this.player.pause();
   }
 
-  public start(url: string) {
+  public start(url: string, song: Song) {
     this.player.src = url;
     this.play();
+    this.currentMusic = song;
+    this.onMusicChange.emit();
+  }
+
+  public addAndPlay(song: Song) {
+    this.currentMusic = song;
+    this.playlist.push(song);
+    this.addMusicAndPlay.emit(song);
+    this.playlistChange.emit();
+  }
+
+  /**
+   * 删除播放列表中的某一首歌曲
+   */
+  public deleteFromPlaylist(index: number) {
+    if (index == this.playlist.findIndex(item => item === this.currentMusic)) {
+      this.playlist.splice(index, 1);
+      this.currentMusicDelete.emit();
+      this.playlistChange.emit();
+      return;
+    }
+    this.playlist.splice(index, 1);
+    this.playlistChange.emit();
   }
 
   public setVolume(volume: number) {
@@ -82,5 +111,26 @@ export class PlayerService {
 
   public onEnded = new EventEmitter();
 
+  /**
+   * 当前歌曲切换事件，主要用于playlist定位当前播放歌曲
+   */
+  public onMusicChange = new EventEmitter<Song>();
+
+  /**
+   * 添加歌曲到播放列表并开始播放事件
+   * 由player组件订阅处理，拿到被添加的歌曲后，请求URL并开始播放
+   */
+  public addMusicAndPlay = new EventEmitter<Song>();
+
+  /**
+   * 播放列表改变事件，主要由playlist订阅处理，重新计算searchbar
+   */
+  public playlistChange = new EventEmitter();
+
+  /**
+ * 当前歌曲被删除事件，由player组件进行调度处理
+ * 涉及到music-info组件的内容显示，播放器的播放状态更改，control组件的内容显示
+ */
+  public currentMusicDelete = new EventEmitter();
   //#endregion
 }

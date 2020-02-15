@@ -1,7 +1,7 @@
 $control-button-color: rgba(225, 225, 225, .8);
 
 .outlet-content {
-    bottom: 100px;
+    bottom: 110px;
     z-index: 3;
 }
 
@@ -34,7 +34,8 @@ $control-button-color: rgba(225, 225, 225, .8);
     margin-top: 85px;
     user-select: none;
     text-align: left;
-    width: 10%;
+    width: 16%;
+    max-width: 140px;
     list-style: none;
     display: block;
     z-index: 3;
@@ -69,6 +70,6 @@ $control-button-color: rgba(225, 225, 225, .8);
 }
 
 .display-item {
-    width: 90%;
-    height: 100%;
+    width: 88%;
+    height: 99%;
 }
