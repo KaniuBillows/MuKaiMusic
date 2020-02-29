@@ -20,40 +20,65 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="Microsoft.AspNetCore.Authentication.JwtBearer" Version="3.1.0" />
+    <PackageReference Include="Microsoft.AspNetCore.Authentication.JwtBearer" Version="3.1.2" />
     <PackageReference Include="Microsoft.AspNetCore.Http" Version="2.2.2" />
     <PackageReference Include="Microsoft.AspNetCore.Http.Abstractions" Version="2.2.0" />
     <PackageReference Include="Microsoft.AspNetCore.Identity" Version="2.2.0" />
-    <PackageReference Include="Microsoft.AspNetCore.Identity.EntityFrameworkCore" Version="3.1.0" />
+    <PackageReference Include="Microsoft.AspNetCore.Identity.EntityFrameworkCore" Version="3.1.2" />
     <PackageReference Include="Microsoft.AspNetCore.ResponseCaching" Version="2.2.0" />
-    <PackageReference Include="Microsoft.AspNetCore.SpaServices.Extensions" Version="3.1.0" />
-    <PackageReference Include="Microsoft.EntityFrameworkCore.Design" Version="3.1.0">
+    <PackageReference Include="Microsoft.AspNetCore.SpaServices.Extensions" Version="3.1.2" />
+    <PackageReference Include="Microsoft.EntityFrameworkCore.Design" Version="3.1.2">
       <PrivateAssets>all</PrivateAssets>
       <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
     </PackageReference>
-    <PackageReference Include="Microsoft.EntityFrameworkCore.Tools" Version="3.1.0">
+    <PackageReference Include="Microsoft.EntityFrameworkCore.Tools" Version="3.1.2">
       <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
       <PrivateAssets>all</PrivateAssets>
     </PackageReference>
-    <PackageReference Include="Microsoft.Extensions.Caching.Memory" Version="3.1.0" />
-    <PackageReference Include="Microsoft.Extensions.Identity.Core" Version="3.1.0" />
-    <PackageReference Include="Microsoft.Extensions.Logging.Abstractions" Version="3.1.0" />
-    <PackageReference Include="Microsoft.Extensions.Logging.Debug" Version="3.1.0" />
-    <PackageReference Include="Microsoft.TestPlatform.TestHost" Version="16.4.0" />
-    <PackageReference Include="Npgsql.EntityFrameworkCore.PostgreSQL" Version="3.1.0" />
-    <PackageReference Include="NSwag.AspNetCore" Version="13.2.0" />
-    <PackageReference Include="System.Text.Json" Version="4.7.0" />
+    <PackageReference Include="Microsoft.Extensions.Caching.Memory" Version="3.1.2" />
+    <PackageReference Include="Microsoft.Extensions.Identity.Core" Version="3.1.2" />
+    <PackageReference Include="Microsoft.Extensions.Logging.Abstractions" Version="3.1.2" />
+    <PackageReference Include="Microsoft.Extensions.Logging.Debug" Version="3.1.2" />
+    <PackageReference Include="Microsoft.TestPlatform.TestHost" Version="16.5.0" />
+    <PackageReference Include="Npgsql.EntityFrameworkCore.PostgreSQL" Version="3.1.2" />
+    <PackageReference Include="NSwag.AspNetCore" Version="13.2.3" />
+    <PackageReference Include="StackExchange.Redis" Version="2.0.601" />
+    <PackageReference Include="System.IdentityModel.Tokens.Jwt" Version="5.6.0" />
+    <PackageReference Include="System.Text.Json" Version="4.7.1" />
   </ItemGroup>
 
   <ItemGroup>
     <!-- Don't publish the SPA source files, but do show them in the project files list -->
+    <Compile Remove="mukaiMusic\dist\**" />
+    <Compile Remove="wwwroot\**" />
     <Content Remove="$(SpaRoot)**" />
+    <Content Remove="mukaiMusic\dist\**" />
+    <Content Remove="wwwroot\**" />
+    <EmbeddedResource Remove="mukaiMusic\dist\**" />
+    <EmbeddedResource Remove="wwwroot\**" />
     <None Remove="$(SpaRoot)**" />
+    <None Remove="mukaiMusic\dist\**" />
+    <None Remove="wwwroot\**" />
     <None Include="$(SpaRoot)**" Exclude="$(SpaRoot)node_modules\**" />
   </ItemGroup>
 
   <ItemGroup>
-    <Content Remove="wwwroot\001.mp3" />
+    <None Remove="mukaiMusic\dist\muKaiMusic\3rdpartylicenses.txt" />
+    <None Remove="mukaiMusic\dist\muKaiMusic\5-es2015.13ed77b944d74b5e0a7e.js" />
+    <None Remove="mukaiMusic\dist\muKaiMusic\5-es5.13ed77b944d74b5e0a7e.js" />
+    <None Remove="mukaiMusic\dist\muKaiMusic\6-es2015.9726157e1310ef1fca91.js" />
+    <None Remove="mukaiMusic\dist\muKaiMusic\6-es5.9726157e1310ef1fca91.js" />
+    <None Remove="mukaiMusic\dist\muKaiMusic\assets\img\logo.png" />
+    <None Remove="mukaiMusic\dist\muKaiMusic\favicon.ico" />
+    <None Remove="mukaiMusic\dist\muKaiMusic\index.html" />
+    <None Remove="mukaiMusic\dist\muKaiMusic\main-es2015.e00b67e7597a987f4463.js" />
+    <None Remove="mukaiMusic\dist\muKaiMusic\main-es5.e00b67e7597a987f4463.js" />
+    <None Remove="mukaiMusic\dist\muKaiMusic\polyfills-es2015.ca64e4516afbb1b890d5.js" />
+    <None Remove="mukaiMusic\dist\muKaiMusic\polyfills-es5.277e2e1d6fb2daf91a5c.js" />
+    <None Remove="mukaiMusic\dist\muKaiMusic\runtime-es2015.4cd82bd19c72d06844b2.js" />
+    <None Remove="mukaiMusic\dist\muKaiMusic\runtime-es5.4cd82bd19c72d06844b2.js" />
+    <None Remove="mukaiMusic\dist\muKaiMusic\styles.aa2098ce612a081f42a8.css" />
+    <None Remove="Service\TokenProvider.cs~RF6df3c22.TMP" />
   </ItemGroup>
 
   <ItemGroup>
@@ -64,9 +89,8 @@
   </ItemGroup>
 
   <ItemGroup>
+    <Folder Include="Extensions\" />
     <Folder Include="Migrations\" />
-    <Folder Include="mukaiMusic\dist\" />
-    <Folder Include="wwwroot\" />
   </ItemGroup>
 
   <ItemGroup>
@@ -112,7 +136,7 @@
   </Target>
 
   <ProjectExtensions>
-    <VisualStudio><UserProperties appsettings_1json__JsonSchema="" /></VisualStudio>
+    <VisualStudio><UserProperties appsettings_1development_1json__JsonSchema="http://json.schemastore.org/appsettings" /></VisualStudio>
   </ProjectExtensions>
 
 </Project>

@@ -3,8 +3,8 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using MuKai_Music.Attribute;
+using MuKai_Music.Model.Authentication;
 using MuKai_Music.Model.DataEntity;
-using MuKai_Music.Model.Manager;
 using MuKai_Music.Model.ResponseEntity;
 using MuKai_Music.Service;
 using System.ComponentModel.DataAnnotations;
@@ -44,7 +44,7 @@ namespace MuKai_Music.Controllers
         [ResponseCache(NoStore = true)]
         [ApiCache(NoStore = true)]
         [AllowAnonymous]
-        public async Task<IResult<UserInfo>> Register([FromBody] UserInfo userInfo)
+        public async Task<IResult<string>> Register([FromBody] UserInfo userInfo)
             => await this.userService.Register(userInfo);
 
         /// <summary>
@@ -57,8 +57,19 @@ namespace MuKai_Music.Controllers
         [ResponseCache(NoStore = true)]
         [ApiCache(NoStore = true)]
         [AllowAnonymous]
-        public async Task<IResult<UserInfo>> Login([Required][FromForm]string username, [Required][FromForm] string password)
+        public async Task<IResult<object>> LogIn([Required][FromForm]string username, [Required][FromForm] string password)
             => await this.userService.Login(username, password);
+
+        /// <summary>
+        /// 登出
+        /// </summary>
+        /// <returns></returns>
+        [HttpGet("account/logout")]
+        [ResponseCache(NoStore = true)]
+        [ApiCache(NoStore = true)]
+        [AllowAnonymous]
+        public async Task LogOut()
+            => await this.userService.Logout();
 
         /// <summary>
         /// 上传头像
@@ -70,16 +81,6 @@ namespace MuKai_Music.Controllers
         [ApiCache(NoStore = true)]
         public async Task<IResult<string>> UploadAvatar(string fileData) => await this.userService.UploadAvatar(fileData);
 
-
-
-        /// <summary>
-        /// 刷新token
-        /// </summary>
-        /// <returns></returns>
-        [HttpPut("account/verification")]
-        [ApiCache(NoStore = true)]
-        [ResponseCache(NoStore = true)]
-        public async Task<IResult<string>> RefreshToken() => await userService.RefreshToken();
 
 
         /// <summary>

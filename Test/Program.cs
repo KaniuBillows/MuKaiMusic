@@ -1,8 +1,6 @@
-﻿using MusicApi.Migu.Music;
-using MusicApi.Migu.Search;
-using MusicApi.NetEase.Search;
-using System.Net.Http;
-using System.Text.RegularExpressions;
+﻿
+using System.Threading;
+using System.Threading.Tasks;
 
 namespace Test
 {
@@ -10,17 +8,38 @@ namespace Test
     class Program
     {
 
-        static async System.Threading.Tasks.Task Main(string[] args)
+        static async Task Main(string[] args)
         {
-
-            HttpClient client = new HttpClient();
-            //client.DefaultRequestHeaders.Add("Referer", "http://music.migu.cn/v3/music/player/audio");
-            string id = "3215";
-            var result = await client.GetAsync($"http://music.migu.cn/v3/api/music/audioPlayer/getSongPic?songId={id}");
-            System.Console.WriteLine(await result.Content.ReadAsStringAsync());
+            Mehtd();
+            System.Console.WriteLine("run");
         }
 
 
+
+        static Task Mehtd()
+        {
+            var t = new Task(() => Thread.Sleep(10000));
+            t.Start();
+            System.Console.WriteLine($"{Thread.CurrentThread.ManagedThreadId}");
+            return t;
+        }
+
+
+        static async Task MethodAsync()
+        {
+            System.Console.WriteLine($"in line 28 is {Thread.CurrentThread.ManagedThreadId}");
+            await Task.Run(() =>
+               {
+                   System.Console.WriteLine($"Thread in line 31 {Thread.CurrentThread.ManagedThreadId}");//4
+                   Thread.Sleep(2000);
+               });
+            System.Console.WriteLine($"Thread in line 34 is{Thread.CurrentThread.ManagedThreadId}");
+            await Task.Run(() =>
+            {
+
+            });
+            System.Console.WriteLine($"The Thread in line 39 {Thread.CurrentThread.ManagedThreadId}");
+        }
 
 
     }
