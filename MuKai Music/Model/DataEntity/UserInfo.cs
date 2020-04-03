@@ -26,7 +26,7 @@ namespace MuKai_Music.Model.DataEntity
         public LoginType LoginType { get; set; }
 
         [Required]
-        [StringLength(maximumLength: 30, MinimumLength = 4, ErrorMessage = "昵称长度必须在4-30个字符之间")]
+        [StringLength(maximumLength: 30, MinimumLength = 2, ErrorMessage = "昵称长度必须在2-30个字符之间")]
         public string NcikName { get; set; }
 
         [Required]
@@ -59,17 +59,27 @@ namespace MuKai_Music.Model.DataEntity
         [JsonIgnore]
         public override string PasswordHash { get => base.PasswordHash; set => base.PasswordHash = value; }
 
+        [JsonIgnore]
+        public override string SecurityStamp { get => base.SecurityStamp; set => base.SecurityStamp = value; }
+
+        [JsonIgnore]
+        public override string NormalizedUserName { get => base.NormalizedUserName; set => base.NormalizedUserName = value; }
+
+        [JsonIgnore]
+        public override string NormalizedEmail { get => base.NormalizedEmail; set => base.NormalizedEmail = value; }
+
+        [JsonIgnore]
+        public override string ConcurrencyStamp { get => base.ConcurrencyStamp; set => base.ConcurrencyStamp = value; }
         /// <summary>
         /// 网易云手机号
         /// </summary>
+        [JsonIgnore]
         public string Ne_Cellphone { get; set; }
 
         /// <summary>
         /// 网易云密码
         /// </summary>
+        [JsonIgnore]
         public string Ne_Password { get; set; }
-
-        [NotMapped]
-        public string Token { get; set; }
     }
 }

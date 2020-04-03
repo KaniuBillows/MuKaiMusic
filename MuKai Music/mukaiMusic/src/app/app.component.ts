@@ -18,7 +18,7 @@ export class AppComponent implements OnInit {
       //暂存content面板中打开页面的URL
       if (ev instanceof NavigationEnd) {
         if (ev.url.includes('/content/'))
-          this._url_save = ev.url;
+          this._url_save = decodeURI(ev.url);
       }
     });
   }
@@ -39,8 +39,7 @@ export class AppComponent implements OnInit {
   //打开content面板
   public showContent() {
     if (!this.contentOpened) {
-      //this.router.navigate([this._url_save]);
-      this.router.navigate(['/content/explore'])
+      this.router.navigate([this._url_save]);
     } else {
       this.router.navigate(['/']);
     }

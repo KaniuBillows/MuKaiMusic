@@ -1,23 +1,17 @@
-﻿using System;
-using System.Collections.Generic;
-using System.IdentityModel.Tokens.Jwt;
-using System.Linq;
-using System.Text;
-using System.Text.Json;
-using System.Threading.Tasks;
+﻿using DataAbstract;
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.Primitives;
+using Microsoft.IdentityModel.Tokens;
 using Microsoft.Net.Http.Headers;
 using MuKai_Music.Cache;
-using Microsoft.IdentityModel.Tokens;
-using System.Security.Claims;
 using MuKai_Music.Service;
-using MuKai_Music.Model.ResponseEntity;
-using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.Authorization.Policy;
-using Microsoft.Extensions.DependencyInjection;
+using System;
+using System.IdentityModel.Tokens.Jwt;
+using System.Text;
+using System.Text.Json;
+using System.Threading.Tasks;
 
 namespace MuKai_Music.Middleware.TokenManager
 {
@@ -25,13 +19,11 @@ namespace MuKai_Music.Middleware.TokenManager
     public class TokenManagerMiddleware
     {
         private readonly RequestDelegate _next;
-        private readonly IAuthorizationPolicyProvider _policyProvider;
         private readonly RedisClient _redisClient;
-        public TokenManagerMiddleware(RequestDelegate next, IAuthorizationPolicyProvider policyProvider)
+        public TokenManagerMiddleware(RequestDelegate next)
         {
             this._redisClient = RedisClient.RedisClientInstence;
             _next = next;
-            this._policyProvider = policyProvider;
         }
 
         /// <summary>
@@ -57,8 +49,15 @@ namespace MuKai_Music.Middleware.TokenManager
                     handler.ValidateToken(refreshToken, Startup.TokenValidationParameters, out SecurityToken token);
                     //从token中读取用户Id
                     string userId = (token as JwtSecurityToken).Payload["id"] as string;
+                    if (this._redisClient.Exists(userId))
+                    {
+                        await httpContext.ChallengeAsync();
+                        return;
+                    }
                     //检查RefreshToken是否在Redis中，如果不在，则视为用户已登出，返回401
-                    if (!this._redisClient.Exists(TokenProvider.GetTokenKey(userId, ua)))
+                    string key = TokenProvider.GetTokenKey(userId, ua);
+                    Console.WriteLine(key);
+                    if (!this._redisClient.Exists(key))
                     {
                         await httpContext.ChallengeAsync();
                         return;
@@ -68,12 +67,12 @@ namespace MuKai_Music.Middleware.TokenManager
                         ? TokenProvider.CreateRefreshToken(userId as string, ua)
                         : (string)refreshToken;
                     //生成新的返回内容
-                    string content = JsonSerializer.Serialize(new BaseResult<object>(
+                    string content = JsonSerializer.Serialize<Result<object>>(new Result<object>(
                         new
                         {
                             accessToken = TokenProvider.CreateAccessToken(userId as string),
                             refreshToken = reToken
-                        }, 200, null));
+                        }, 200, null), Startup.JsonSerializerOptions);
                     byte[] buffer = Encoding.UTF8.GetBytes(content);
                     httpContext.Response.ContentType = "application/json; charset=utf-8";
                     Task writeBodyTask = httpContext.Response.Body.WriteAsync(buffer, 0, buffer.Length);
@@ -85,7 +84,7 @@ namespace MuKai_Music.Middleware.TokenManager
                     return;
                 }
             }
-            if (httpContext.Request.Headers.TryGetValue("Authentication", out StringValues authentication))
+            if (httpContext.Request.Headers.TryGetValue("Authorization", out StringValues authentication))
             {
                 string token = authentication.ToString().Substring("Bearer ".Length).Trim();
                 if (this._redisClient.Exists(token))
@@ -95,6 +94,12 @@ namespace MuKai_Music.Middleware.TokenManager
                 }
                 var handler = new JwtSecurityTokenHandler();
                 JwtSecurityToken jwtToken = handler.ReadJwtToken(token);
+                //如果Redis中存在userId
+                if (this._redisClient.Exists(jwtToken.Payload["id"] as string))
+                {
+                    await httpContext.ChallengeAsync();
+                    return;
+                }
                 if (jwtToken.Payload["type"] as string != "ac")
                 {
                     await httpContext.ForbidAsync();

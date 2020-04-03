@@ -2,7 +2,7 @@ import { Injectable } from '@angular/core';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Observable } from 'rxjs';
 import 'src/app/entity/music';
-import { musicDetailResult, NetEaseUrlResult, Song, UrlInfo, Lyric } from 'src/app/entity/music';
+import { Song, UrlInfo, Lyric } from 'src/app/entity/music';
 import { CategoryResult, HotCaegoryResult, PersonalizedPlaylistResult } from 'src/app/entity/playlist';
 import { Result } from 'src/app/entity/baseResult';
 import { environment } from "src/environments/environment"
@@ -24,16 +24,17 @@ export class MusicService {
    * @param song 
    */
   public getLyric(song: Song): Observable<Result<Lyric[]>> {
-    return this.httpClient.post<Result<Lyric[]>>(environment.baseUrl + '/api/music/lyric', this.getParma(song));
+    let url = environment.baseUrl + `/api/music/lyric?${this.getRoute(song)}`;
+    return this.httpClient.get<Result<Lyric[]>>(url);
   }
 
   /**
    * 获取网易云歌曲详情
    * @param id 网易云歌曲Id
    */
-  public getMusicDetail(id: number): Observable<musicDetailResult> {
-    return this.httpClient.get<musicDetailResult>(environment.baseUrl + `/api/music/ne_detail?id=${id}`);
-  }
+  // public getMusicDetail(id: number): Observable<musicDetailResult> {
+  //   return this.httpClient.get<musicDetailResult>(environment.baseUrl + `/api/music/ne_detail?id=${id}`);
+  // }
 
   /**
    * 获取推荐新歌
@@ -54,8 +55,9 @@ export class MusicService {
    * 获取歌曲的URL
    * @param parma
    */
-  public getUrl(parma: MusicParam): Observable<Result<UrlInfo>> {
-    return this.httpClient.post<Result<UrlInfo>>(environment.baseUrl + '/api/music/url', parma);
+  public getUrl(song: Song): Observable<Result<string>> {
+    let url = environment.baseUrl + `/api/music/url?${this.getRoute(song)}`
+    return this.httpClient.get<Result<string>>(url);
   }
 
   /**
@@ -95,13 +97,8 @@ export class MusicService {
    * 搜索歌曲
    * @param key 
    */
-  public searchMusic(key: string, kuwoToken: string): Observable<Result<Song[]>> {
-    return this.httpClient.get<Result<Song[]>>(environment.baseUrl + '/api/music/search?', {
-      params: {
-        token: kuwoToken,
-        key: key
-      }
-    });
+  public searchMusic(key: string): Observable<Result<Song[]>> {
+    return this.httpClient.get<Result<Song[]>>(environment.baseUrl + `/api/music/search?key=${key}`);
   }
 
   /**
@@ -118,49 +115,45 @@ export class MusicService {
    * @param song 
    */
   public async getPicture(song: Song): Promise<string> {
-    let url: string = "";
-    if (song.picUrl) return song.picUrl;
+    console.log(song)
+    if (song.album.picUrl != null) return song.album.picUrl;
     try {
+      let id: any = '';
       switch (song.dataSource) {
         case DataSource.Kuwo: {
-          url = `http://www.kuwo.cn/api/www/music/musicInfo?mid=${song.kuWo_Id}&reqId=${this.get_uuid()}`;
-          let res = await this.httpClient.get<any>(url).toPromise();
-          if (res.code != 200) return null;
-          return res.data.pic;
-        }
+          id = song.kw_Id;
+        } break;
         case DataSource.Migu: {
-          url = environment.baseUrl + `/api/music/migu_pic?id=${song.migu_Id}`;
-          let res = await this.httpClient.get<any>(url).toPromise();
-          if (res.returnCode != "000000") return null;
-          return "http:" + res.smallPic;
-        }
+          id = song.migu_Id;
+        } break;
         case DataSource.NetEase: {
-          let res = await this.getMusicDetail(song.ne_Id).toPromise();
-          return res.songs[0].al.picUrl + '?param=240y240';
-        }
+          id = song.ne_Id;
+        } break;
       }
+      let res = await this.httpClient.get<Result<string>>(environment.baseUrl + `/api/music/pic?=${id}`).toPromise();
+      if (res.code == 200) return res.content;
     } catch{
       return "../../../assets/img/logo.png";
     }
   }
 
-  /**
-   * 生成请求参数
-   */
-  public getParma(song: Song): MusicParam {
-    let res = new MusicParam();
-    res.dataSource = song.dataSource;
+  private getRoute(song: Song): string {
+    let param: any = 'id=';
     switch (song.dataSource) {
-      case DataSource.Kuwo: res.kuwoId = song.kuWo_Id;
-        break;
-      case DataSource.Migu: res.miguId = song.migu_CopyrightId;
-        break;
-      case DataSource.NetEase: res.neteaseId = song.ne_Id;
-        break;
-    }
-    return res;
-  }
+      case DataSource.Kuwo: {
+        param += song.kw_Id;
 
+      } break;
+      case DataSource.Migu: {
+        param += song.migu_Id;
+      } break;
+      case DataSource.NetEase: {
+        param += song.ne_Id;
+      } break;
+    }
+    param += `&source=${song.dataSource}`;
+    return param;
+  }
   /**
    * 用于获取UUID 辅助函数
    */

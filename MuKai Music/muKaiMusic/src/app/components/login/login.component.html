@@ -18,9 +18,14 @@
             {{errorInfo}}
         </mat-error>
     </div>
-    <div class="item-contain">
+    <div class="item-contain" *ngIf="!isLoading">
         <div class="{{currentTheme}} login-button" (click)="login()">
             <span>登录</span>
         </div>
     </div>
+    <div [class]="currentTheme">
+        <mat-spinner *ngIf="isLoading" value='100' id="spinner" diameter=40>
+        </mat-spinner>
+    </div>
+
 </div>

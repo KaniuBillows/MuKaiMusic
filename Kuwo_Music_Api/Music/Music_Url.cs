@@ -10,7 +10,7 @@ namespace MusicApi.Kuwo.Music
             var id = Guid.NewGuid();
             TimeSpan ts = DateTime.UtcNow - new DateTime(1970, 1, 1, 0, 0, 0, 0);
             long t = Convert.ToInt64(ts.TotalMilliseconds);
-            this.Url = $"http://www.kuwo.cn/url?format=mp3&rid={rid.ToString()}&response=url&type=convert_url3&from=web&t={t.ToString()}&reqId={id.ToString()}";
+            this.Url = $"http://www.kuwo.cn/url?format=mp3&rid={rid}&response=url&type=convert_url3&from=web&t={t}&reqId={id}";
         }
 
         public Music_Url(int rid) : this(new Hashtable(), rid)

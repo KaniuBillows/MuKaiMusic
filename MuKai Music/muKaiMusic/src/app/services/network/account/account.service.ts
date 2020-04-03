@@ -1,45 +1,40 @@
 import { Injectable, EventEmitter } from '@angular/core';
-import { HttpClient, HttpHeaders } from '@angular/common/http';
-import { Observable } from 'rxjs';
+import { HttpClient, HttpHeaders, HttpParams } from '@angular/common/http';
+import { Observable, ObservableInput } from 'rxjs';
 import { NetEaseLoginUserInfo, UserInfo } from 'src/app/entity/user';
 import { Md5 } from "ts-md5/dist/md5";
 import { Result } from 'src/app/entity/baseResult';
 import { onError, onResult } from '../resultHandle';
 import { environment } from 'src/environments/environment';
+import { Token } from 'src/app/entity/Token';
+import { mergeMap, tap } from 'rxjs/operators';
+import { AccountInterceptor, AccessToken, RefreshToken, User } from '../accountInterceptor';
+
+
+
 @Injectable({
   providedIn: 'root'
 })
 export class AccountService {
 
-  constructor(private httpClient: HttpClient) {
-    this.loginSuccess.subscribe(user => {
-      this._userInfo = user;
-      localStorage.setItem("userInfo", JSON.stringify(user));
+  constructor(private httpClient: HttpClient,
+    private accountInterceptor: AccountInterceptor
+  ) {
+    this.accountInterceptor.accountExpire.subscribe(() => {
+      this._userInfo = null;
+      localStorage.removeItem(User);
+      localStorage.removeItem(AccessToken);
+      localStorage.removeItem(RefreshToken);
     });
-    this.tokenUpdate.subscribe(token => {
-      localStorage.setItem("token", token);
-    });
-    this.initVerify();
   }
 
-  //token
-  private initVerify() {
-    let token = localStorage.getItem("token");
-    if (token != null)
-      this._token = token;
-  }
 
-  private _token: string = null;
-
-  public get token(): string {
-    return this._token;
-  }
 
   private _userInfo: UserInfo;
 
   public get userInfo() {
     if (this._userInfo != null) return this._userInfo;
-    let storeUser = localStorage.getItem("userInfo");
+    let storeUser = localStorage.getItem(User);
     if (storeUser != null) {
       this._userInfo = JSON.parse(storeUser);
     }
@@ -51,47 +46,46 @@ export class AccountService {
     return this.httpClient.get<NetEaseLoginUserInfo>(environment.baseUrl + `/api/netease/login?countrycode=86&phone=${phonenumber}&password=${md5}`);
   }
 
-  private login(usr: string, pwd: string): Observable<Result<UserInfo>> {
+  public login(usr: string, pwd: string): Observable<Result<Token>> {
     let header = { "Content-Type": "application/x-www-form-urlencoded" }
-    return this.httpClient.post<Result<UserInfo>>(environment.baseUrl + '/api/account/login',
+    return this.httpClient.post<Result<Token>>(environment.baseUrl + '/api/account/login',
       "username=" + encodeURIComponent(usr) + "&" +
       "password=" + encodeURIComponent(pwd)
       , {
         headers: header
-      });
+      }).pipe(tap((res: Result<Token>) => {
+        if (res.code == 200) {
+          localStorage.setItem(AccessToken, res.content.accessToken);
+          localStorage.setItem(RefreshToken, res.content.refreshToken);
+        }
+      }));
   }
 
-  public logIn(username: string, password: string): void {
-    this.login(username, password).subscribe(res => {
-      if (onResult(res)) {
-        this.loginSuccess.emit(res.content);
-        this.tokenUpdate.emit(res.content.token);
-      } else {
-        this.loginFailed.emit(res.error);
-      }
+  public getUserInfo(usrId?: number): Observable<Result<UserInfo>> {
+    return this.httpClient.get<Result<UserInfo>>(environment.baseUrl + "/api/account/info", {
+      params: usrId != null ? new HttpParams().append("id", usrId.toString()) : null
+    })
+      .pipe(tap((res: Result<UserInfo>) => {
+        if (res.code == 200) {
+          //将用户对象存入缓存
+          localStorage.setItem(User, JSON.stringify(res.content));
+          this._userInfo = res.content;
+        }
+      }));
+  }
+
+  public async logOut() {
+    localStorage.removeItem(User);
+    this._userInfo = null;
+    await this.httpClient.get(environment.baseUrl + "/api/account/logout").toPromise().then(() => {
+      localStorage.removeItem(AccessToken);
+      localStorage.removeItem(RefreshToken);
+    }).catch(() => {
+      localStorage.removeItem(AccessToken);
+      localStorage.removeItem(RefreshToken);
     });
   }
 
-  public logOut(): void {
-    localStorage.removeItem("userInfo");
-    localStorage.removeItem("token");
-    this._userInfo = null;
-  }
 
-  public loginSuccess = new EventEmitter<UserInfo>();
-
-  public loginFailed = new EventEmitter<string>();
-
-  public logout = new EventEmitter();
-
-  private tokenUpdate = new EventEmitter<string>();
-
-  public getHeader(): HttpHeaders {
-    let header: HttpHeaders = new HttpHeaders();
-    if (this.token) {
-      header.append("Authorization", "Bearer " + this.token);
-    }
-    return header;
-  }
 }
 

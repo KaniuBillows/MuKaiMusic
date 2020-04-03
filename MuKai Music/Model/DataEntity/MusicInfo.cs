@@ -1,4 +1,4 @@
-﻿using MuKai_Music.Model.ResponseEntity;
+﻿using DataAbstract;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 

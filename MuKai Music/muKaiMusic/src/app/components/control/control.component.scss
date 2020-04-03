@@ -27,7 +27,10 @@ $control-button-color: rgba(225, 225, 225, .8);
 #music-title-bottom {
     top: -10px;
     left: 10px;
-    width: 100%;
+    max-width: 80%;
+    text-overflow: ellipsis;
+    overflow: hidden;
+    white-space: nowrap;
     position: absolute;
     font-size: 16px;
     cursor: pointer;
@@ -36,6 +39,14 @@ $control-button-color: rgba(225, 225, 225, .8);
     &:hover {
         color: #fff;
     }
+}
+
+#music-duration {
+    position: absolute;
+    right: 10px;
+    font-size: 16px;
+    color: rgba(225, 225, 225, 0.8);
+    top: -10px;
 }
 
 #seek-bar {

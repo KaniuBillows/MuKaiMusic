@@ -14,12 +14,16 @@ export class MusicInfoComponent implements OnInit {
   lyrics: ElementRef;
   constructor(public player: PlayerService,
     public musicNet: MusicService,
-    private theme: ThemeService) { }
+    private theme: ThemeService) {
+    this.player.currentMusicChange.subscribe(async () => {
+      await this.getPic();
+      await this.getLyric();
+    });
+  }
 
   ngOnInit() {
     this.player.onCurrentTimeChange.subscribe((time: number) =>
-      this.onTimeChange(time)
-    );
+      this.onTimeChange(time));
   }
 
   public get themeClass(): string {
@@ -32,35 +36,20 @@ export class MusicInfoComponent implements OnInit {
     return this._currentLrcIndex;
   }
 
-  private _msuicInfo: Song;
-  @Input()
   public get musicInfo() {
-    return this._msuicInfo;
-  }
-  public set musicInfo(value: Song) {
-    this._msuicInfo = value;
-    this.getPic(value);
+    return this.player.currentMusic;
   }
 
-  private _picUrl: string = null;
+
   public get picUrl(): string {
-    return this._picUrl == null ? "../../../assets/img/logo.png" : this._picUrl;
-  }
-  public set picUrl(value: string) {
-    this._picUrl = value;
-    this.pictureChange.emit(this.picUrl);
+    return this.musicInfo?.album?.picUrl == null ? "../../../assets/img/logo.png" : this.musicInfo.album.picUrl.replace("http://", "https://");
   }
 
 
   private _lyric_paras: Lyric[] = [];
-  @Input()
   public get lyric_paras(): Lyric[] {
     return this._lyric_paras;
   }
-  public set lyric_paras(value: Lyric[]) {
-    this._lyric_paras = value;
-  }
-
 
   /**
     * 订阅播放时间改变事件，实现歌词滚动
@@ -78,16 +67,19 @@ export class MusicInfoComponent implements OnInit {
    * 从网络获取图片地址
    * @param song 
    */
-  private getPic(song: Song) {
-    this.picUrl = null;
-    this.musicNet.getPicture(song).then(res => {
-      this.picUrl = res;
-    })
+  private async getPic() {
+    if (this.player.currentMusic?.album?.picUrl) return;
+    let res = await this.musicNet.getPicture(this.player.currentMusic);
+    this.player.currentMusic.album.picUrl = res;
   }
 
-  /**
-   * 图片改变事件，由palyer组件订阅，改变背景图片
-   */
-  @Output()
-  public pictureChange = new EventEmitter<string>();
+  private async getLyric() {
+    this._lyric_paras = [];
+    let result = await this.musicNet.getLyric(this.player.currentMusic).toPromise();
+    if (result.code == 200) {
+      this._lyric_paras = result.content;
+    } else {
+      this._lyric_paras = [{ text: "暂无歌词", time: 0 }];
+    }
+  }
 }

@@ -9,18 +9,16 @@
             fill="currentColor" class="octo-body"></path>
     </svg>
 </a>
+<img id="app-logo" src="../../../assets/Mukai-LOGO.png">
 <div id='back-board'>
     <div id='back-board-mask'></div>
 </div>
 <div id="contents-container">
     <div id='contents'>
-        <app-music-info id='music-info' [lyric_paras]='this.lyric_paras' [musicInfo]='this.currentMusicInfo'
-            (pictureChange)="onPictureChange($event)">
+        <app-music-info id='music-info'>
         </app-music-info>
-        <app-playlist id='playlist' [(playlist)]=" this.playlist" [currentPlayIndex]="this.currentMusicIndex"
-            (item_download_Click)="this.clickDownload($event)" (item_play_Click)="this.clickPlay($event)">
+        <app-playlist id='playlist'>
         </app-playlist>
     </div>
 </div>
-<app-control [currentMusicInfo]="this.currentMusicInfo" (startPlay)="startPlay($event)"
-    (nextButtonClick)="onNextTrackButtonClick()" (lastButtonClick)="onLastTrackButtonClick()"></app-control>
+<app-control></app-control>

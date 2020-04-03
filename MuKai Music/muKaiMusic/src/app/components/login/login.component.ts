@@ -26,12 +26,6 @@ export class LoginComponent implements OnInit {
   ) { }
 
   ngOnInit() {
-    this.accountService.loginSuccess.subscribe(() => {
-      this.dialogRef.close();
-    });
-    this.accountService.loginFailed.subscribe((err: string) => {
-      this.errorInfo = err;
-    })
   }
   public get currentTheme() {
     return this.theme.getThemeClass();
@@ -39,8 +33,24 @@ export class LoginComponent implements OnInit {
 
   public errorInfo: string = "";
 
+  public isLoading: boolean = false;
+
   public login() {
-    this.accountService.logIn(this.user.username, this.user.password);
+    if (this.user.password == "" || this.user.username == "") {
+      return this.errorInfo = "请输入您的信息";
+    }
+    this.isLoading = true;
+    this.accountService.login(this.user.username, this.user.password).subscribe(async res => {
+      if (res.code != 200) {
+        this.isLoading = false;
+        this.errorInfo = res.error;
+      } else {
+        await this.accountService.getUserInfo().toPromise().then(() => {
+          this.dialogRef.close();
+          this.isLoading = false;
+        });
+      }
+    });
   }
 
   public onInputChange() {

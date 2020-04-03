@@ -5,7 +5,6 @@ using Microsoft.AspNetCore.Mvc;
 using MuKai_Music.Attribute;
 using MuKai_Music.Model.Authentication;
 using MuKai_Music.Model.DataEntity;
-using MuKai_Music.Model.ResponseEntity;
 using MuKai_Music.Service;
 using System.ComponentModel.DataAnnotations;
 using System.Net.Http;
@@ -44,7 +43,7 @@ namespace MuKai_Music.Controllers
         [ResponseCache(NoStore = true)]
         [ApiCache(NoStore = true)]
         [AllowAnonymous]
-        public async Task<IResult<string>> Register([FromBody] UserInfo userInfo)
+        public async Task Register([FromBody] UserInfo userInfo)
             => await this.userService.Register(userInfo);
 
         /// <summary>
@@ -57,7 +56,7 @@ namespace MuKai_Music.Controllers
         [ResponseCache(NoStore = true)]
         [ApiCache(NoStore = true)]
         [AllowAnonymous]
-        public async Task<IResult<object>> LogIn([Required][FromForm]string username, [Required][FromForm] string password)
+        public async Task LogIn([Required][FromForm]string username, [Required][FromForm] string password)
             => await this.userService.Login(username, password);
 
         /// <summary>
@@ -72,6 +71,14 @@ namespace MuKai_Music.Controllers
             => await this.userService.Logout();
 
         /// <summary>
+        /// 获取用户信息 如传入id,则获取该用户id
+        /// </summary>
+        /// <param name="id"></param>
+        /// <returns></returns>
+        [HttpGet("account/info")]
+        public async Task UserInfo(int? id) => await userService.GetUserInfo(id);
+
+        /// <summary>
         /// 上传头像
         /// </summary>
         /// <param name="fileData"></param>
@@ -79,7 +86,7 @@ namespace MuKai_Music.Controllers
         [HttpPost("account/upload/avatar")]
         [ResponseCache(NoStore = true)]
         [ApiCache(NoStore = true)]
-        public async Task<IResult<string>> UploadAvatar(string fileData) => await this.userService.UploadAvatar(fileData);
+        public async Task UploadAvatar(string fileData) => await this.userService.UploadAvatar(fileData);
 
 
 

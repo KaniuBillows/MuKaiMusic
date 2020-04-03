@@ -123,7 +123,8 @@ namespace MusicApi
                         httpClient.BaseAddress = new Uri(requestOption.Url + requestOption.GetQueryString());
                         httpClient.DefaultRequestHeaders.Add("ua", requestOption.Ua);
                         httpClient.DefaultRequestHeaders.Add("User-Agent", GetUserAgent(requestOption));
-                        httpClient.DefaultRequestHeaders.Add("channel", "0231111");
+                        httpClient.DefaultRequestHeaders.Add("Referer", "http://music.migu.cn/v3");
+                        //httpClient.DefaultRequestHeaders.Add("channel", "0231111");
                         return await httpClient.GetAsync(httpClient.BaseAddress);
                     }
                 case CryptoType.MiGU_Web:

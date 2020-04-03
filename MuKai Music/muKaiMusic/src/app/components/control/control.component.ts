@@ -15,7 +15,7 @@ export class ControlComponent implements OnInit {
   constructor(private player: PlayerService) { }
 
   ngOnInit() {
-    
+
     //订阅当前播放时间改变事件
     this.player.onCurrentTimeChange.subscribe((time: number) =>
       this.onTimeChange(time)
@@ -26,20 +26,35 @@ export class ControlComponent implements OnInit {
       this.progrees.max = duration;
       this.progrees.value = 0.1;
     });
+
+    this.player.onEnded.subscribe(() => {
+      this.onNextTrackButtonClick();
+    });
+    this.player.currentMusicDelete.subscribe(() => {
+      this.player.stop();
+      if (this.player.playlist.length == 0) return;
+      let currentIndex = this.player.currentMusicIndex;
+      if (currentIndex == this.player.playlist.length - 1) {
+        this.player.currentMusic = this.player.playlist[0];
+      } else {
+        this.player.currentMusic = this.player.playlist[currentIndex + 1];
+      }
+    })
   }
   //#region Properties
 
-  /**
-   * 当前歌曲信息，由player组件传递
-   */
-  @Input()
-  public get currentMusicInfo(): Song {
-    return this._currentMusicInfo;
+  public get durationInfo(): string {
+    if (this.player.duration != null) {
+      if (this.player.status == 'stop') return "00:00/" + this.getTimeFormat(this.player.duration);
+      else return this.getTimeFormat(this.player.currentTime) + "/" + this.getTimeFormat(this.player.duration);
+    } else {
+      return "";
+    }
   }
-  public set currentMusicInfo(value: Song) {
-    this._currentMusicInfo = value;
+
+  public get musicInfo(): Song {
+    return this.player.currentMusic;
   }
-  private _currentMusicInfo: Song;
 
   /**
    * 音量值
@@ -86,19 +101,29 @@ export class ControlComponent implements OnInit {
   //#region methods
 
   /**
-   * 上一首按钮点击事件
-   * 将事件抛出给player组件，由palyer组件处理
+   * 上一首
    */
   public onLastTrackButtonClick() {
-    this.lastButtonClick.emit();
+    if (this.player.playlist.length == 0) return;
+    let currentIndex = this.player.currentMusicIndex;
+    if (currentIndex == 0) {
+      this.player.start(this.player.playlist[this, this.player.playlist.length - 1]);
+    } else {
+      this.player.start(this.player.playlist[currentIndex - 1]);
+    }
   }
 
   /**
-   * 下一首按钮点击事件
-   * 将事件抛出给player组件，由palyer组件处理
+   * 下一首
    */
   public onNextTrackButtonClick() {
-    this.nextButtonClick.emit();
+    if (this.player.playlist.length == 0) return;
+    let currentIndex = this.player.currentMusicIndex;
+    if (currentIndex == this.player.playlist.length - 1) {
+      this.player.start(this.player.playlist[0]);
+    } else {
+      this.player.start(this.player.playlist[currentIndex + 1]);
+    }
   }
 
   /**
@@ -106,12 +131,12 @@ export class ControlComponent implements OnInit {
    * 当播放器状态不为'stop'时，恢复播放
    * 否则触发开始新歌曲播放事件，并将进度条复原
    */
-  public onPlayButtonClick() {
+  public playButtonClick() {
     if (this.player.status != "stop") {
       this.player.play();
     }
     else {
-      this.startPlay.emit(this.currentMusicInfo);
+      this.player.start(this.player.currentMusic);
       this.progrees.value = 0.1;
     }
   }
@@ -119,21 +144,21 @@ export class ControlComponent implements OnInit {
   /**
    * 暂停按钮点击事件，直接控制播放器的状态
    */
-  public onPauseButtonClick() {
+  public pauseButtonClick() {
     this.player.pause();
   }
 
   /**
    * 静音还原，读取保存的静音前音量并赋值给volume属性
    */
-  public onReductionClick() {
+  public reductionClick() {
     this.volume = this.reductVolume;
   }
 
   /**
    * 静音，将当前音量保存，并设置音量为0
    */
-  public onMuteClick() {
+  public muteClick() {
     this.reductVolume = this.volume;
     this.volume = 0;
   }
@@ -153,27 +178,19 @@ export class ControlComponent implements OnInit {
     this.progrees.writeValue(time);
 
   }
-  //#endregion
-
-  //#region events
-  /**
-   * 下一首点击事件，当点击按钮时触发
-   */
-  @Output()
-  public nextButtonClick = new EventEmitter();
-  /**
-   * 上一首点击事件，当点击按钮触发
-   */
-  @Output()
-  public lastButtonClick = new EventEmitter();
 
   /**
-   * 开始以当前歌曲播放事件，在播放器状态为’stop‘时点击播放按钮触发
+   * 格式化时间
+   * @param time 
    */
-  @Output()
-  public startPlay = new EventEmitter<Song>();
+  private getTimeFormat(time: number): string {
+    return Math.floor(time / 60).toString().padStart(2, '0') +
+      ':' + Math.floor((time % 60)).toString().padStart(2, '0');
+  }
 
   //#endregion
+
+
 
 
 }

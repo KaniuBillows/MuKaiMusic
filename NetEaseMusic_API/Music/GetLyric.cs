@@ -5,14 +5,14 @@ namespace MusicApi.NetEase.Music
     /// <summary>
     /// 获取歌词
     /// </summary>
-    public sealed class Lyric : BaseRequestOption
+    public sealed class GetLyric : BaseRequestOption
     {
         /// <summary>
         /// 
         /// </summary>
         /// <param name="cookies"></param>
         /// <param name="musicId"></param>
-        public Lyric(Hashtable cookies, int musicId) : base(cookies)
+        public GetLyric(Hashtable cookies, int musicId) : base(cookies)
         {
             Params.Add("id", musicId.ToString());
         }
@@ -21,7 +21,7 @@ namespace MusicApi.NetEase.Music
         /// 
         /// </summary>
         /// <param name="musicId"></param>
-        public Lyric(int musicId) : this(new Hashtable(), musicId)
+        public GetLyric(int musicId) : this(new Hashtable(), musicId)
         {
         }
 

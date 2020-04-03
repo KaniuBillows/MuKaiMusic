@@ -8,7 +8,7 @@
         </div>
     </li>
     <div id="result-container">
-        <ul>
+        <div id="r-ul">
             <li class="result-title" *ngFor='let song of searchResult'>
                 <div class="option">
                     <mat-icon matTooltip="添加到播放列表" (click)="addToPlaylist(song)">add</mat-icon>
@@ -16,12 +16,15 @@
                 </div>
                 <div class="result-item">
                     <div class="result-name"><span>{{song.name}}</span></div>
-                    <div class="result-artist"><span>{{song.artistName}}</span></div>
-                    <div class="result-album"><span>{{song.albumName||"未知专辑"}}</span></div>
+                    <div class="result-artist"><span>{{song.artists[0].name}}</span></div>
+                    <div class="result-album"><span>{{song.album.name||"未知专辑"}}</span></div>
                     <div class="result-time"><span>{{getTimeFormat(song.duration)||"未知"}}</span></div>
                 </div>
             </li>
-        </ul>
+        </div>
     </div>
     <mat-spinner *ngIf="isloading" value='100' color='accent' id="spinner"></mat-spinner>
+    <div class="scroll" id="r-scroll">
+        <div class="bar" id="r-bar"></div>
+    </div>
 </div>

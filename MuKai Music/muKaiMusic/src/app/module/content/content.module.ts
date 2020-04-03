@@ -10,6 +10,9 @@ import { MatDialogModule } from '@angular/material/dialog';
 import { MatInputModule } from '@angular/material/input';
 import { LoginComponent } from 'src/app/components/login/login.component';
 import { FormsModule } from '@angular/forms';
+import { HTTP_INTERCEPTORS } from '@angular/common/http';
+import { AccountInterceptor } from 'src/app/services/network/accountInterceptor';
+import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 const routes: Routes = [
   {
     path: '',
@@ -37,6 +40,7 @@ const routes: Routes = [
   imports: [
     FormsModule,
     CommonModule,
+    MatProgressSpinnerModule,
     MatDialogModule,
     MatInputModule,
     MatIconModule,
@@ -44,5 +48,6 @@ const routes: Routes = [
     MatSidenavModule,
     RouterModule.forChild(routes)
   ]
+
 })
 export class ContentModule { }

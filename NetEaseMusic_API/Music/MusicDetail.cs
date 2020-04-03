@@ -6,15 +6,15 @@ namespace MusicApi.NetEase.Music
     /// <summary>
     /// 音乐信息
     /// </summary>
-    public sealed class MusicInfo : BaseRequestOption
+    public sealed class MusicDetail : BaseRequestOption
     {
-        public MusicInfo(Hashtable cookies, int id) : base(cookies)
+        public MusicDetail(Hashtable cookies, int[] ids) : base(cookies)
         {
-            int[] ids = { id };
+
             Params.Add("c", "[" + string.Join(",", ids.Select(id => "{\"id\":" + id + "}")) + "]");
             Params.Add("ids", "[" + string.Join(",", ids) + "]");
         }
-        public MusicInfo(int id) : this(new Hashtable(), id)
+        public MusicDetail(int id) : this(new Hashtable(), new int[] { id })
         {
 
         }

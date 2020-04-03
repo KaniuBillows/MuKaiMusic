@@ -26,6 +26,7 @@ namespace MuKai_Music.Cache
             }
             else
             {
+                RedisClient.RedisClientInstence.CacheOption = option;
                 services.AddSingleton<ICache, RedisClient>((s) =>
                     RedisClient.RedisClientInstence
                 );

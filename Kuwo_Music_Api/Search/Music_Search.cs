@@ -10,7 +10,7 @@ namespace MusicApi.Kuwo.Search
         })
         {
             var id = Guid.NewGuid();
-            this.Url = $"http://www.kuwo.cn/api/www/search/searchMusicBykeyWord?key={Uri.EscapeDataString(keyword)}&pn={offset + 1}&rn={limit}&reqId={id.ToString()}";
+            this.Url = $"http://www.kuwo.cn/api/www/search/searchMusicBykeyWord?key={Uri.EscapeDataString(keyword)}&pn={offset + 1}&rn={limit}&reqId={id}";
         }
 
 

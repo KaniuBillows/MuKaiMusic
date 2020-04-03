@@ -1,24 +1,25 @@
+using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.HttpOverrides;
+using Microsoft.AspNetCore.Identity;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
-using Microsoft.EntityFrameworkCore;
+using Microsoft.IdentityModel.Tokens;
+using MuKai_Music.Cache;
 using MuKai_Music.DataContext;
 using MuKai_Music.Middleware;
-using System;
-using MuKai_Music.Model.DataEntity;
-using Microsoft.AspNetCore.Identity;
-using Microsoft.IdentityModel.Tokens;
-using System.Text;
-using Microsoft.AspNetCore.Authentication.JwtBearer;
-using System.IdentityModel.Tokens.Jwt;
-using System.Linq;
-using MuKai_Music.Model.Authentication;
-using MuKai_Music.Cache;
 using MuKai_Music.Middleware.ApiCache;
 using MuKai_Music.Middleware.TokenManager;
+using MuKai_Music.Model.Authentication;
+using MuKai_Music.Model.DataEntity;
+using MuKai_Music.Model.Service;
+using System;
+using System.IdentityModel.Tokens.Jwt;
+using System.Text;
+using System.Text.Json;
 
 namespace MuKai_Music
 {
@@ -38,8 +39,14 @@ namespace MuKai_Music
                 ValidIssuer = Configuration.GetValue<string>("Domain"),//Issuer，这两项和前面签发jwt的设置一致
                 IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(Configuration.GetValue<string>("SecurityKey")))
             };
+            JsonSerializerOptions = new JsonSerializerOptions()
+            {
+                PropertyNamingPolicy = JsonNamingPolicy.CamelCase,
+                PropertyNameCaseInsensitive = true
+            };
         }
 
+        public static JsonSerializerOptions JsonSerializerOptions { get; private set; }
 
         public static IConfiguration Configuration { get; private set; }
 
@@ -61,6 +68,8 @@ namespace MuKai_Music
             services.AddDbContext<AccountContext>(options =>
                 options.UseNpgsql(Configuration.GetConnectionString("PostgreSql"))
             );
+
+            services.AddScoped<MusicService>();
 
             services.AddHttpClient();
             //注册身份验证
@@ -99,7 +108,7 @@ namespace MuKai_Music
 
             // In production, the Angular files will be served from this directory
             services.AddSpaStaticFiles(configuration => configuration.RootPath = "mukaiMusic/dist/muKaiMusic");
-            //添加内存缓存到DI容器
+            //添加缓存
             services.AddICache(option =>
             {
                 option.Age = int.Parse(Configuration["cache-age"]);
@@ -119,7 +128,7 @@ namespace MuKai_Music
 
             }).AddJsonOptions(configure =>
                     configure.JsonSerializerOptions.PropertyNameCaseInsensitive = true);
-            //RedisClient.RedisClientInstance.InitConnect(Configuration);
+
             services.AddResponseCaching();
         }
 
@@ -140,30 +149,28 @@ namespace MuKai_Music
             {
                 ForwardedHeaders = ForwardedHeaders.XForwardedFor | ForwardedHeaders.XForwardedProto
             });
+
+            app.UseTokenManager();
+
             //配置启用静态资源文件
             app.UseStaticFiles();
             app.UseOpenApi();
             //使用swagger
             app.UseSwaggerUi3();
-            //启用单页面静态资源文件
-            if (!env.IsDevelopment())
-            {
-                app.UseSpaStaticFiles();
-            }
-            app.UseRouting();
 
-            app.UseTokenManager();
-            //身份认证
-            app.UseAuthentication();
-            //授权
-            app.UseAuthorization();
-            //允许跨域
+            app.UseRouting();
             app.UseCors(builder =>
             {
                 builder.AllowAnyOrigin();
                 builder.AllowAnyMethod();
                 builder.AllowAnyHeader();
             });
+
+            //身份认证
+            app.UseAuthentication();
+            //授权
+            app.UseAuthorization();
+            //允许跨域
             app.UseApiCacheMiddleware();
 
 
@@ -173,9 +180,10 @@ namespace MuKai_Music
                     name: "default",
                     pattern: "{controller}/{action=Index}/{id?}");
             });
-            app.UseSpaStaticFiles();
+            //启用单页面静态资源文件
             if (env.IsProduction())
             {
+                app.UseSpaStaticFiles();
                 app.UseSpa(spa =>
                 {
                     spa.Options.SourcePath = "mukaiMusic";

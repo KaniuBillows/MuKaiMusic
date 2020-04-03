@@ -1,8 +1,10 @@
 ﻿using Microsoft.Extensions.Configuration;
 using StackExchange.Redis;
 using System;
+using System.Diagnostics;
 using System.Text.Json;
 using System.Threading.Tasks;
+
 
 namespace MuKai_Music.Cache
 {
@@ -29,6 +31,7 @@ namespace MuKai_Music.Cache
                 Console.WriteLine(ex.Message);
                 redisMultiplexer = null;
                 db = null;
+                Process.GetCurrentProcess().Kill();
             }
         }
 
@@ -37,7 +40,17 @@ namespace MuKai_Music.Cache
             InitConnect(Configuration);
         }
 
-        public static RedisClient RedisClientInstence => lazy.Value;
+        public static RedisClient RedisClientInstence
+        {
+            get
+            {
+                if (lazy.Value.db == null)
+                {
+                    throw new Exception("Can Not Connect the Redis");
+                }
+                return lazy.Value;
+            }
+        }
 
         /// <summary>
         /// 保存单个key value
@@ -46,6 +59,20 @@ namespace MuKai_Music.Cache
         /// <param name="value">保存的值</param>
         /// <param name="expiry">过期时间</param>
         public async void SetStringKey(string key, string value, TimeSpan expiry) => await db.StringSetAsync(key, value, expiry);
+
+        /// <summary>
+        /// 保存key，value 不设置过期时间
+        /// </summary>
+        /// <param name="key"></param>
+        /// <param name="value"></param>
+        public async Task SetStringKeyAsync(string key, string value) => await db.StringSetAsync(key, value);
+
+        /// <summary>
+        /// 保存key，value 不设置过期时间
+        /// </summary>
+        /// <param name="key"></param>
+        /// <param name="value"></param>
+        public void SetStringKey(string key, string value) => db.StringSet(key, value);
 
         /// <summary>
         /// 获取单个key的值

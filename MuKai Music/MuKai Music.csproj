@@ -17,6 +17,8 @@
     <PlatformTarget>x64</PlatformTarget>
     <GenerateDocumentationFile>true</GenerateDocumentationFile>
     <NoWarn>$(NoWarn);1591</NoWarn>
+    <AllowUnsafeBlocks>false</AllowUnsafeBlocks>
+    <Optimize>false</Optimize>
   </PropertyGroup>
 
   <ItemGroup>
@@ -82,14 +84,10 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\Kuwo_Music_Api\Kuwo_Music_Api.csproj" />
-    <ProjectReference Include="..\MiGu_Music_API\MiGu_Music_API.csproj" />
-    <ProjectReference Include="..\NetEaseMusic_API\NetEaseMusic_API.csproj" />
-    <ProjectReference Include="..\RequestHandler\RequestHandler.csproj" />
+    <ProjectReference Include="..\DataAbstract\DataAbstract.csproj" />
   </ItemGroup>
 
   <ItemGroup>
-    <Folder Include="Extensions\" />
     <Folder Include="Migrations\" />
   </ItemGroup>
 
@@ -136,7 +134,7 @@
   </Target>
 
   <ProjectExtensions>
-    <VisualStudio><UserProperties appsettings_1development_1json__JsonSchema="http://json.schemastore.org/appsettings" /></VisualStudio>
+    <VisualStudio><UserProperties appsettings_1production_1json__JsonSchema="http://json.schemastore.org/band-manifest" appsettings_1development_1json__JsonSchema="http://json.schemastore.org/appsettings" /></VisualStudio>
   </ProjectExtensions>
 
 </Project>

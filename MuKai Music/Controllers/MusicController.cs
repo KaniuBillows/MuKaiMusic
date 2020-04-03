@@ -1,16 +1,13 @@
-﻿using Microsoft.AspNetCore.Http;
+﻿using DataAbstract;
 using Microsoft.AspNetCore.Mvc;
 using MuKai_Music.Attribute;
-using MuKai_Music.Model.DataEntity;
-using MuKai_Music.Model.RequestEntity.Music;
-using MuKai_Music.Model.ResponseEntity;
-using MuKai_Music.Model.ResponseEntity.LyricResult;
-using MuKai_Music.Model.ResponseEntity.SearchResult;
 using MuKai_Music.Model.Service;
-using MusicApi.NetEase.Banner;
-using MusicApi.NetEase.Search;
+using System;
 using System.ComponentModel.DataAnnotations;
+using System.Linq;
 using System.Net.Http;
+using System.Text;
+using System.Text.Json;
 using System.Threading.Tasks;
 
 namespace MuKai_Music.Service
@@ -22,14 +19,14 @@ namespace MuKai_Music.Service
     public class MusicController : ControllerBase
     {
         private readonly MusicService musicService;
+        private readonly IHttpClientFactory httpClientFactory;
+
         //   private readonly IHttpContextAccessor httpContextAccessor;
 
-        public MusicController(IHttpContextAccessor httpContextAccessor,
-            IHttpClientFactory httpClientFactory
-            )
+        public MusicController(IHttpClientFactory httpClientFactory, MusicService musicService)
         {
-            this.musicService = new MusicService(httpContextAccessor.HttpContext, httpClientFactory);
-            //    this.httpContextAccessor = httpContextAccessor;
+            this.httpClientFactory = httpClientFactory;
+            this.musicService = musicService;
         }
 
 
@@ -38,44 +35,38 @@ namespace MuKai_Music.Service
         /// </summary>
         /// <param name="id"></param>
         [HttpGet("artist/description")]
-        public async Task GetArtistDescription(int id) => await musicService.GetArtistDescription(id);
+        public async Task GetArtistDescription(int id) { }
 
         /// <summary>
         /// 获取歌手单曲
         /// </summary>
         /// <param name="id"></param>
         [HttpGet("artist/musics")]
-        public async Task GetArtistMusics(int id) => await musicService.GetArtistMusics(id);
+        public async Task GetArtistMusics(int id) { }
 
         /// <summary>
         /// 获取专辑信息
         /// </summary>
         /// <param name="id"></param>
         [HttpGet("album/deatail")]
-        public async Task GetInfo(int id) => await musicService.GetAlbumDetail(id);
+        public async Task GetInfo(int id) { }
 
         /// <summary>
         /// 推荐新歌,作为首页默认显示
         /// </summary>
         /// <returns></returns>
         [HttpGet("music/personalized")]
-        public async Task<IResult<MusicInfo[]>> PersonalizedMusic() => await musicService.GetPersonalizedNewMusic();
+        public async Task PersonalizedMusic() { }
 
         /// <summary>
         /// 获取网易云歌曲详情信息，包含图片等信息
         /// </summary>
         /// <param name="id"></param>
+        /// <param name="source"></param>
         /// <returns></returns>
-        [HttpGet("music/ne_detail")]
-        public async Task MusicDetail(int id) => await musicService.GetMusicDetail(id);
+        [HttpGet("music/pic")]
+        public async Task MusicPic([Required]string id, [Required]DataSource source) => await ServiceRequest(id, source, "/pic?id=");
 
-        /// <summary>
-        /// 获取咪咕音乐图片信息
-        /// </summary>
-        /// <param name="id"></param>
-        /// <returns></returns>
-        [HttpGet("music/migu_pic")]
-        public async Task MiguMusicPic(string id) => await musicService.GetMiguMusicPic(id);
 
         /// <summary>
         /// 获取精品歌单
@@ -83,7 +74,7 @@ namespace MuKai_Music.Service
         /// <param name="category"></param>
         /// <param name="limit"></param>
         [HttpGet("playlist/highQuality")]
-        public async Task HighQualityPlaylist(string category, int limit) => await musicService.GetHighQualityPlaylist(category, limit);
+        public async Task HighQualityPlaylist(string category, int limit) { }
 
         /// <summary>
         /// 推荐歌单
@@ -91,34 +82,69 @@ namespace MuKai_Music.Service
         /// <param name="limit"></param>
         /// <returns></returns>
         [HttpGet("playlist/personalized")]
-        public async Task PersonalizedPlaylist(int limit) => await musicService.GetPersonalizedPlaylist(limit);
+        public async Task PersonalizedPlaylist(int limit) { }
 
         /// <summary>
-        /// 获取歌曲的URL
+        /// 获取歌曲的URL,当Source为咪咕时，id为copyrightid，mid为普通id
         /// </summary>
-        /// <param name="param"></param>
         /// <returns></returns>
-        [HttpPost("music/url")]
+        [HttpGet("music/url")]
         [ApiCache(Duration = 1200)]
-        public async Task<IResult<Model.ResponseEntity.MusicUrlResult.MusicUrlInfo>> MsuicUrl([Required]Music_Param param)
-            => await musicService.GetMusicUrl(param);
+        public async Task MsuicUrl(
+            [Required]string id,
+            [Required]DataSource source,
+            string? mid)
+        {
+            if (DataSource.Migu.Equals(source))
+            {
+                if (mid == null)
+                {
+                    this.HttpContext.Response.StatusCode = 400;
+                    return;
+                }
+                StringBuilder builder = new StringBuilder(Startup.Configuration[ServiceInfo.MiguAPI]);
+                builder.Append("/url?cid=");
+                builder.Append(id);
+                builder.Append("&id=");
+                builder.Append(mid);
+                await this.RequestAndWrite(builder.ToString());
+            }
+            else
+            {
+                await this.ServiceRequest(id, source, "/url?id=");
+            }
+        }
 
         /// <summary>
-        /// 全曲库搜索歌曲信息
+        /// 搜索歌曲信息
         /// </summary>
-        /// <param name="token"></param>
         /// <param name="key"></param>
         /// <returns></returns>
         [HttpGet("music/search")]
-        [ResponseCache(Duration = 3600)]
-        public async Task<IResult<MusicInfo[]>> SearchUrl(string token, string key) => await musicService.SearchMusic(key, token);
+        [ResponseCache(Duration = 1200)]
+        [ApiCache(Duration = 1200)]
+        public async Task<Result<MusicInfo[]>> SearchUrl(string key)
+        {
+            StringBuilder neBuilder = GetStringBuilder(DataSource.NetEase).Append("/search?keyword=").Append(key);
+            Task<MusicInfo[]> neResult = ServiceRequest<MusicInfo>(neBuilder.ToString());
+            StringBuilder kwBuilder = GetStringBuilder(DataSource.Kuwo).Append("/search?keyword=").Append(key);
+            Task<MusicInfo[]> kwResult = ServiceRequest<MusicInfo>(kwBuilder.ToString());
+            StringBuilder miguBuilder = GetStringBuilder(DataSource.Migu).Append("/search?keyword=").Append(key);
+            Task<MusicInfo[]> miguResult = ServiceRequest<MusicInfo>(miguBuilder.ToString());
+            MusicInfo[] neMusic = await neResult;
+            MusicInfo[] kwMusic = await kwResult;
+            MusicInfo[] miguMusic = await miguResult;
+            MusicInfo[] res = neMusic.Concat(kwMusic).Concat(miguMusic).ToArray();
+            return new Result<MusicInfo[]>(res, 200, null);
+        }
 
         /// <summary>
         /// 获取歌词
         /// </summary>
-        /// <param name="param"></param>
-        [HttpPost("music/lyric")]
-        public async Task<IResult<Lyric[]>> GetLyric([Required]Music_Param param) => await musicService.GetLyric(param);
+        /// <param name="id"></param>
+        /// <param name="source"></param>
+        [HttpGet("music/lyric")]
+        public async Task GetLyric([Required]string id, [Required]DataSource source) => await this.ServiceRequest(id, source, "/lyric?id=");
 
 
         /// <summary>
@@ -126,14 +152,14 @@ namespace MuKai_Music.Service
         /// </summary>
         [HttpGet("playlist/categories")]
         [ResponseCache(CacheProfileName = "longTime")]
-        public async Task GetCategories() => await musicService.GetPlaylistCategories();
+        public async Task GetCategories() { }
 
         /// <summary>
         /// 获取热门歌单分类
         /// </summary>
         [HttpGet("playlist/hotCategories")]
         [ResponseCache(CacheProfileName = "longTime")]
-        public async Task GetHotCategories() => await musicService.GetHotCategories();
+        public async Task GetHotCategories() { }
 
         /// <summary>
         /// 获取分类下的歌单
@@ -142,14 +168,14 @@ namespace MuKai_Music.Service
         /// <param name="limit"></param>
         /// <param name="offset"></param>
         [HttpGet("playlist")]
-        public async Task GetPlaylistInCategory(string category, int limit, int offset) => await musicService.GetPlaylistInCategory(category, limit, offset);
+        public async Task GetPlaylistInCategory(string category, int limit, int offset) { }
 
         /// <summary>
         /// 获取歌单详情
         /// </summary>
         /// <param name="id"></param>
         [HttpGet("playlist/detail")]
-        public async Task GetPlaylistDetail(int id) => await musicService.GetPlaylistDetail(id);
+        public async Task GetPlaylistDetail(int id) { }
 
         /// <summary>
         /// 获取相似歌单
@@ -158,7 +184,7 @@ namespace MuKai_Music.Service
         /// <param name="limit"></param>
         /// <param name="offset"></param>
         [HttpGet("playlist/similar")]
-        public async Task GetSimilarPlaylist(int id, int limit, int offset) => await musicService.GetSimilarPlaylist(id, limit, offset);
+        public async Task GetSimilarPlaylist(int id, int limit, int offset) { }
 
         /// <summary>
         /// 获取相似歌曲
@@ -167,17 +193,8 @@ namespace MuKai_Music.Service
         /// <param name="limit"></param>
         /// <param name="offset"></param>
         [HttpGet("music/similar")]
-        public async Task GetSimlarMusic(int id, int limit, int offset) => await musicService.GetSimilarMusics(id, limit, offset);
+        public async Task GetSimlarMusic(int id, int limit, int offset) { }
 
-        /// <summary>
-        /// 获取轮播图
-        /// </summary>
-        /// <param name="type"></param>
-        /// <returns></returns>
-        [HttpGet("banner")]
-        [ApiCache(Duration = 3600)]
-        [ResponseCache(CacheProfileName = "default")]
-        public async Task GetBanner(BannerType type) => await musicService.GetBanner(type);
 
         /// <summary>
         /// 获取日推歌曲，需要登录网易云账号
@@ -185,15 +202,9 @@ namespace MuKai_Music.Service
         [HttpGet("music/recommend")]
         [ApiCache(Duration = 43200)]
         [ResponseCache(Duration = 43200)]
-        public async Task GetRecommendMusic() => await this.musicService.GetRecommendMusics();
+        public async Task GetRecommendMusic() { }
 
-        /// <summary>
-        /// 获取日推歌单，需要登录网易云账号
-        /// </summary>
-        [HttpGet("playlist/recommend")]
-        [ApiCache(Duration = 43200)]
-        [ResponseCache(Duration = 43200)]
-        public async Task GetRecommendPlaylist() => await this.musicService.GetRecommendPlaylist();
+
 
         /// <summary>
         /// 获取用户创建的歌单列表
@@ -205,26 +216,84 @@ namespace MuKai_Music.Service
         [HttpGet("netase/playlist")]
         [ApiCache(NoStore = true)]
         [ResponseCache(NoStore = true)]
-        public async Task GetUserPlaylist(int userId, int limit, int offset) => await musicService.GetUserPlaylist(userId, limit, offset);
+        public async Task GetUserPlaylist(int userId, int limit, int offset) { }
 
-        /// <summary>
-        /// 获取酷我token
-        /// </summary>
-        /// <returns></returns>
-        [HttpGet("kuwo/token")]
-        [ApiCache(Duration = 3600)]
-        [ResponseCache(Duration = 3600)]
-        public async Task<IResult<string>> GetKuwoToken() => await musicService.GetKuwoToken();
+        /* [HttpGet("music/src")]
+         [ResponseCache(NoStore = true)]
+         [ApiCache(NoStore = true)]
+         public IActionResult GetMusic()
+         {
+             return Forbid();
+         }*/
 
-        /*/// <summary>
-        /// 酷我曲库搜索
-        /// </summary>
-        /// <param name="token"></param>
-        /// <param name="key"></param>
-        /// <returns></returns>
-        [HttpGet("kuwo/search")]
-        [ApiCache(Duration = 86400)]
-        [ResponseCache(CacheProfileName = "longTime")]
-        public async Task KuwoSearch(string token, string key) => await musicService.KuwoSearch(token, key);*/
+
+        public async Task RequestAndWrite(string url)
+        {
+            using HttpClient client = httpClientFactory.CreateClient();
+            HttpResponseMessage response = await client.GetAsync(url);
+            await this.musicService.WirteBodyAsync(this.HttpContext, await response.Content.ReadAsStringAsync());
+        }
+
+        public async Task ServiceRequest(string id, DataSource dataSource, string route)
+        {
+            StringBuilder builder;
+            switch (dataSource)
+            {
+                case DataSource.NetEase:
+                    {
+                        builder = new StringBuilder(Startup.Configuration[ServiceInfo.NeAPI]);
+                        builder.Append(route);
+                        builder.Append(id);
+                        await this.RequestAndWrite(builder.ToString());
+                    }
+                    break;
+                case DataSource.Migu:
+                    {
+                        builder = new StringBuilder(Startup.Configuration[ServiceInfo.MiguAPI]);
+                        builder.Append(route);
+                        builder.Append(id);
+                        await this.RequestAndWrite(builder.ToString());
+                    }
+                    break;
+                case DataSource.Kuwo:
+                    {
+                        builder = new StringBuilder(Startup.Configuration[ServiceInfo.KuwoAPI]);
+                        builder.Append(route);
+                        builder.Append(id);
+                        await this.RequestAndWrite(builder.ToString());
+                    }
+                    break;
+                default:
+                    {
+                        await this.musicService.WirteBodyAsync(this.HttpContext, new Result<Lyric?>(null, 400, "参数不完整！"));
+                        return;
+                    }
+            }
+        }
+
+        public async Task<T[]> ServiceRequest<T>(string url)
+        {
+            using HttpClient client = this.httpClientFactory.CreateClient();
+            try
+            {
+                HttpResponseMessage response = await client.GetAsync(url);
+                return JsonSerializer.Deserialize<T[]>(await response.Content.ReadAsStringAsync());
+            }
+            catch (Exception)
+            {
+                return Array.Empty<T>();
+            }
+        }
+
+        public StringBuilder GetStringBuilder(DataSource dataSource)
+        {
+            return dataSource switch
+            {
+                DataSource.NetEase => new StringBuilder(Startup.Configuration[ServiceInfo.NeAPI]),
+                DataSource.Migu => new StringBuilder(Startup.Configuration[ServiceInfo.MiguAPI]),
+                DataSource.Kuwo => new StringBuilder(Startup.Configuration[ServiceInfo.KuwoAPI]),
+                _ => new StringBuilder(),
+            };
+        }
     }
 }

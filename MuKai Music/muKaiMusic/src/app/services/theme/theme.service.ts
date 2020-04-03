@@ -20,7 +20,7 @@ export class ThemeService {
         this.themes.push('orange-theme');
     }
     public themes: string[];
-    private _themeclas: string = 'light_green-theme';
+    private _themeclas: string = 'blue-theme';
     /**
      * 设置当前主题class
      */

@@ -1,10 +1,6 @@
-﻿using MuKai_Music.Model.ResponseEntity;
-using System;
-using System.Collections.Generic;
+﻿using DataAbstract;
 using System.ComponentModel.DataAnnotations;
-using System.Linq;
 using System.Text.Json.Serialization;
-using System.Threading.Tasks;
 
 namespace MuKai_Music.Model.RequestEntity.Music
 {

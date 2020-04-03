@@ -7,13 +7,14 @@ namespace MusicApi.NetEase.Music
     /// </summary>
     public class Music_Url : BaseRequestOption
     {
-        public Music_Url(Hashtable cookies, int id, int br) : base(cookies)
+        public Music_Url(Hashtable cookies, int[] ids, int br) : base(cookies)
         {
-            this.Params.Add("ids", "[" + id.ToString() + "]");
+
+            this.Params.Add("ids", "[" + string.Join(',', ids) + "]");
             this.Params.Add("br", br);
         }
 
-        public Music_Url(int id, int br) : this(new Hashtable(), id, br)
+        public Music_Url(int id, int br) : this(new Hashtable(), new int[] { id }, br)
         {
 
         }
@@ -23,7 +24,7 @@ namespace MusicApi.NetEase.Music
 
         }
 
-        public Music_Url(Hashtable cookies, int id) : this(cookies, id, 999000)
+        public Music_Url(Hashtable cookies, int id) : this(cookies, new int[] { id }, 999000)
         {
 
         }

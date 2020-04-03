@@ -80,15 +80,8 @@ $control-button-color: rgba(225, 225, 225, .8);
   background-repeat: no-repeat;
   background-size: cover;
   filter: blur(65px);
-
-  #back-board-img {
-    display: block;
-    width: 100vw;
-    height: 100vh;
-    position: relative;
-    z-index: 1;
-    filter: blur(40px);
-  }
+  filter: blur(10px);
+  transform: scale(1.1);
 
   #back-board-mask {
     position: absolute;
@@ -99,4 +92,12 @@ $control-button-color: rgba(225, 225, 225, .8);
     height: 100%;
     overflow: hidden;
   }
+}
+
+#app-logo {
+  position: absolute;
+  height: 7%;
+  max-height: 75px;
+  top: 5%;
+  left: 5%;
 }

@@ -1,13 +1,9 @@
 ﻿using Microsoft.IdentityModel.Tokens;
 using MuKai_Music.Cache;
-using MuKai_Music.Model.DataEntity;
 using System;
-using System.Collections.Generic;
 using System.IdentityModel.Tokens.Jwt;
-using System.Linq;
 using System.Security.Claims;
 using System.Text;
-using System.Threading.Tasks;
 
 namespace MuKai_Music.Service
 {
@@ -64,7 +60,8 @@ namespace MuKai_Music.Service
             expires: expires,
             signingCredentials: creds);
             string tokenString = new JwtSecurityTokenHandler().WriteToken(token);
-            _ = RedisClient.RedisClientInstence.SetStringKeyAsync(GetTokenKey(userId, ua), tokenString, expires.TimeOfDay);
+            TimeSpan expiry = expires - new DateTime(1970, 1, 1, 0, 0, 0);
+            _ = RedisClient.RedisClientInstence.SetStringKeyAsync(GetTokenKey(userId, ua), tokenString, expiry);
             return tokenString;
         }
 

@@ -7,7 +7,7 @@ namespace MusicApi.Migu.Search
     {
         public Web_Search(Hashtable cookies, string keyWord) : base(cookies)
         {
-            this.Url = $"http://music.migu.cn/v2/async/search?keyword={Uri.EscapeDataString(keyWord)}";
+            this.Url = $"http://music.migu.cn/v3/async/search?keyword={Uri.EscapeDataString(keyWord)}";
         }
 
         public Web_Search(string keyWord) : this(new Hashtable(), keyWord)

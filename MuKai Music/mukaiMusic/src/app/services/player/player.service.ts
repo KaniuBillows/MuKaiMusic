@@ -1,6 +1,9 @@
 import { Injectable, EventEmitter } from '@angular/core';
 import { Song } from 'src/app/entity/music';
-
+import { MusicService } from '../network/music/music.service';
+import { Title } from '@angular/platform-browser';
+export const CurrentMusicIndex = 'CURRENTMUSICINDEX';
+export const Playlist = 'PLAYLIST';
 @Injectable({
   providedIn: 'root'
 })
@@ -10,7 +13,10 @@ export class PlayerService {
 
   private _status: 'pause' | 'loading' | 'playing' | 'stop' = 'stop';
 
-  constructor() {
+  constructor(
+    private musicNet: MusicService,
+    private title: Title
+  ) {
     this.player = document.createElement('audio');
     this.player.preload = "load";
     this.player.ontimeupdate = () => {
@@ -22,13 +28,42 @@ export class PlayerService {
     this.player.onended = () => {
       this.onEnded.emit();
     }
+    this.playlistChange.subscribe(() => {
+      localStorage.setItem(Playlist, JSON.stringify(this._playlist));
+    });
+    this.player.onerror = (ev) => {
+      this.currentMusic.url = null;
+      console.log(this.currentMusic.url)
+      this.start(this.currentMusic);
+    };
   }
 
   //#region public property
 
-  public playlist: Song[] = [];
+  private _playlist: Song[] = [];
 
-  public currentMusic: Song = {} as any;
+  public get playlist(): Song[] {
+    return this._playlist;
+  }
+
+  public get currentMusicIndex(): number {
+    return this.playlist.indexOf(this.currentMusic);
+  }
+
+  public _currentMusic: Song = {} as any;
+
+  public set currentMusic(value: Song) {
+    this._currentMusic = value;
+    this.title.setTitle(this.currentMusic.name + ' - ' + this.currentMusic.artists[0].name);
+    this.currentMusicChange.emit(this._currentMusic);
+    if (!this.playlist.includes(this._currentMusic)) {
+      this.playlist.push(this._currentMusic);
+    }
+    localStorage.setItem(CurrentMusicIndex, this.currentMusicIndex.toString());
+  }
+  public get currentMusic() {
+    return this._currentMusic;
+  }
 
   public set status(value: 'pause' | 'loading' | 'playing' | 'stop') {
     this._status = value;
@@ -43,8 +78,20 @@ export class PlayerService {
   }
 
   public get duration() {
-    return this.player.duration;
+    if (this.currentMusic?.duration) {
+      return this.currentMusic.duration
+    }
+    if (this.player.src) {
+      //this.currentMusic.duration = this.player.duration;
+      return this.player.duration;
+    }
+    return null;
   }
+
+  public get currentTime() {
+    return this.player.currentTime;
+  }
+
   //#endregion
 
   //#region public methods
@@ -65,31 +112,75 @@ export class PlayerService {
     this.player.pause();
   }
 
-  public start(url: string, song: Song) {
-    this.player.src = url;
-    this.play();
-    this.currentMusic = song;
-    this.onMusicChange.emit();
+  /**
+   * 获取播放链接，并开始播放
+   * 成功获取播放链接，产生当前音乐改变事件
+   * @param song 
+   */
+  public async start(song: Song) {
+    this._status = 'loading';
+    if (song.url != null) {
+      this.player.src = song.url;
+      this.play();
+      this.currentMusic = song;
+    }
+    else {
+      this.musicNet.getUrl(song).subscribe(res => {
+        if (res.content == null) {
+          alert("这首歌居然不让听了! 试试其他的吧!");
+          this.deleteFromPlaylist(this.playlist.indexOf(song));
+          return;
+        }
+        this.player.src = res.content;
+        this.play();
+        this.currentMusic = song;
+      }, err => {
+        alert("无法访问服务器");
+      });
+    }
   }
 
-  public addAndPlay(song: Song) {
+  /**
+   * 将一首歌曲添加到播放列表，并立即开始播放
+   * @param song 
+   */
+  public async addAndPlay(song: Song) {
+    if (song.url != null)
+      this.player.src = song.url;
+    else {
+      let result = await this.musicNet.getUrl(song).toPromise();
+      if (result.content == null) {
+        alert("这首歌居然不让听了! 试试其他的吧!");
+        return;
+      }
+      this.playlist.push(song);
+      this.player.src = result.content;
+    }
+    this.play();
     this.currentMusic = song;
-    this.playlist.push(song);
-    this.addMusicAndPlay.emit(song);
-    this.playlistChange.emit();
   }
 
   /**
    * 删除播放列表中的某一首歌曲
    */
   public deleteFromPlaylist(index: number) {
-    if (index == this.playlist.findIndex(item => item === this.currentMusic)) {
-      this.playlist.splice(index, 1);
+    if (index == this.currentMusicIndex) {
+      this.stop();
+      this._playlist.splice(index, 1);
       this.currentMusicDelete.emit();
       this.playlistChange.emit();
       return;
     }
-    this.playlist.splice(index, 1);
+    this._playlist.splice(index, 1);
+    this.playlistChange.emit();
+  }
+
+  /**
+   * 将歌曲添加到播放列表，会产生播放列表改变事件
+   * @param song 
+   */
+  public addToPlaylist(song: Song[] | Song) {
+    this._playlist = this._playlist.concat(song);
     this.playlistChange.emit();
   }
 
@@ -99,6 +190,21 @@ export class PlayerService {
 
   public seek(value: number) {
     this.player.currentTime = value;
+  }
+
+  public initPlaylist(playlist: Song[], index?: number) {
+    this._playlist = playlist;
+    this.playlistChange.emit();
+    if (index != null) {
+      if (index >= 0 && index < playlist.length) {
+        this.currentMusic = playlist[index];
+      }
+      else {
+        this.currentMusic = playlist[0];
+      }
+    } else {
+      this.currentMusic = playlist[0];
+    }
   }
 
   //#endregion
@@ -112,15 +218,9 @@ export class PlayerService {
   public onEnded = new EventEmitter();
 
   /**
-   * 当前歌曲切换事件，主要用于playlist定位当前播放歌曲
+   * 当前歌曲切换事件
    */
-  public onMusicChange = new EventEmitter<Song>();
-
-  /**
-   * 添加歌曲到播放列表并开始播放事件
-   * 由player组件订阅处理，拿到被添加的歌曲后，请求URL并开始播放
-   */
-  public addMusicAndPlay = new EventEmitter<Song>();
+  public currentMusicChange = new EventEmitter<Song>();
 
   /**
    * 播放列表改变事件，主要由playlist订阅处理，重新计算searchbar

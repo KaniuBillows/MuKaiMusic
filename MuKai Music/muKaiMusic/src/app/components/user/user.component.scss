@@ -1,4 +1,4 @@
-$normal-color: rgba(225, 225, 225, .5);
+$normal-color: rgba(225, 225, 225, .7);
 $hover-color:rgba(225, 225, 225, .8);
 
 .login {
@@ -60,7 +60,7 @@ $hover-color:rgba(225, 225, 225, .8);
     left: 30px;
     top: 30px;
     z-index: 1000;
-    background-color: rgba(0, 0, 0, .8);
+    background-color: rgba(0, 0, 0, .5);
 
     .option-items {
         margin-top: 2px;

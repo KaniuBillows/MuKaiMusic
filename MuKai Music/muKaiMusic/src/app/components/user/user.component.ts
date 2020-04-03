@@ -37,8 +37,9 @@ export class UserComponent implements OnInit {
     this.dialog.open(LoginComponent);
   }
 
-  public logoutClick() {
-    this.account.logOut();
+  public async logoutClick() {
+    this.showOption = false;
+    await this.account.logOut();
   }
 
   public registerClick() {
