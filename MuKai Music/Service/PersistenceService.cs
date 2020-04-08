@@ -1,8 +1,5 @@
-﻿using MuKai_Music.DataContext;
-using MuKai_Music.Model.DataEntity;
-using System;
-using System.Collections.Generic;
-using System.Linq;
+﻿using DataAbstract;
+using MuKai_Music.DataContext;
 using System.Threading.Tasks;
 
 namespace MuKai_Music.Model.Service

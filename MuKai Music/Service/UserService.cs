@@ -1,4 +1,5 @@
 ﻿using DataAbstract;
+using DataAbstract.Account;
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
@@ -7,7 +8,6 @@ using Microsoft.IdentityModel.Tokens;
 using Microsoft.Net.Http.Headers;
 using MuKai_Music.Cache;
 using MuKai_Music.Model.Authentication;
-using MuKai_Music.Model.DataEntity;
 using System;
 using System.Collections.Generic;
 using System.IdentityModel.Tokens.Jwt;
@@ -204,7 +204,7 @@ namespace MuKai_Music.Service
         /// <returns></returns>
         public async Task Ne_LogInPhone(string countrycode, string phone, string password)
         {
-           
+
         }
 
         /// <summary>
@@ -212,7 +212,7 @@ namespace MuKai_Music.Service
         /// </summary>
         public async Task Ne_Logout()
         {
-          
+
         }
 
         /// <summary>
@@ -221,7 +221,7 @@ namespace MuKai_Music.Service
         /// <param name="id"></param>
         public async Task Ne_GetUserDetail(int id)
         {
-         
+
         }
 
         /// <summary>

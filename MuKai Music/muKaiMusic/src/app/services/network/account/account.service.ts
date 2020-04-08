@@ -4,10 +4,9 @@ import { Observable, ObservableInput } from 'rxjs';
 import { NetEaseLoginUserInfo, UserInfo } from 'src/app/entity/user';
 import { Md5 } from "ts-md5/dist/md5";
 import { Result } from 'src/app/entity/baseResult';
-import { onError, onResult } from '../resultHandle';
 import { environment } from 'src/environments/environment';
 import { Token } from 'src/app/entity/Token';
-import { mergeMap, tap } from 'rxjs/operators';
+import { tap } from 'rxjs/operators';
 import { AccountInterceptor, AccessToken, RefreshToken, User } from '../accountInterceptor';
 
 

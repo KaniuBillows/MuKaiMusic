@@ -33,7 +33,6 @@ export class PlayerService {
     });
     this.player.onerror = (ev) => {
       this.currentMusic.url = null;
-      console.log(this.currentMusic.url)
       this.start(this.currentMusic);
     };
   }
@@ -120,7 +119,7 @@ export class PlayerService {
   public async start(song: Song) {
     this._status = 'loading';
     if (song.url != null) {
-      this.player.src = song.url;
+      this.player.src = song.url.replace("http://", "https://");
       this.play();
       this.currentMusic = song;
     }

@@ -1,11 +1,9 @@
-import { Component, OnInit, ViewChild, ElementRef, EventEmitter } from '@angular/core';
+import { Component, OnInit, ViewChild, ElementRef } from '@angular/core';
 import { PlayerService, Playlist, CurrentMusicIndex } from 'src/app/services/player/player.service';
 import { MusicService } from 'src/app/services/network/music/music.service';
-import { album, artist, Song, UrlInfo, Lyric } from 'src/app/entity/music';
+import { Song } from 'src/app/entity/music';
 import { ThemeService } from 'src/app/services/theme/theme.service';
-import { AccountService } from 'src/app/services/network/account/account.service';
 import { Result } from 'src/app/entity/baseResult';
-import { MusicParam, DataSource } from 'src/app/entity/param/musicUrlParam';
 
 
 @Component({
@@ -20,10 +18,8 @@ export class PlayerComponent implements OnInit {
     lyrics: ElementRef;
 
 
-    private _lyric_paras: Lyric[] = [];
 
 
-    private _currentLrcIndex: number = 0;
 
 
     constructor(
@@ -32,6 +28,7 @@ export class PlayerComponent implements OnInit {
         private musicNet: MusicService) {
     }
     ngOnInit() {
+        document.getElementById("back-board").style.backgroundImage = "Url(../../../assets/img/music_white.jpg)";
         this.player.currentMusicChange.subscribe(() => {
             document.getElementById("back-board").style.backgroundImage = "Url(" + this.player.currentMusic.album.picUrl + ")";
         });
@@ -40,25 +37,12 @@ export class PlayerComponent implements OnInit {
 
 
     /**
-     * 当前播放歌曲,当前播放歌曲改变时，会调用获取歌词方法，加载歌词
-     * 并且会更改背景图片
+     * 当前播放歌曲,当前播放歌曲改变时
      */
     public get currentMusicInfo() {
         return this.player.currentMusic;
     }
-    public set currentMusicInfo(value: Song) {
-        this.player.currentMusic = value;
-    }
 
-    /**
-     * 当前歌词索引
-     */
-    public get currentLrcIndex() {
-        return this._currentLrcIndex;
-    }
-    public set currentLrcIndex(value: number) {
-        this._currentLrcIndex = value;
-    }
 
 
 
@@ -77,7 +61,7 @@ export class PlayerComponent implements OnInit {
      * 订阅music-info组件产生的音乐图片改变事件
      * @param pic 
      */
-    public onPictureChange(pic: string) {
+    public onPictureChange() {
 
     }
 
@@ -95,17 +79,15 @@ export class PlayerComponent implements OnInit {
      * 获取推荐歌曲，并将获取到的第一首歌作为当前歌曲
      */
     private getDefault() {
-
         let playlist = localStorage.getItem(Playlist);
         if (playlist == null) {
             this.musicNet.searchMusic("陈奕迅").subscribe((res: Result<Song[]>) => {
-                if (res.content.length > 0) this.currentMusicInfo = res.content[0];
                 this.player.initPlaylist(res.content);
             });
         } else {
             let currentMusic = localStorage.getItem(CurrentMusicIndex);
             if (currentMusic != null) {
-                this.player.initPlaylist(JSON.parse(playlist),Number.parseInt(currentMusic));
+                this.player.initPlaylist(JSON.parse(playlist), Number.parseInt(currentMusic));
             } else {
                 this.player.initPlaylist(JSON.parse(playlist));
             }

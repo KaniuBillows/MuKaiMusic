@@ -24,8 +24,15 @@ export class MusicService {
    * @param song 
    */
   public getLyric(song: Song): Observable<Result<Lyric[]>> {
-    let url = environment.baseUrl + `/api/music/lyric?${this.getRoute(song)}`;
-    return this.httpClient.get<Result<Lyric[]>>(url);
+    let url: string;
+    if (song.dataSource == DataSource.Migu) {
+      url = environment.baseUrl + `/api/music/lyric?id=${song.migu_CopyrightId}&source=${song.dataSource}`;
+      return this.httpClient.get<Result<Lyric[]>>(url);
+    } else {
+      url = environment.baseUrl + `/api/music/lyric?${this.getRoute(song)}`;
+      return this.httpClient.get<Result<Lyric[]>>(url);
+    }
+
   }
 
   /**
@@ -102,20 +109,10 @@ export class MusicService {
   }
 
   /**
-   * 获取酷我token
-   */
-  public async getKuWoToken(): Promise<string> {
-    let res = await this.httpClient.get<Result<string>>(environment.baseUrl + '/api/kuwo/token').toPromise();
-    if (res.code == 200) return res.content;
-    else return null;
-  }
-
-  /**
    * 请求歌曲的图片信息
    * @param song 
    */
   public async getPicture(song: Song): Promise<string> {
-    console.log(song)
     if (song.album.picUrl != null) return song.album.picUrl;
     try {
       let id: any = '';
@@ -154,14 +151,6 @@ export class MusicService {
     param += `&source=${song.dataSource}`;
     return param;
   }
-  /**
-   * 用于获取UUID 辅助函数
-   */
-  private S4() {
-    return (((1 + Math.random()) * 0x10000) | 0).toString(16).substring(1);
-  }
-  private get_uuid() {
-    return (this.S4() + this.S4() + "-" + this.S4() + "-" + this.S4() + "-" + this.S4() + "-" + this.S4() + this.S4() + this.S4());
-  }
+
 
 }

@@ -1,10 +1,11 @@
-﻿using Microsoft.AspNetCore.Authorization;
+﻿using DataAbstract;
+using DataAbstract.Account;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using MuKai_Music.Attribute;
 using MuKai_Music.Model.Authentication;
-using MuKai_Music.Model.DataEntity;
 using MuKai_Music.Service;
 using System.ComponentModel.DataAnnotations;
 using System.Net.Http;
@@ -56,7 +57,7 @@ namespace MuKai_Music.Controllers
         [ResponseCache(NoStore = true)]
         [ApiCache(NoStore = true)]
         [AllowAnonymous]
-        public async Task LogIn([Required][FromForm]string username, [Required][FromForm] string password)
+        public async Task<Result<object>> LogIn([Required][FromForm]string username, [Required][FromForm] string password)
             => await this.userService.Login(username, password);
 
         /// <summary>
@@ -76,7 +77,7 @@ namespace MuKai_Music.Controllers
         /// <param name="id"></param>
         /// <returns></returns>
         [HttpGet("account/info")]
-        public async Task UserInfo(int? id) => await userService.GetUserInfo(id);
+        public async Task<Result<UserInfo>> UserInfo(int? id) => await userService.GetUserInfo(id);
 
         /// <summary>
         /// 上传头像

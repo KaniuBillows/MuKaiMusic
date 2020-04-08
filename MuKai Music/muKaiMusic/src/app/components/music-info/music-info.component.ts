@@ -3,6 +3,7 @@ import { PlayerService } from 'src/app/services/player/player.service';
 import { MusicService } from 'src/app/services/network/music/music.service';
 import { ThemeService } from 'src/app/services/theme/theme.service';
 import { Lyric, Song } from 'src/app/entity/music';
+import { Result } from 'src/app/entity/baseResult';
 
 @Component({
   selector: 'app-music-info',
@@ -17,7 +18,7 @@ export class MusicInfoComponent implements OnInit {
     private theme: ThemeService) {
     this.player.currentMusicChange.subscribe(async () => {
       await this.getPic();
-      await this.getLyric();
+      this.getLyric();
     });
   }
 
@@ -42,7 +43,7 @@ export class MusicInfoComponent implements OnInit {
 
 
   public get picUrl(): string {
-    return this.musicInfo?.album?.picUrl == null ? "../../../assets/img/logo.png" : this.musicInfo.album.picUrl.replace("http://", "https://");
+    return this.musicInfo?.album?.picUrl == null ? "../../../assets/img/music_white.jpg" : this.musicInfo.album.picUrl.replace("http://", "https://");
   }
 
 
@@ -73,13 +74,17 @@ export class MusicInfoComponent implements OnInit {
     this.player.currentMusic.album.picUrl = res;
   }
 
-  private async getLyric() {
-    this._lyric_paras = [];
-    let result = await this.musicNet.getLyric(this.player.currentMusic).toPromise();
-    if (result.code == 200) {
-      this._lyric_paras = result.content;
-    } else {
+  private getLyric() {
+    this._lyric_paras = [{ text: "正在加载歌词...", time: 0 }];
+    this.musicNet.getLyric(this.player.currentMusic).subscribe((res: Result<Lyric[]>) => {
+      if (res.code == 200) {
+        this._lyric_paras = res.content;
+      } else {
+        this._lyric_paras = [{ text: "暂无歌词", time: 0 }];
+      }
+    }, (err) => {
       this._lyric_paras = [{ text: "暂无歌词", time: 0 }];
-    }
+    });
+
   }
 }

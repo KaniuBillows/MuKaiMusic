@@ -1,9 +1,5 @@
-﻿using Microsoft.EntityFrameworkCore;
-using MuKai_Music.Model.DataEntity;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
+﻿using DataAbstract;
+using Microsoft.EntityFrameworkCore;
 
 namespace MuKai_Music.DataContext
 {

@@ -1,3 +1,4 @@
+using DataAbstract.Account;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
@@ -14,7 +15,6 @@ using MuKai_Music.Middleware;
 using MuKai_Music.Middleware.ApiCache;
 using MuKai_Music.Middleware.TokenManager;
 using MuKai_Music.Model.Authentication;
-using MuKai_Music.Model.DataEntity;
 using MuKai_Music.Model.Service;
 using System;
 using System.IdentityModel.Tokens.Jwt;
