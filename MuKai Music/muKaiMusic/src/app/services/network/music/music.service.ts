@@ -142,7 +142,8 @@ export class MusicService {
 
       } break;
       case DataSource.Migu: {
-        param += song.migu_Id;
+        param += song.migu_CopyrightId;
+        param += `&mid=${song.migu_Id}`;
       } break;
       case DataSource.NetEase: {
         param += song.ne_Id;

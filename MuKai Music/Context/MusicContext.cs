@@ -3,6 +3,7 @@ using Microsoft.EntityFrameworkCore;
 
 namespace MuKai_Music.DataContext
 {
+    //保存一些音乐信息
     public class MusicContext : DbContext
     {
         public MusicContext(DbContextOptions<MusicContext> options) : base(options)

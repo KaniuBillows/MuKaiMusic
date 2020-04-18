@@ -33,17 +33,8 @@ export class NetEaseLoginUserInfo {
 export class UserInfo {
     id: number;
     userName: string;
-    normalizedUserName: string;
     email: string;
-    normalizedEmail: string;
-    emailConfirmed: boolean;
-    securityStamp: string;
-    concurrencyStamp: string;
     phoneNumber: string;
-    phoneNumberConfirmed: boolean;
-    twoFactorEnabled: boolean;
-    ne_Id: number;
     ncikName: string;
     avatarUrl: string;
-    token: string;
 }

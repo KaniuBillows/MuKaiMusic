@@ -15,7 +15,7 @@
 </div>
 <div id="contents-container">
     <div id='contents'>
-        <app-music-info id='music-info'>
+        <app-music-info id='music-info' (picError)='this.onPicError'>
         </app-music-info>
         <app-playlist id='playlist'>
         </app-playlist>

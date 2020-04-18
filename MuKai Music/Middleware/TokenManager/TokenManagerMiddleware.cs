@@ -20,9 +20,12 @@ namespace MuKai_Music.Middleware.TokenManager
     {
         private readonly RequestDelegate _next;
         private readonly RedisClient _redisClient;
-        public TokenManagerMiddleware(RequestDelegate next)
+        private readonly TokenProvider tokenProvider;
+
+        public TokenManagerMiddleware(RequestDelegate next, RedisClient redis, TokenProvider tokenProvider)
         {
-            this._redisClient = RedisClient.RedisClientInstence;
+            this._redisClient = redis;
+            this.tokenProvider = tokenProvider;
             _next = next;
         }
 
@@ -56,7 +59,6 @@ namespace MuKai_Music.Middleware.TokenManager
                     }
                     //检查RefreshToken是否在Redis中，如果不在，则视为用户已登出，返回401
                     string key = TokenProvider.GetTokenKey(userId, ua);
-                    Console.WriteLine(key);
                     if (!this._redisClient.Exists(key))
                     {
                         await httpContext.ChallengeAsync();
@@ -64,13 +66,13 @@ namespace MuKai_Music.Middleware.TokenManager
                     }
                     //如果RefreshToken将在3天内过期，生成新的RefreshToken
                     string reToken = (token as JwtSecurityToken).ValidTo - DateTime.UtcNow < TimeSpan.FromDays(3)
-                        ? TokenProvider.CreateRefreshToken(userId as string, ua)
+                        ? this.tokenProvider.CreateRefreshToken(userId as string, ua)
                         : (string)refreshToken;
                     //生成新的返回内容
                     string content = JsonSerializer.Serialize<Result<object>>(new Result<object>(
                         new
                         {
-                            accessToken = TokenProvider.CreateAccessToken(userId as string),
+                            accessToken = this.tokenProvider.CreateAccessToken(userId as string),
                             refreshToken = reToken
                         }, 200, null), Startup.JsonSerializerOptions);
                     byte[] buffer = Encoding.UTF8.GetBytes(content);
@@ -93,18 +95,28 @@ namespace MuKai_Music.Middleware.TokenManager
                     return;
                 }
                 var handler = new JwtSecurityTokenHandler();
-                JwtSecurityToken jwtToken = handler.ReadJwtToken(token);
-                //如果Redis中存在userId
-                if (this._redisClient.Exists(jwtToken.Payload["id"] as string))
+                try
                 {
-                    await httpContext.ChallengeAsync();
-                    return;
+                    JwtSecurityToken jwtToken = handler.ReadJwtToken(token);
+                    //如果Redis中存在userId,用户更改密码之后，要求重新登录
+                    if (this._redisClient.Exists(jwtToken.Payload["id"] as string))
+                    {
+                        await httpContext.ChallengeAsync();
+                        return;
+                    }
+                    if (jwtToken.Payload["type"] as string != "ac")
+                    {
+                        await httpContext.ForbidAsync();
+                        return;
+                    }
                 }
-                if (jwtToken.Payload["type"] as string != "ac")
+                catch (Exception)
                 {
                     await httpContext.ForbidAsync();
                     return;
                 }
+
+
             }
             await _next(httpContext);
         }

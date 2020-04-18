@@ -1,23 +1,24 @@
-using DataAbstract.Account;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.HttpOverrides;
-using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.IdentityModel.Tokens;
+using MuKai_Account;
+using MuKai_Account.Middleware;
 using MuKai_Music.Cache;
 using MuKai_Music.DataContext;
 using MuKai_Music.Middleware;
 using MuKai_Music.Middleware.ApiCache;
 using MuKai_Music.Middleware.TokenManager;
-using MuKai_Music.Model.Authentication;
 using MuKai_Music.Model.Service;
+using MuKai_Music.Service;
 using System;
 using System.IdentityModel.Tokens.Jwt;
+using System.Net.Http;
 using System.Text;
 using System.Text.Json;
 
@@ -35,9 +36,9 @@ namespace MuKai_Music
                 ValidateLifetime = true,//是否验证失效时间
                 ClockSkew = TimeSpan.FromSeconds(30),
                 ValidateIssuerSigningKey = true,//是否验证SecurityKey
-                ValidAudience = Configuration.GetValue<string>("Domain"),//Audience
-                ValidIssuer = Configuration.GetValue<string>("Domain"),//Issuer，这两项和前面签发jwt的设置一致
-                IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(Configuration.GetValue<string>("SecurityKey")))
+                ValidAudience = Configuration.GetDomain(),//Audience
+                ValidIssuer = Configuration.GetDomain(),//Issuer，这两项和前面签发jwt的设置一致
+                IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(Configuration.GetSecurityKey()))
             };
             JsonSerializerOptions = new JsonSerializerOptions()
             {
@@ -55,42 +56,38 @@ namespace MuKai_Music
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
+            AppContext.SetSwitch(
+   "System.Net.Http.SocketsHttpHandler.Http2UnencryptedSupport", true);
             services.AddSwaggerDocument();
             services.AddControllersWithViews();
-            /*
-             * TODO 将音乐信息持久化保存在数据库
-             */
 
             //数据库上下文配置
             services.AddDbContext<MusicContext>(options =>
                 options.UseNpgsql(Configuration.GetConnectionString("PostgreSql"))
             );
-            services.AddDbContext<AccountContext>(options =>
-                options.UseNpgsql(Configuration.GetConnectionString("PostgreSql"))
-            );
 
-            services.AddScoped<MusicService>();
+            services.AddSingleton<MusicService>();
+
+            services.AddSingleton<RedisClient>();
+
+            services.AddSingleton<TokenProvider>();
 
             services.AddHttpClient();
-            //注册身份验证
-            services.AddIdentityCore<UserInfo>(options =>
-            {
-                //设置密码安全性，这里做宽松处理，在UserInfo实体类模型中通过注解做详细限制
-                options.Password.RequiredLength = 6;
-                options.Password.RequireDigit = false;
-                options.Password.RequireLowercase = false;
-                options.Password.RequireNonAlphanumeric = false;
-                options.Password.RequireUppercase = false;
-                options.Password.RequiredUniqueChars = 0;
 
-                options.User.RequireUniqueEmail = true;
-            }).AddSignInManager<SignInManager<UserInfo>>()
-              .AddUserManager<AccountManager>()
-              .AddEntityFrameworkStores<AccountContext>();
+            services.AddGrpcClient<AccountService.AccountServiceClient>(o =>
+            o.Address = new Uri(Configuration.GetAccountAddress()))
+                .ConfigurePrimaryHttpMessageHandler(() =>
+                {
+                    var handler = new HttpClientHandler
+                    {
+                        ServerCertificateCustomValidationCallback = HttpClientHandler.DangerousAcceptAnyServerCertificateValidator
+                    };
+                    return handler;
+                });
+
             //清除默认tokenHandler
             JwtSecurityTokenHandler.DefaultInboundClaimTypeMap.Clear();
-
-            //启用json web token 做登录验证方案,防止Cookie和网易Cookie冲突
+            //启用json web token 做验证方案
             services.AddAuthentication(options =>
              {
                  options.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
@@ -100,20 +97,19 @@ namespace MuKai_Music
             ).AddJwtBearer(options =>
             {
                 options.RequireHttpsMetadata = false;
-                options.SaveToken = true;
                 options.TokenValidationParameters = TokenValidationParameters;
-
             });
             services.AddHttpContextAccessor();
 
             // In production, the Angular files will be served from this directory
             services.AddSpaStaticFiles(configuration => configuration.RootPath = "mukaiMusic/dist/muKaiMusic");
-            //添加缓存
+            //添加缓存,一定在RedisClient之后
             services.AddICache(option =>
             {
-                option.Age = int.Parse(Configuration["cache-age"]);
-                option.CacheType = Enum.Parse<CacheType>(Configuration["cache-type"]);
+                option.Age = int.Parse(Configuration.GetCacheAge());
+                option.CacheType = Enum.Parse<CacheType>(Configuration.GetCacheType());
             });
+
             services.AddMvc(option =>
             {
                 /*客户端缓存*/
@@ -170,6 +166,9 @@ namespace MuKai_Music
             app.UseAuthentication();
             //授权
             app.UseAuthorization();
+
+            app.UseMiddleware<DecryptMiddleware>();
+
             //允许跨域
             app.UseApiCacheMiddleware();
 

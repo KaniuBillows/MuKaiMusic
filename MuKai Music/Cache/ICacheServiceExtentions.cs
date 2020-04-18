@@ -2,9 +2,6 @@
 using Microsoft.Extensions.DependencyInjection;
 using MuKai_Music.Middleware;
 using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
 
 namespace MuKai_Music.Cache
 {
@@ -26,10 +23,12 @@ namespace MuKai_Music.Cache
             }
             else
             {
-                RedisClient.RedisClientInstence.CacheOption = option;
                 services.AddSingleton<ICache, RedisClient>((s) =>
-                    RedisClient.RedisClientInstence
-                );
+                 {
+                     var client = s.GetService<RedisClient>();
+                     client.CacheOption = option;
+                     return client;
+                 });
             }
             return services;
         }

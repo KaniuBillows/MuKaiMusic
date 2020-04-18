@@ -17,11 +17,6 @@ export class PlayerComponent implements OnInit {
     @ViewChild('lyrics', { static: true })
     lyrics: ElementRef;
 
-
-
-
-
-
     constructor(
         public player: PlayerService,
         public theme: ThemeService,
@@ -61,15 +56,9 @@ export class PlayerComponent implements OnInit {
      * 订阅music-info组件产生的音乐图片改变事件
      * @param pic 
      */
-    public onPictureChange() {
-
+    public onPicError() {
+        document.getElementById("back-board").style.backgroundImage = "Url(../../../assets/img/music_white.jpg)";
     }
-
-    //#endregion
-
-
-
-    //#region private method
 
 
 

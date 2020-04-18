@@ -227,14 +227,14 @@ namespace MuKai_Music.Service
          }*/
 
 
-        public async Task RequestAndWrite(string url)
+        private async Task RequestAndWrite(string url)
         {
             using HttpClient client = httpClientFactory.CreateClient();
             HttpResponseMessage response = await client.GetAsync(url);
             await this.musicService.WirteBodyAsync(this.HttpContext, await response.Content.ReadAsStringAsync());
         }
 
-        public async Task ServiceRequest(string id, DataSource dataSource, string route)
+        private async Task ServiceRequest(string id, DataSource dataSource, string route)
         {
             StringBuilder builder;
             switch (dataSource)
@@ -271,7 +271,7 @@ namespace MuKai_Music.Service
             }
         }
 
-        public async Task<T[]> ServiceRequest<T>(string url)
+        private async Task<T[]> ServiceRequest<T>(string url)
         {
             using HttpClient client = this.httpClientFactory.CreateClient();
             try
@@ -285,7 +285,7 @@ namespace MuKai_Music.Service
             }
         }
 
-        public StringBuilder GetStringBuilder(DataSource dataSource)
+        private StringBuilder GetStringBuilder(DataSource dataSource)
         {
             return dataSource switch
             {

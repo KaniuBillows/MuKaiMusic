@@ -2,6 +2,7 @@ import { Injectable, EventEmitter } from '@angular/core';
 import { Song } from 'src/app/entity/music';
 import { MusicService } from '../network/music/music.service';
 import { Title } from '@angular/platform-browser';
+import { DataSource } from 'src/app/entity/param/musicUrlParam';
 export const CurrentMusicIndex = 'CURRENTMUSICINDEX';
 export const Playlist = 'PLAYLIST';
 @Injectable({
@@ -119,7 +120,9 @@ export class PlayerService {
   public async start(song: Song) {
     this._status = 'loading';
     if (song.url != null) {
-      this.player.src = song.url.replace("http://", "https://");
+      if (song.dataSource != DataSource.Migu)
+        song.url = song.url.replace("http://", "https://");
+      this.player.src = song.url;
       this.play();
       this.currentMusic = song;
     }

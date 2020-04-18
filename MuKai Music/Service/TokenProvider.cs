@@ -7,29 +7,35 @@ using System.Text;
 
 namespace MuKai_Music.Service
 {
-    public static class TokenProvider
+    public class TokenProvider
     {
+        private readonly RedisClient client;
+
+        public TokenProvider(RedisClient client)
+        {
+            this.client = client;
+        }
 
         /// <summary>
         /// 颁发AccessToken 此token可用于访问接口
         /// </summary>
         /// <param name="userId"></param>
         /// <returns></returns>
-        public static string CreateAccessToken(string userId)
+        public string CreateAccessToken(string userId)
         {
-            DateTime expires = DateTime.UtcNow.AddMinutes(int.Parse(Startup.Configuration["Expires"]));
+            DateTime expires = DateTime.UtcNow.AddMinutes(int.Parse(Startup.Configuration.GetExpires()));
             Claim[] claims = new[]
             {
-                new Claim (JwtRegisteredClaimNames.Exp,$"{expires.ToString()}"),
+                new Claim (JwtRegisteredClaimNames.Exp,$"{expires}"),
                 new Claim ("type","ac"),
                 new Claim("id", userId)
             };
-            var key = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(Startup.Configuration["SecurityKey"]));
+            var key = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(Startup.Configuration.GetSecurityKey()));
             var creds = new SigningCredentials(key, SecurityAlgorithms.HmacSha256);
 
             var token = new JwtSecurityToken(
-                audience: Startup.Configuration["Domain"],
-            issuer: Startup.Configuration["Domain"],
+                audience: Startup.Configuration.GetDomain(),
+            issuer: Startup.Configuration.GetDomain(),
             claims: claims,
             expires: expires,
             signingCredentials: creds);
@@ -43,25 +49,25 @@ namespace MuKai_Music.Service
         /// <param name="userId"></param>
         /// <param name="ua"></param>
         /// <returns></returns>
-        public static string CreateRefreshToken(string userId, string ua)
+        public string CreateRefreshToken(string userId, string ua)
         {
-            DateTime expires = DateTime.UtcNow.AddDays(int.Parse(Startup.Configuration["RefreshTime"])).ToUniversalTime();
+            DateTime expires = DateTime.UtcNow.AddDays(int.Parse(Startup.Configuration.GetRefreshTime())).ToUniversalTime();
             Claim[] claims = new[]
             {
-                new Claim (JwtRegisteredClaimNames.Exp,$"{expires.ToString()}"),
+                new Claim (JwtRegisteredClaimNames.Exp,$"{expires}"),
                 new Claim("id", userId)
             };
-            var key = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(Startup.Configuration["SecurityKey"]));
+            var key = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(Startup.Configuration.GetSecurityKey()));
             var creds = new SigningCredentials(key, SecurityAlgorithms.HmacSha256);
             var token = new JwtSecurityToken(
-                audience: Startup.Configuration["Domain"],
-            issuer: Startup.Configuration["Domain"],
+                audience: Startup.Configuration.GetDomain(),
+            issuer: Startup.Configuration.GetDomain(),
             claims: claims,
             expires: expires,
             signingCredentials: creds);
             string tokenString = new JwtSecurityTokenHandler().WriteToken(token);
             TimeSpan expiry = expires - new DateTime(1970, 1, 1, 0, 0, 0);
-            _ = RedisClient.RedisClientInstence.SetStringKeyAsync(GetTokenKey(userId, ua), tokenString, expiry);
+            _ = this.client.SetStringKeyAsync(GetTokenKey(userId, ua), tokenString, expiry);
             return tokenString;
         }
 

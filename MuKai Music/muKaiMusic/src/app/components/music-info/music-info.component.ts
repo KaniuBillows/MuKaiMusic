@@ -17,14 +17,21 @@ export class MusicInfoComponent implements OnInit {
     public musicNet: MusicService,
     private theme: ThemeService) {
     this.player.currentMusicChange.subscribe(async () => {
-      await this.getPic();
       this.getLyric();
+      await this.getPic();
     });
   }
 
   ngOnInit() {
     this.player.onCurrentTimeChange.subscribe((time: number) =>
       this.onTimeChange(time));
+
+    let pic = document.getElementById("album-pic") as HTMLImageElement;
+    pic.onerror = () => {
+      pic.src = "../../../assets/img/music_white.jpg";
+      this.picError.emit();
+    };
+
   }
 
   public get themeClass(): string {
@@ -46,7 +53,6 @@ export class MusicInfoComponent implements OnInit {
     return this.musicInfo?.album?.picUrl == null ? "../../../assets/img/music_white.jpg" : this.musicInfo.album.picUrl.replace("http://", "https://");
   }
 
-
   private _lyric_paras: Lyric[] = [];
   public get lyric_paras(): Lyric[] {
     return this._lyric_paras;
@@ -64,14 +70,18 @@ export class MusicInfoComponent implements OnInit {
     }
   }
 
+  @Output()
+  public picError = new EventEmitter();
+
   /**
    * 从网络获取图片地址
    * @param song 
    */
-  private async getPic() {
-    if (this.player.currentMusic?.album?.picUrl) return;
+  private async getPic(): Promise<string> {
+    if (this.player.currentMusic?.album?.picUrl) return "../../../assets/img/music_white.jpg";
     let res = await this.musicNet.getPicture(this.player.currentMusic);
     this.player.currentMusic.album.picUrl = res;
+    return res;
   }
 
   private getLyric() {

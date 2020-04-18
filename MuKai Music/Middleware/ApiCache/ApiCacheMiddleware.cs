@@ -1,17 +1,15 @@
-﻿using System;
-using System.Collections.Generic;
-using System.IO;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using Microsoft.AspNetCore.Http;
+﻿using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Http.Extensions;
-using Microsoft.Extensions.Caching.Memory;
-using Microsoft.AspNetCore.Hosting;
-using System.Reflection;
 using Microsoft.AspNetCore.Mvc;
 using MuKai_Music.Attribute;
 using MuKai_Music.Cache;
+using System;
+using System.Collections.Generic;
+using System.IO;
+using System.Linq;
+using System.Reflection;
+using System.Text;
+using System.Threading.Tasks;
 
 namespace MuKai_Music.Middleware
 {
@@ -20,7 +18,9 @@ namespace MuKai_Music.Middleware
         Redis,
         Memory
     }
-    // You may need to install the Microsoft.AspNetCore.Http.Abstractions package into your project
+    /*
+     * 缓存中间件，针对GET请求，进行内存或Redis缓存，缓存与请求头无关
+     */
     public class ApiCacheMiddleware
     {
         private readonly RequestDelegate _next;
@@ -46,26 +46,16 @@ namespace MuKai_Music.Middleware
                     {
                         string route;
                         HttpGetAttribute get = meth.GetCustomAttribute<HttpGetAttribute>();
-                        HttpPostAttribute post = meth.GetCustomAttribute<HttpPostAttribute>();
                         if (get != null)
                         {
                             route = get.Template;
+                            string key = "/" + ctrRoute + "/" + route;
+                            if (this.ApiMap.ContainsKey(key))
+                            {
+                                throw new Exception("Api Method Route Repeat Exception！");
+                            }
+                            this.ApiMap.Add(key, apiCacheAttribute);
                         }
-                        else if (post != null)
-                        {
-                            route = post.Template;
-                        }
-                        else
-                        {
-                            continue;
-                        }
-                        string key = "/" + ctrRoute + "/" + route;
-                        if (this.ApiMap.ContainsKey(key))
-                        {
-                            throw new Exception("Api Method Route Repeat Exception！");
-                        }
-
-                        this.ApiMap.Add(key, apiCacheAttribute);
                     }
                 }
             }
@@ -73,6 +63,11 @@ namespace MuKai_Music.Middleware
 
         public async Task InvokeAsync(HttpContext httpContext, ICache cache)
         {
+            if (httpContext.Request.Method != "GET")
+            {
+                await this._next(httpContext);
+                return;
+            }
             //暂存原始响应流
             Stream originResponseStream = httpContext.Response.Body;
             //在内存中开辟缓冲区暂存请求体
@@ -80,7 +75,7 @@ namespace MuKai_Music.Middleware
             using var requestReader = new StreamReader(httpContext.Request.Body);
             string apikey = httpContext.Request.Path.Value;
             //获取请求的key
-            string key = await GetRequestKey(requestReader, httpContext);
+            string key = GetRequestKey(httpContext);
             if (key == null)
             {
                 await _next(httpContext);
@@ -109,7 +104,7 @@ namespace MuKai_Music.Middleware
                 using var responseReader = new StreamReader(resBody);
                 resBody.Position = 0;
                 //异步进行缓存
-                Task cacheTask = BeginCache(key, await ResponseHandle(responseReader, httpContext), cache, apikey);
+                Task cacheTask = AddCache(key, await ResponseHandle(responseReader, httpContext), cache, apikey);
                 resBody.Position = 0;
                 await resBody.CopyToAsync(originResponseStream);
                 httpContext.Response.Body = originResponseStream;
@@ -119,21 +114,17 @@ namespace MuKai_Music.Middleware
         /// <summary>
         /// 根据请求信息生成Key
         /// </summary>
-        /// <param name="requestReader"></param>
         /// <param name="httpContext"></param>
         /// <returns></returns>
-        private async Task<string> GetRequestKey(StreamReader requestReader, HttpContext httpContext)
+        private string GetRequestKey(HttpContext httpContext)
         {
-            Task<string> task = requestReader.ReadToEndAsync();
             var stringBuilder = new StringBuilder(httpContext.Request.GetDisplayUrl());
             if (!stringBuilder.ToString().Contains("/api"))
             {
                 return null;
             }
-            string requestContent = await task;
             //读取body内容，生成key
-            string key = stringBuilder.Append(requestContent).ToString();
-            return key;
+            return stringBuilder.ToString();
         }
 
         /// <summary>
@@ -187,7 +178,7 @@ namespace MuKai_Music.Middleware
         /// <param name="memoryCache"></param>
         /// <param name="apikey"></param>
         /// <returns></returns>
-        private async Task BeginCache(string key, string value, ICache memoryCache, string apikey)
+        private async Task AddCache(string key, string value, ICache memoryCache, string apikey)
         {
             if (value == null) return;
             this.ApiMap.TryGetValue(apikey, out ApiCacheAttribute entry);

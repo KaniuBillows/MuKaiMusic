@@ -10,47 +10,29 @@ namespace MuKai_Music.Cache
 {
     public sealed class RedisClient : ICache
     {
-        private ConnectionMultiplexer redisMultiplexer;
-        private static readonly Lazy<RedisClient> lazy =
-        new Lazy<RedisClient>(() => new RedisClient(Startup.Configuration));
-
-        IDatabase db = null;
+        private readonly ConnectionMultiplexer redisMultiplexer;
+        private readonly IDatabase db = null;
 
         public CacheOption CacheOption { get; set; }
 
-        public void InitConnect(IConfiguration Configuration)
+        public RedisClient(IConfiguration Configuration)
         {
             try
             {
                 string RedisConnection = Configuration.GetConnectionString("Redis");
-                redisMultiplexer = ConnectionMultiplexer.Connect(RedisConnection);
-                db = redisMultiplexer.GetDatabase();
+                this.redisMultiplexer = ConnectionMultiplexer.Connect(RedisConnection);
+                this.db = this.redisMultiplexer.GetDatabase();
             }
             catch (Exception ex)
             {
                 Console.WriteLine(ex.Message);
-                redisMultiplexer = null;
-                db = null;
+                this.redisMultiplexer = null;
+                this.db = null;
                 Process.GetCurrentProcess().Kill();
             }
         }
 
-        public RedisClient(IConfiguration Configuration)
-        {
-            InitConnect(Configuration);
-        }
 
-        public static RedisClient RedisClientInstence
-        {
-            get
-            {
-                if (lazy.Value.db == null)
-                {
-                    throw new Exception("Can Not Connect the Redis");
-                }
-                return lazy.Value;
-            }
-        }
 
         /// <summary>
         /// 保存单个key value
