@@ -123,7 +123,7 @@ namespace MuKai_Music.Service
         [HttpGet("music/search")]
         [ResponseCache(Duration = 1200)]
         [ApiCache(Duration = 1200)]
-        public async Task<Result<MusicInfo[]>> SearchUrl(string key)
+        public async Task<Result<MusicInfo[]>> SearchMusic(string key)
         {
             StringBuilder neBuilder = GetStringBuilder(DataSource.NetEase).Append("/search?keyword=").Append(key);
             Task<MusicInfo[]> neResult = ServiceRequest<MusicInfo>(neBuilder.ToString());
@@ -135,6 +135,7 @@ namespace MuKai_Music.Service
             MusicInfo[] kwMusic = await kwResult;
             MusicInfo[] miguMusic = await miguResult;
             MusicInfo[] res = neMusic.Concat(kwMusic).Concat(miguMusic).ToArray();
+            res.Shuffle();
             return new Result<MusicInfo[]>(res, 200, null);
         }
 

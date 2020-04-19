@@ -1,4 +1,5 @@
 ﻿using Microsoft.Extensions.Configuration;
+using System;
 
 namespace MuKai_Music.Service
 {
@@ -25,5 +26,24 @@ namespace MuKai_Music.Service
         public static string GetAccountAddress(this IConfiguration configuration) => configuration["AccountAddredss"];
 
         public static long GetMaxPicSize(this IConfiguration configuration) => long.Parse(configuration["MaxPicSize"]);
+
+        /// <summary>
+        /// 将数组乱序
+        /// </summary>
+        /// <typeparam name="T"></typeparam>
+        /// <param name="array"></param>
+        public static void Shuffle<T>(this T[] array)
+        {
+            int n = array.Length;
+            if (n == 0) return;
+            Random random = new Random();
+            for (int i = 0; i < array.Length; i++)
+            {
+                int rand = random.Next(i, n - 1);
+                T temp = array[rand];
+                array[rand] = array[i];
+                array[i] = temp;
+            }
+        }
     }
 }
