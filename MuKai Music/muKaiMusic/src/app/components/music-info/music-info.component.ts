@@ -25,13 +25,6 @@ export class MusicInfoComponent implements OnInit {
   ngOnInit() {
     this.player.onCurrentTimeChange.subscribe((time: number) =>
       this.onTimeChange(time));
-
-    let pic = document.getElementById("album-pic") as HTMLImageElement;
-    pic.onerror = () => {
-      pic.src = "../../../assets/img/music_white.jpg";
-      this.picError.emit();
-    };
-
   }
 
   public get themeClass(): string {
@@ -69,9 +62,6 @@ export class MusicInfoComponent implements OnInit {
       this.lyrics.nativeElement.style.transform = `translateY(-${element.offsetTop}px)`;
     }
   }
-
-  @Output()
-  public picError = new EventEmitter();
 
   /**
    * 从网络获取图片地址

@@ -15,16 +15,19 @@
                 <div class='playlist-item'>
                     <div class='{{this.currentPlayIndex==i? themeClass:"playlist-name"}} playlist-name'>
                         <div class="item-name">
-                            <span>{{item.name}}</span>
+                            <span [matTooltip]='item.name' matTooltipPosition='below'>{{item.name}}</span>
                         </div>
                         <div [id]="'option-'+i" class="playlist-options">
-                            <mat-icon class="click_button" (click)='clickPlay(i)'>play_circle_outline</mat-icon>
-                            <mat-icon class="click_button" (click)='clickDownload(i)'>play_for_work</mat-icon>
-                            <mat-icon class="click_button" (click)='deleteMusic(i)'>delete</mat-icon>
+                            <mat-icon matTooltip="播放" class="click_button" (click)='clickPlay(i)'>play_circle_outline
+                            </mat-icon>
+                            <mat-icon matTooltip="下载" class="click_button" (click)='clickDownload(i)'>play_for_work
+                            </mat-icon>
+                            <mat-icon matTooltip="从列表删除" class="click_button" (click)='deleteMusic(i)'>delete</mat-icon>
                         </div>
                     </div>
                     <div class='playlist-artist'>
-                        <span>{{item.artists[0].name}}</span>
+                        <span [matTooltip]='item.artists[0].name'
+                            matTooltipPosition='after'>{{item.artists[0].name}}</span>
                     </div>
                     <div class='playlist-album'>{{item.album.name||"未知"}}</div>
                 </div>

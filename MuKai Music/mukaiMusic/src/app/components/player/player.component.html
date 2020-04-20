@@ -10,12 +10,13 @@
     </svg>
 </a>
 <img id="app-logo" src="../../../assets/Mukai-LOGO.png">
-<div id='back-board'>
-    <div id='back-board-mask'></div>
-</div>
+<div id='back-board-mask'></div>
+
+<img id='back-board' [src]='this.picUrl' onerror="this.src='../../../assets/img/music_white.jpg'" />
+
 <div id="contents-container">
     <div id='contents'>
-        <app-music-info id='music-info' (picError)='this.onPicError'>
+        <app-music-info id='music-info'>
         </app-music-info>
         <app-playlist id='playlist'>
         </app-playlist>

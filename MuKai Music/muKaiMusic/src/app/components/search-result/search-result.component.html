@@ -1,10 +1,10 @@
 <div [class]="themeClass" id="search-container">
-    <li class="result-title">
+    <li class="result-title" id="title-bar">
         <div class="result-item" id="title-item">
             <div class="result-name"><span>歌曲</span></div>
             <div class="result-artist"><span>艺术家</span></div>
             <div class="result-album"><span>专辑</span></div>
-            <div class="result-time"><span>时长</span></div>
+            <div class="result-pic"></div>
         </div>
     </li>
     <div id="result-container">
@@ -18,8 +18,10 @@
                     <div class="result-name"><span>{{song.name}}</span></div>
                     <div class="result-artist"><span>{{song.artists[0].name}}</span></div>
                     <div class="result-album"><span>{{song.album.name||"未知专辑"}}</span></div>
-                    <div class="result-time"><span>{{getTimeFormat(song.duration)||"未知"}}</span></div>
+                    <div class="result-pic"><img [src]='song.album.picUrl'
+                            onerror="this.src='../../../assets/img/music_white.jpg'" /></div>
                 </div>
+                <i></i>
             </li>
         </div>
     </div>

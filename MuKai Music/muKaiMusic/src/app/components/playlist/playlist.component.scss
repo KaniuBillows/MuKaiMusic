@@ -48,7 +48,7 @@ $control-button-color: rgba(225, 225, 225, .8);
     width: 110px;
     margin-left: 30px;
     right: 0px;
-    bottom: 0px;
+    bottom: -2px;
 
     .click_button {
         font-size: 27px;
@@ -66,8 +66,8 @@ $control-button-color: rgba(225, 225, 225, .8);
     clear: both;
     overflow: hidden;
     height: 30px;
-    min-width: 520px;
-    width: 70%;
+    min-width: 575px;
+    width: 85%;
     margin: auto;
     display: flex;
 }
@@ -89,6 +89,10 @@ $control-button-color: rgba(225, 225, 225, .8);
         white-space: nowrap;
         text-overflow: ellipsis;
         height: 100%;
+
+        span {
+            line-height: 30px;
+        }
     }
 }
 
@@ -100,6 +104,10 @@ $control-button-color: rgba(225, 225, 225, .8);
     text-overflow: ellipsis;
     white-space: nowrap;
     text-align: center;
+
+    span {
+        line-height: 30px;
+    }
 }
 
 .playlist-artist {
@@ -110,7 +118,12 @@ $control-button-color: rgba(225, 225, 225, .8);
     white-space: nowrap;
     text-overflow: ellipsis;
 
+    span {
+        line-height: 30px;
+    }
+
     :hover {
+        cursor: pointer;
         color: #fff;
     }
 }
@@ -118,10 +131,10 @@ $control-button-color: rgba(225, 225, 225, .8);
 .playlist-title {
     color: rgba(255, 255, 255, 0.6);
     list-style: none;
-    width: 85%;
+    width: 95%;
     min-width: 670px;
     position: relative;
-    margin: 0px auto 10px;
+    margin: 0px 0% 10px 5%;
     height: 30px;
 
 

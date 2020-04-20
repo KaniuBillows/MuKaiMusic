@@ -16,6 +16,7 @@ import { PlaylistComponent } from './components/playlist/playlist.component';
 import { ControlComponent } from './components/control/control.component';
 import { MusicInfoComponent } from './components/music-info/music-info.component';
 import { AccountInterceptor } from './services/network/accountInterceptor';
+import { MatTooltipModule } from '@angular/material/tooltip';
 
 
 
@@ -34,6 +35,7 @@ import { AccountInterceptor } from './services/network/accountInterceptor';
   imports: [
     MatIconModule,
     MatSlideToggleModule,
+    MatTooltipModule,
     BrowserModule,
     AppRoutingModule,
     HttpClientModule,

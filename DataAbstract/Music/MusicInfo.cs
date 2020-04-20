@@ -18,7 +18,7 @@ namespace DataAbstract
         public int? Migu_Id { get; set; }
 
         [JsonPropertyName("ne_Id")]
-        public int? Ne_Id { get; set; }
+        public long? Ne_Id { get; set; }
 
         [JsonPropertyName("kw_Id")]
         public int? Kw_Id { get; set; }
@@ -45,7 +45,7 @@ namespace DataAbstract
     public class Artist
     {
         [JsonPropertyName("id")]
-        public int? Id { get; set; }
+        public long? Id { get; set; }
 
         [JsonPropertyName("name")]
         public string Name { get; set; }

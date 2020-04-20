@@ -14,19 +14,12 @@ import { Result } from 'src/app/entity/baseResult';
 export class PlayerComponent implements OnInit {
 
 
-    @ViewChild('lyrics', { static: true })
-    lyrics: ElementRef;
-
     constructor(
         public player: PlayerService,
         public theme: ThemeService,
         private musicNet: MusicService) {
     }
     ngOnInit() {
-        document.getElementById("back-board").style.backgroundImage = "Url(../../../assets/img/music_white.jpg)";
-        this.player.currentMusicChange.subscribe(() => {
-            document.getElementById("back-board").style.backgroundImage = "Url(" + this.player.currentMusic.album.picUrl + ")";
-        });
         this.getDefault();
     }
 
@@ -52,14 +45,9 @@ export class PlayerComponent implements OnInit {
 
     //#region Actions
 
-    /**
-     * 订阅music-info组件产生的音乐图片改变事件
-     * @param pic 
-     */
-    public onPicError() {
-        document.getElementById("back-board").style.backgroundImage = "Url(../../../assets/img/music_white.jpg)";
+    public get picUrl() {
+        return this.currentMusicInfo?.album?.picUrl != null ? this.currentMusicInfo.album.picUrl : '../../../assets/img/music_white.jpg';
     }
-
 
 
 
