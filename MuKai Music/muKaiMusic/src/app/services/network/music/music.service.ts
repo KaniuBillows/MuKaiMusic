@@ -3,7 +3,7 @@ import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Observable } from 'rxjs';
 import 'src/app/entity/music';
 import { Song, UrlInfo, Lyric } from 'src/app/entity/music';
-import { CategoryResult, HotCaegoryResult, PersonalizedPlaylistResult } from 'src/app/entity/playlist';
+import { Playlist } from 'src/app/entity/playlist';
 import { Result } from 'src/app/entity/baseResult';
 import { environment } from "src/environments/environment"
 import { MusicParam, DataSource } from 'src/app/entity/param/musicUrlParam';
@@ -54,8 +54,8 @@ export class MusicService {
    * 获取推荐歌单
    * @param limit 数量
    */
-  public getPersonalizedPlaylist(limit?: number): Observable<PersonalizedPlaylistResult> {
-    return this.httpClient.get<PersonalizedPlaylistResult>(environment.baseUrl + `/api/playlist/personalized?limit=${limit | 5}`);
+  public getPersonalizedPlaylist(limit?: number): Observable<Result<Playlist[]>> {
+    return this.httpClient.get<Result<Playlist[]>>(environment.baseUrl + `/api/personlized/playlist?limit=${limit | 10}`);
   }
 
   /**
@@ -66,21 +66,6 @@ export class MusicService {
     let url = environment.baseUrl + `/api/music/url?${this.getRoute(song)}`
     return this.httpClient.get<Result<string>>(url);
   }
-
-  /**
-   * 获取热门歌单分类
-   */
-  public getHotCategories(): Observable<HotCaegoryResult> {
-    return this.httpClient.get<HotCaegoryResult>(environment.baseUrl + '/api/playlist/hotCategories');
-  }
-
-  /**
-   * 获取全部歌单分类
-   */
-  public getAllCategories(): Observable<CategoryResult> {
-    return this.httpClient.get<CategoryResult>(environment.baseUrl + '/api/playlist/categories');
-  }
-
 
   /**
    * 下载歌曲

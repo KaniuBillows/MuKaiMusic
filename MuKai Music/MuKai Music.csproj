@@ -119,7 +119,7 @@
   </Target>
 
   <ProjectExtensions>
-    <VisualStudio><UserProperties appsettings_1development_1json__JsonSchema="http://json.schemastore.org/appsettings" /></VisualStudio>
+    <VisualStudio><UserProperties appsettings_1development_1json__JsonSchema="http://json.schemastore.org/appsettings" appsettings_1json__JsonSchema="" /></VisualStudio>
   </ProjectExtensions>
 
 </Project>

@@ -1,1 +1,6 @@
-
+<div id="recommend-playlist">
+    <div class="playlist-item" *ngFor='let item of this.playlists'>
+        <img [src]="item.picUrl">
+        <span>{{item.name}}</span>
+    </div>
+</div>

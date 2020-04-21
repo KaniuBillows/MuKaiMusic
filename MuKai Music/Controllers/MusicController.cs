@@ -55,7 +55,7 @@ namespace MuKai_Music.Service
         /// 推荐新歌,作为首页默认显示
         /// </summary>
         /// <returns></returns>
-        [HttpGet("music/personalized")]
+        [HttpGet("personalized/music")]
         public async Task PersonalizedMusic() { }
 
         /// <summary>
@@ -81,8 +81,10 @@ namespace MuKai_Music.Service
         /// </summary>
         /// <param name="limit"></param>
         /// <returns></returns>
-        [HttpGet("playlist/personalized")]
-        public async Task PersonalizedPlaylist(int limit) { }
+        [HttpGet("personlized/playlist")]
+        public async Task PersonalizedPlaylist(int limit = 10)
+        => await this.RequestAndWrite($"{Startup.Configuration[ServiceInfo.NeAPI]}/personlized/playlist?limit={limit}");
+
 
         /// <summary>
         /// 获取歌曲的URL,当Source为咪咕时，id为copyrightid，mid为普通id

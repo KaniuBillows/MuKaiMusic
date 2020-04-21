@@ -25,7 +25,7 @@ export class AppComponent implements OnInit {
   title = 'Mukai Music';
   public _showContent: boolean = false;
 
-  public _url_save: string = '/content/explore';
+  public _url_save: string = '/content/explore/boutique';
 
   public get contentOpened() {
     return location.href.includes('/content/');
