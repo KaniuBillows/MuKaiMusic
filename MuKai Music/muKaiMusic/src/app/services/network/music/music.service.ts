@@ -59,6 +59,14 @@ export class MusicService {
   }
 
   /**
+   * 获取歌单的详情，包含歌单中的音乐
+   * @param id 
+   */
+  public getPlaylistDetail(id: number): Observable<Result<Playlist>> {
+    return this.httpClient.get<Result<Playlist>>(`${environment.baseUrl}/api/detail/playlist?id=${id}`);
+  }
+
+  /**
    * 获取歌曲的URL
    * @param parma
    */

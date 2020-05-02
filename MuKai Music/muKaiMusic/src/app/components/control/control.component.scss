@@ -98,6 +98,13 @@ $control-button-color: rgba(225, 225, 225, .8);
     }
 }
 
+#play-mode {
+    font-size: 24px;
+    color: rgba(225, 225, 225, 0.8);
+    cursor: pointer;
+    margin-top: 10px;
+}
+
 #palette {
     margin-top: 10px;
     position: relative;

@@ -11,8 +11,8 @@
         <div id="r-ul">
             <li class="result-title" *ngFor='let song of searchResult'>
                 <div class="option">
-                    <mat-icon matTooltip="添加到播放列表" (click)="addToPlaylist(song)">add</mat-icon>
-                    <mat-icon matTooltip="播放此曲" (click)="startPlay(song)">play_circle_outline</mat-icon>
+                    <mat-icon title="添加到播放列表" (click)="addToPlaylist(song)">add</mat-icon>
+                    <mat-icon title="播放此曲" (click)="startPlay(song)">play_circle_outline</mat-icon>
                 </div>
                 <div class="result-item">
                     <div class="result-name"><span>{{song.name}}</span></div>

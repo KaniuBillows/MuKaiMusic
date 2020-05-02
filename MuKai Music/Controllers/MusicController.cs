@@ -177,8 +177,9 @@ namespace MuKai_Music.Service
         /// 获取歌单详情
         /// </summary>
         /// <param name="id"></param>
-        [HttpGet("playlist/detail")]
-        public async Task GetPlaylistDetail(int id) { }
+        [HttpGet("detail/playlist")]
+        public async Task GetPlaylistDetail(long id)
+            => await this.RequestAndWrite($"{Startup.Configuration[ServiceInfo.NeAPI]}/detail/playlist?id={id}");
 
         /// <summary>
         /// 获取相似歌单

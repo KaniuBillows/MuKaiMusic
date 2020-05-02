@@ -28,20 +28,19 @@ export class ControlComponent implements OnInit {
     });
 
     this.player.onEnded.subscribe(() => {
-      this.onNextTrackButtonClick();
-    });
-    this.player.currentMusicDelete.subscribe(() => {
-      this.player.stop();
-      if (this.player.playlist.length == 0) return;
-      let currentIndex = this.player.currentMusicIndex;
-      if (currentIndex == this.player.playlist.length - 1) {
-        this.player.currentMusic = this.player.playlist[0];
+      if (this.player.mode == 'single') {
+        this.player.start(this.player.currentMusic);
       } else {
-        this.player.currentMusic = this.player.playlist[currentIndex + 1];
+        this.onNextTrackButtonClick();
       }
-    })
+    });
+
   }
   //#region Properties
+
+  public get mode(): 'single' | 'random' | 'normal' {
+    return this.player.mode;
+  }
 
   public get durationInfo(): string {
     if (this.player.duration != null) {
@@ -105,11 +104,16 @@ export class ControlComponent implements OnInit {
    */
   public onLastTrackButtonClick() {
     if (this.player.playlist.length == 0) return;
-    let currentIndex = this.player.currentMusicIndex;
-    if (currentIndex == 0) {
-      this.player.start(this.player.playlist[this, this.player.playlist.length - 1]);
+    if (this.player.mode == 'random') {
+      let index = Math.floor(Math.random() * this.player.playlist.length);
+      this.player.start(this.player.playlist[index]);
     } else {
-      this.player.start(this.player.playlist[currentIndex - 1]);
+      let currentIndex = this.player.currentMusicIndex;
+      if (currentIndex == 0) {
+        this.player.start(this.player.playlist[this, this.player.playlist.length - 1]);
+      } else {
+        this.player.start(this.player.playlist[currentIndex - 1]);
+      }
     }
   }
 
@@ -118,11 +122,16 @@ export class ControlComponent implements OnInit {
    */
   public onNextTrackButtonClick() {
     if (this.player.playlist.length == 0) return;
-    let currentIndex = this.player.currentMusicIndex;
-    if (currentIndex == this.player.playlist.length - 1) {
-      this.player.start(this.player.playlist[0]);
+    if (this.player.mode == 'random') {
+      let index = Math.floor(Math.random() * this.player.playlist.length);
+      this.player.start(this.player.playlist[index]);
     } else {
-      this.player.start(this.player.playlist[currentIndex + 1]);
+      let currentIndex = this.player.currentMusicIndex;
+      if (currentIndex == this.player.playlist.length - 1) {
+        this.player.start(this.player.playlist[0]);
+      } else {
+        this.player.start(this.player.playlist[currentIndex + 1]);
+      }
     }
   }
 
@@ -176,7 +185,10 @@ export class ControlComponent implements OnInit {
    */
   private onTimeChange(time: number) {
     this.progrees.writeValue(time);
+  }
 
+  public changeMode(mode: 'single' | 'random' | 'normal') {
+    this.player.mode = mode;
   }
 
   /**

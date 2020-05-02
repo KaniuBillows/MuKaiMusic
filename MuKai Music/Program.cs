@@ -15,7 +15,6 @@ namespace MuKai_Music
         public static IWebHostBuilder CreateWebHostBuilder(string[] args)
         {
             IConfigurationRoot configuration = new ConfigurationBuilder()
-
                 .SetBasePath(Environment.CurrentDirectory)
                 .AddJsonFile("appsettings.json")
                 .Build();

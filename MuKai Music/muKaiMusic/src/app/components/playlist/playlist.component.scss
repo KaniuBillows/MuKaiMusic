@@ -21,6 +21,8 @@ $control-button-color: rgba(225, 225, 225, .8);
     overflow: hidden;
 
     #ul {
+        transition-duration: 0.2s;
+        transition-timing-function: ease-in-out;
         margin-top: 0px;
         clear: both;
         width: 100%;
@@ -173,7 +175,7 @@ $control-button-color: rgba(225, 225, 225, .8);
     width: 100%;
     height: 0px;
     background-color: rgba(0, 0, 0, 0.7);
-    ;
+
     border-radius: 5px;
     cursor: pointer;
     position: absolute;

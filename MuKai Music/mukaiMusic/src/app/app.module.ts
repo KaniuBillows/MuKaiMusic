@@ -16,8 +16,8 @@ import { PlaylistComponent } from './components/playlist/playlist.component';
 import { ControlComponent } from './components/control/control.component';
 import { MusicInfoComponent } from './components/music-info/music-info.component';
 import { AccountInterceptor } from './services/network/accountInterceptor';
-import { MatTooltipModule } from '@angular/material/tooltip';
-
+import { MatSnackBarModule } from '@angular/material/snack-bar';
+import { SnackBarComponent } from './components/snackBar/snackBar.component';
 
 
 
@@ -30,13 +30,14 @@ import { MatTooltipModule } from '@angular/material/tooltip';
     PlaylistComponent,
     PaletteComponent,
     ControlComponent,
-    MusicInfoComponent
+    MusicInfoComponent,
+    SnackBarComponent
   ],
   imports: [
     MatIconModule,
     MatSlideToggleModule,
-    MatTooltipModule,
     BrowserModule,
+    MatSnackBarModule,
     AppRoutingModule,
     HttpClientModule,
     MatSliderModule,

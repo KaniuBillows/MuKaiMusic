@@ -6,6 +6,8 @@ import { Result } from 'src/app/entity/baseResult';
 import { UrlInfo } from 'src/app/entity/music';
 import { MusicService } from 'src/app/services/network/music/music.service';
 import { from } from 'rxjs';
+import { MatSnackBar } from '@angular/material/snack-bar';
+import { SnackBarComponent } from '../snackBar/snackBar.component';
 
 @Component({
   selector: 'app-playlist',
@@ -17,7 +19,8 @@ export class PlaylistComponent implements OnInit {
   constructor(
     public theme: ThemeService,
     private musicNet: MusicService,
-    public player: PlayerService
+    public player: PlayerService,
+    public snackBar: MatSnackBar
   ) {
     //当播放列表元素改变时,更新scroll bar状态
     this.player.playlistChange.subscribe(() => {
@@ -71,7 +74,7 @@ export class PlaylistComponent implements OnInit {
     //鼠标滚轮滑动播放列表
     window.addEventListener('mousewheel', window.onmousewheel = (e: MouseWheelEvent) => {
       if (this.allowScroll && (!this.contentShow)) {
-        oringin += e.deltaY / 5;
+        oringin += e.deltaY / 10;
         //防止超出范围
         oringin = oringin < 0 ? 0 : oringin;
         oringin = oringin > scroll.clientHeight - bar.clientHeight ? scroll.clientHeight - bar.clientHeight : oringin;
@@ -154,9 +157,22 @@ export class PlaylistComponent implements OnInit {
   /** 
    * 点击播放此歌曲 
    * @param index 歌曲索引
-  */
+   */
   public clickPlay(index: number) {
-    this.player.start(this.player.playlist[index]);
+    let song = this.player.playlist[index];
+    if (song.url)
+      this.player.start(song);
+    else {
+      this.musicNet.getUrl(song).subscribe(res => {
+        if (res.code != 200 || res.content == null) {
+          this.snackBar.openFromComponent(SnackBarComponent, { duration: 2500, data: "这首歌不让听了，试试其他的吧" });
+          this.player.deleteFromPlaylist(index);
+        } else {
+          song.url = res.content;
+          this.player.start(song);
+        }
+      });
+    }
   }
 
   /**
@@ -170,7 +186,7 @@ export class PlaylistComponent implements OnInit {
     } else {
       this.musicNet.getUrl(item).subscribe((res: Result<string>) => {
         if (res.content == null) {
-          alert('这居然不让下载，试试其他的吧!');
+          this.snackBar.openFromComponent(SnackBarComponent, { duration: 2500, data: "这居然不让下载，试试其他的吧!" });
           this.player.deleteFromPlaylist(index);
           return;
         }

@@ -27,7 +27,10 @@
             <mat-icon class="volumeIcon" *ngSwitchCase="'high'" (click)='muteClick()'>volume_up</mat-icon>
             <mat-slider id='volume-seek-bar' [(value)]='volume' max=100 min=0></mat-slider>
         </div>
-        <!-- <app-palette class="control-item" id="palette"></app-palette> -->
-
+        <div class="control-item" id="play-mode" [ngSwitch]='mode'>
+            <mat-icon *ngSwitchCase="'single'" (click)="changeMode('random')" title="单曲循环">repeat_one</mat-icon>
+            <mat-icon *ngSwitchCase="'random'" (click)="changeMode('normal')" title="随机播放">shuffle</mat-icon>
+            <mat-icon *ngSwitchCase="'normal'" (click)="changeMode('single')" title="列表循环">repeat</mat-icon>
+        </div>
     </div>
 </div>

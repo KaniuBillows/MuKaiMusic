@@ -5,6 +5,8 @@ import { MusicService } from 'src/app/services/network/music/music.service';
 import { Song } from 'src/app/entity/music';
 import { ThemeService } from 'src/app/services/theme/theme.service';
 import { PlayerService } from 'src/app/services/player/player.service';
+import { MatSnackBar } from '@angular/material/snack-bar';
+import { SnackBarComponent } from '../snackBar/snackBar.component';
 
 @Component({
   selector: 'app-search-result',
@@ -14,7 +16,7 @@ import { PlayerService } from 'src/app/services/player/player.service';
 export class SearchResultComponent implements OnInit {
 
   constructor(private route: ActivatedRoute,
-    private router: Router,
+    private snackBar: MatSnackBar,
     private musicNet: MusicService,
     private player: PlayerService,
     private theme: ThemeService) {
@@ -46,7 +48,6 @@ export class SearchResultComponent implements OnInit {
         oringin = y;
         bar.style.top = y + 'px';
         //3.当拖拽时，内容跟着滚动
-        console.log(ul.offsetHeight);
         let offsetY = y * (ul.offsetHeight - result_container.offsetHeight) / (scroll.offsetHeight - bar.offsetHeight);
         ul.style.top = -offsetY + "px";
       }
@@ -121,7 +122,18 @@ export class SearchResultComponent implements OnInit {
   }
 
   public startPlay(song: Song) {
-    this.player.addAndPlay(song);
+    if (song.url)
+      this.player.addAndPlay(song);
+    else {
+      this.musicNet.getUrl(song).subscribe(res => {
+        if (res.code != 200 || res.content == null) {
+          this.snackBar.openFromComponent(SnackBarComponent, { duration: 2500, data: "这首歌不让听了，试试其他的吧!" });
+        } else {
+          song.url = res.content;
+          this.player.addAndPlay(song);
+        }
+      })
+    }
   }
 
   public addToPlaylist(song: Song) {

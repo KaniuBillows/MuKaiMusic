@@ -1,5 +1,9 @@
 <div id="recommend-playlist">
+    <span id="playlist-title">推荐歌单</span>
     <div class="playlist-item" *ngFor='let item of this.playlists'>
+        <div class="playlist-option">
+            <mat-icon (click)="this.playAll(item)">play_circle_outline</mat-icon>
+        </div>
         <img [src]="item.picUrl">
         <span>{{item.name}}</span>
     </div>

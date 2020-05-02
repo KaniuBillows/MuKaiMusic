@@ -3,8 +3,11 @@ import { Song } from 'src/app/entity/music';
 import { MusicService } from '../network/music/music.service';
 import { Title } from '@angular/platform-browser';
 import { DataSource } from 'src/app/entity/param/musicUrlParam';
+import { MatSnackBar } from '@angular/material/snack-bar';
+import { SnackBarComponent } from 'src/app/components/snackBar/snackBar.component';
 export const CurrentMusicIndex = 'CURRENTMUSICINDEX';
 export const Playlist = 'PLAYLIST';
+export const PlayMode = 'PLAYMODE';
 @Injectable({
   providedIn: 'root'
 })
@@ -14,9 +17,12 @@ export class PlayerService {
 
   private _status: 'pause' | 'loading' | 'playing' | 'stop' = 'stop';
 
+  private _mode: 'single' | 'normal' | 'random';
+
   constructor(
     private musicNet: MusicService,
-    private title: Title
+    private title: Title,
+    private snackBar: MatSnackBar
   ) {
     this.player = document.createElement('audio');
     this.player.preload = "load";
@@ -36,6 +42,8 @@ export class PlayerService {
       this.currentMusic.url = null;
       this.start(this.currentMusic);
     };
+    let mode: any = localStorage.getItem(PlayMode);
+    this.mode = mode != null ? mode : 'normal';
   }
 
   //#region public property
@@ -67,6 +75,15 @@ export class PlayerService {
 
   public set status(value: 'pause' | 'loading' | 'playing' | 'stop') {
     this._status = value;
+  }
+
+  public set mode(value: 'single' | 'normal' | 'random') {
+    this._mode = value;
+    localStorage.setItem(PlayMode, value);
+  }
+
+  public get mode() {
+    return this._mode;
   }
 
   public get status() {
@@ -129,10 +146,13 @@ export class PlayerService {
     else {
       this.musicNet.getUrl(song).subscribe(res => {
         if (res.content == null) {
-          alert("这首歌居然不让听了! 试试其他的吧!");
+          this.snackBar.openFromComponent(SnackBarComponent, { duration: 2500, data: "这首歌居然不让听了，试试其他的吧" });
           this.deleteFromPlaylist(this.playlist.indexOf(song));
+          this.onEnded.emit();
           return;
         }
+        if (song.dataSource != DataSource.Migu)
+          res.content = res.content.replace("http://", "https://");
         this.player.src = res.content;
         this.play();
         this.currentMusic = song;
@@ -156,6 +176,7 @@ export class PlayerService {
         return;
       }
       this.playlist.push(song);
+      this.playlistChange.emit();
       this.player.src = result.content;
     }
     this.play();
@@ -167,9 +188,13 @@ export class PlayerService {
    */
   public deleteFromPlaylist(index: number) {
     if (index == this.currentMusicIndex) {
-      this.stop();
+      this.player.pause();
       this._playlist.splice(index, 1);
-      this.currentMusicDelete.emit();
+      if (this._playlist.length == 0) return;
+      if (index == this.playlist.length - 1) this.currentMusic = this.playlist[0];
+      this.currentMusic = this.playlist[index];
+      if (this._status == 'playing')
+        this.start(this.currentMusic);
       this.playlistChange.emit();
       return;
     }
