@@ -55,7 +55,7 @@ export class MusicService {
    * @param limit 数量
    */
   public getPersonalizedPlaylist(limit?: number): Observable<Result<Playlist[]>> {
-    return this.httpClient.get<Result<Playlist[]>>(environment.baseUrl + `/api/personlized/playlist?limit=${limit | 10}`);
+    return this.httpClient.get<Result<Playlist[]>>(environment.baseUrl + `/api/playlist/personlized/?limit=${limit | 10}`);
   }
 
   /**
@@ -63,7 +63,7 @@ export class MusicService {
    * @param id 
    */
   public getPlaylistDetail(id: number): Observable<Result<Playlist>> {
-    return this.httpClient.get<Result<Playlist>>(`${environment.baseUrl}/api/detail/playlist?id=${id}`);
+    return this.httpClient.get<Result<Playlist>>(`${environment.baseUrl}/api/playlist/detail?id=${id}`);
   }
 
   /**
@@ -135,8 +135,8 @@ export class MusicService {
 
       } break;
       case DataSource.Migu: {
-        param += song.migu_CopyrightId;
-        param += `&mid=${song.migu_Id}`;
+        param += song.migu_Id;
+
       } break;
       case DataSource.NetEase: {
         param += song.ne_Id;

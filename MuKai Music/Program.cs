@@ -22,8 +22,7 @@ namespace MuKai_Music
             return WebHost.CreateDefaultBuilder(args).UseConfiguration(configuration)
                  .UseStartup<Startup>()
                  .ConfigureAppConfiguration((hostingContext, config) =>
-                     config.AddJsonFile($"appsettings.{hostingContext.HostingEnvironment.EnvironmentName}.json")
-                 );
+                     config.AddJsonFile($"appsettings.{hostingContext.HostingEnvironment.EnvironmentName}.json"));
         }
 
     }

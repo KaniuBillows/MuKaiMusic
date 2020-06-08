@@ -31,15 +31,15 @@ namespace MuKai_Music.Controllers
     {
         private readonly AccountService.AccountServiceClient client;
         private readonly TokenProvider tokenProvider;
-        private readonly RedisClient redisClient;
+        private readonly ICache cache;
         private readonly IConfiguration config;
 
         public UserController(AccountService.AccountServiceClient client,
-            TokenProvider tokenProvider, RedisClient redisClient, IConfiguration config)
+            TokenProvider tokenProvider, ICache cache, IConfiguration config)
         {
             this.client = client;
             this.tokenProvider = tokenProvider;
-            this.redisClient = redisClient;
+            this.cache = cache;
             this.config = config;
         }
 
@@ -136,7 +136,7 @@ namespace MuKai_Music.Controllers
                 var handler = new JwtSecurityTokenHandler();
                 JwtSecurityToken jwtToken = handler.ReadJwtToken(token);
                 TimeSpan expiry = jwtToken.ValidTo - new DateTime(1970, 1, 1, 0, 0, 0);
-                await this.redisClient.SetStringKeyAsync(token, token, expiry);
+                await this.cache.SetStringKeyAsync(token, token, expiry);
                 return Ok();
             }
             catch (Exception)

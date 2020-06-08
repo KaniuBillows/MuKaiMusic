@@ -1,9 +1,9 @@
-﻿using DataAbstract;
-using Microsoft.Extensions.Configuration;
-using MuKai_Music.Service;
-using System.Linq;
+﻿using System.Linq;
 using System.Net.Http;
 using System.Threading.Tasks;
+using DataAbstract;
+using Microsoft.Extensions.Configuration;
+using MuKai_Music.Service;
 
 namespace MuKai_Music.Model.Service
 {
@@ -26,30 +26,22 @@ namespace MuKai_Music.Model.Service
             MusicInfo[] kwMusic = await kwResult;
             MusicInfo[] miguMusic = await miguResult;
             MusicInfo[] res = neMusic.Concat(kwMusic).Concat(miguMusic).ToArray();
-            res.Shuffle();
             return res;
         }
 
-        public async Task<string> GetLyric(DataSource source, string id)
+        public Task<string> GetLyric(DataSource source, string id)
         {
-            return await this.ServiceRequest(source, $"/lyric?id={id}");
+            return this.ServiceRequest(source, $"/lyric?id={id}");
         }
 
-        public async Task<string> GetPic(string id, DataSource source)
+        public Task<string> GetPic(string id, DataSource source)
         {
-            return await ServiceRequest(source, "/pic?id=" + id);
+            return ServiceRequest(source, $"/pic?id={id}");
         }
 
-        public async Task<string> GetUrl(string id, DataSource source, string mid)
+        public Task<string> GetUrl(string id, DataSource source)
         {
-            if (DataSource.Migu.Equals(source))
-            {
-                return await this.ServiceRequest(source, $"/url?cid={id}&id={mid}");
-            }
-            else
-            {
-                return await this.ServiceRequest(source, "/url?id=" + id);
-            }
+            return this.ServiceRequest(source, $"/url?id={id}");
         }
     }
 }

@@ -10,12 +10,12 @@ namespace MuKai_Music.Service
 {
     public class TokenProvider
     {
-        private readonly RedisClient client;
+        private readonly ICache cache;
         private readonly IConfiguration configuration;
 
-        public TokenProvider(RedisClient client, IConfiguration configuration)
+        public TokenProvider(ICache cache, IConfiguration configuration)
         {
-            this.client = client;
+            this.cache = cache;
             this.configuration = configuration;
         }
 
@@ -70,7 +70,7 @@ namespace MuKai_Music.Service
             signingCredentials: creds);
             string tokenString = new JwtSecurityTokenHandler().WriteToken(token);
             TimeSpan expiry = expires - new DateTime(1970, 1, 1, 0, 0, 0);
-            _ = this.client.SetStringKeyAsync(GetTokenKey(userId, ua), tokenString, expiry);
+            _ = this.cache.SetStringKeyAsync(GetTokenKey(userId, ua), tokenString, expiry);
             return tokenString;
         }
 

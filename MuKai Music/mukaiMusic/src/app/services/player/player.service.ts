@@ -175,10 +175,10 @@ export class PlayerService {
         alert("这首歌居然不让听了! 试试其他的吧!");
         return;
       }
-      this.playlist.push(song);
-      this.playlistChange.emit();
       this.player.src = result.content;
     }
+    this.playlist.push(song);
+    this.playlistChange.emit();
     this.play();
     this.currentMusic = song;
   }

@@ -1,7 +1,8 @@
-﻿using Microsoft.Extensions.Caching.Memory;
+﻿using System;
+using Microsoft.Extensions.Caching.Memory;
+using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using MuKai_Music.Middleware;
-using System;
 
 namespace MuKai_Music.Cache
 {
@@ -25,8 +26,11 @@ namespace MuKai_Music.Cache
             {
                 services.AddSingleton<ICache, RedisClient>((s) =>
                  {
-                     var client = s.GetService<RedisClient>();
-                     client.CacheOption = option;
+                     IConfiguration config = s.GetRequiredService<IConfiguration>();
+                     var client = new RedisClient(config)
+                     {
+                         CacheOption = option
+                     };
                      return client;
                  });
             }

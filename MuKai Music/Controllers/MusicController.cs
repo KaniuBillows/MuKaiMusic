@@ -1,10 +1,10 @@
-﻿using DataAbstract;
+﻿using System.ComponentModel.DataAnnotations;
+using System.Threading.Tasks;
+using DataAbstract;
 using Microsoft.AspNetCore.Mvc;
 using MuKai_Music.Attribute;
 using MuKai_Music.Extions.Util;
 using MuKai_Music.Model.Service;
-using System.ComponentModel.DataAnnotations;
-using System.Threading.Tasks;
 
 namespace MuKai_Music.Service
 {
@@ -45,28 +45,20 @@ namespace MuKai_Music.Service
         /// <param name="source"></param>
         /// <returns></returns>
         [HttpGet("pic")]
-        public async Task MusicPic([Required]string id, [Required]DataSource source)
+        public async Task MusicPic([Required] string id, [Required] DataSource source)
         {
-            await this.HttpContext.WriteBodyAsync(await this.musicService.GetLyric(source, id));
+            await this.HttpContext.WirteBodyAsync(await this.musicService.GetPic(id, source));
         }
 
         /// <summary>
-        /// 获取歌曲的URL,当Source为咪咕时，id为copyrightid，mid为普通id
+        /// 获取歌曲的URL
         /// </summary>
         /// <returns></returns>
         [HttpGet("url")]
         [ApiCache(Duration = 1200)]
-        public async Task MsuicUrl([Required]string id, [Required]DataSource source, string? mid)
+        public async Task MsuicUrl([Required] string id, [Required] DataSource source)
         {
-            if (DataSource.Migu.Equals(source))
-            {
-                if (mid == null)
-                {
-                    this.HttpContext.Response.StatusCode = 400;
-                    return;
-                }
-            }
-            await this.HttpContext.WirteBodyAsync(await this.musicService.GetUrl(id, source, mid));
+            await this.HttpContext.WirteBodyAsync(await this.musicService.GetUrl(id, source));
         }
 
         /// <summary>
@@ -85,12 +77,12 @@ namespace MuKai_Music.Service
         /// <summary>
         /// 获取歌词
         /// </summary>
-        /// <param name="id"></param>
+        /// <param name="id">当DataSource为migu时，id为copyrightId</param>
         /// <param name="source"></param>
         [HttpGet("lyric")]
-        public async Task GetLyric([Required]string id, [Required]DataSource source)
+        public async Task GetLyric([Required] string id, [Required] DataSource source)
         {
-            await this.HttpContext.WriteBodyAsync(await this.musicService.GetLyric(source, id));
+            await this.HttpContext.WirteBodyAsync(await this.musicService.GetLyric(source, id));
         }
 
         /// <summary>

@@ -76,8 +76,6 @@ namespace MuKai_Music
 
             services.AddSingleton<PlaylistService>();
 
-            services.AddSingleton<RedisClient>();
-
             services.AddSingleton<TokenProvider>();
 
             services.AddHttpClient();
@@ -111,7 +109,8 @@ namespace MuKai_Music
 
             // In production, the Angular files will be served from this directory
             services.AddSpaStaticFiles(configuration => configuration.RootPath = "mukaiMusic/dist/muKaiMusic");
-            //添加缓存,一定在RedisClient之后
+            
+            //添加缓存组件
             services.AddICache(option =>
             {
                 option.Age = int.Parse(config.GetCacheAge());
@@ -190,7 +189,7 @@ namespace MuKai_Music
                     pattern: "{controller}/{action=Index}/{id?}");
             });
             //启用单页面静态资源文件
-            if (env.IsProduction())
+            if (!env.IsProduction())
             {
                 app.UseSpaStaticFiles();
                 app.UseSpa(spa =>
