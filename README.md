@@ -47,6 +47,14 @@ https://music.kaniu.pro
   "PicRoot": ""图片上传路径
  }
 ```
-然后执行运行应用程序。
+在/MuKai Music/StartUp.cs 192行左右，
+```
+if (env.IsProduction()){
+ 
+}
+```
+将 if逻辑移除，并保留if体中的代码。
+
+运行应用程序
 
 
