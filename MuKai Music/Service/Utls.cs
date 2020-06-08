@@ -1,4 +1,5 @@
-﻿using Microsoft.Extensions.Configuration;
+﻿using DataAbstract;
+using Microsoft.Extensions.Configuration;
 using System;
 
 namespace MuKai_Music.Service
@@ -26,6 +27,30 @@ namespace MuKai_Music.Service
         public static string GetAccountAddress(this IConfiguration configuration) => configuration["AccountAddredss"];
 
         public static long GetMaxPicSize(this IConfiguration configuration) => long.Parse(configuration["MaxPicSize"]);
+
+        public static string GetBaseUrl(this IConfiguration configuration, DataSource source)
+        {
+            switch (source)
+            {
+                case DataSource.Kuwo:
+                    {
+                        return configuration["KuwoAPI"];
+                    }
+
+                case DataSource.NetEase:
+                    {
+                        return configuration["NeAPI"];
+                    }
+                case DataSource.Migu:
+                    {
+                        return configuration["MiguAPI"];
+                    }
+                default:
+                    {
+                        return "";
+                    }
+            }
+        }
 
         /// <summary>
         /// 将数组乱序

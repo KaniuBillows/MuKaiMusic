@@ -17,7 +17,7 @@ service AccountService{
     rpc UpdateUserInfo (UpdateUserInfoRequest) returns (UpateUserInfoReply);
 }
 message UserInfoRequest{
-    int32 id =1;
+    int64 id =1;
 }
 message UserInfoReply{
     UserInfo userInfo=1;
@@ -30,7 +30,7 @@ message ValidReply{
     bool success=1;
 }
 message ChangePasswordRequest{
-    int32 id=1;
+    int64 id=1;
     string oldPassword=2;
     string newPassword=3;
 }
@@ -44,11 +44,11 @@ message LoginRequest {
 }
 message LoginReply{
     string message = 1;
-    int32 id=2;
+    int64 id=2;
     bool success = 3;
 }
 message UserInfo{
-    int32 id =1;
+    int64 id =1;
     string nickName =2;
     string userName = 3;
     string avatarUrl = 4;
@@ -68,14 +68,14 @@ message RegisterReply{
     bool success =2;
 }
 message UpdateAvatorRequest{
-    int32  Id=1;
+    int64  Id=1;
     string newUrl=2;
 }
 message UpdateAvatorReply{
    bool success=1;
 }
 message UpdateUserInfoRequest{
-    int32 id=1;
+    int64 id=1;
     string nickName=2;
 }
 message UpateUserInfoReply{

@@ -9,7 +9,7 @@ namespace DataAbstract.Account
     {
 
         [Key, DatabaseGenerated(DatabaseGeneratedOption.Identity)]
-        public int Id { get; set; }
+        public long Id { get; set; }
 
 
         [Required]
@@ -26,7 +26,7 @@ namespace DataAbstract.Account
 
         [RegularExpression
             (pattern: @"^[\w_-]{6,16}$",
-            ErrorMessage = "密码为英文或数字组合，可以包含\"-\"与\"_\"，长度在8-16个字符之间")]
+            ErrorMessage = "密码为英文或数字组合，可以包含\"-\"与\"_\"，长度在6-16个字符之间")]
         [NotMapped]
         public string Password { get; set; }
 

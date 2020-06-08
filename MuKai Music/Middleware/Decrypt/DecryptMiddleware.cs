@@ -1,7 +1,7 @@
 ﻿using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Primitives;
-using MuKai_Music;
 using MuKai_Music.Attributes;
 using MuKai_Music.Service;
 using Org.BouncyCastle.Crypto;
@@ -26,10 +26,10 @@ namespace MuKai_Account.Middleware
         private readonly RequestDelegate next;
         private readonly Pkcs1Encoding pkcs1Encoding;
         private readonly Dictionary<string, EncryptAttribute> ApiMap = new Dictionary<string, EncryptAttribute>();
-        public DecryptMiddleware(RequestDelegate next)
+        public DecryptMiddleware(RequestDelegate next, IConfiguration configuration)
         {
             this.next = next;
-            using TextReader reader = new StringReader(Startup.Configuration.GetPivateKey());
+            using TextReader reader = new StringReader(configuration.GetPivateKey());
             PemObject pemObject = new PemReader(reader).ReadPemObject();
             AsymmetricKeyParameter pkey = PrivateKeyFactory.CreateKey(pemObject.Content);
             this.pkcs1Encoding = new Pkcs1Encoding(new RsaEngine());

@@ -1,15 +1,16 @@
 ﻿using DataAbstract;
 using DataAbstract.Account;
-using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Primitives;
 using Microsoft.Net.Http.Headers;
 using MuKai_Account;
 using MuKai_Music.Attribute;
 using MuKai_Music.Attributes;
 using MuKai_Music.Cache;
+using MuKai_Music.Filter;
 using MuKai_Music.Model.RequestParam;
 using MuKai_Music.Service;
 using System;
@@ -23,7 +24,7 @@ using System.Threading.Tasks;
 
 namespace MuKai_Music.Controllers
 {
-    [Route("api")]
+    [Route("api/account")]
     [ApiController]
     [Authorize]
     public class UserController : ControllerBase
@@ -31,13 +32,15 @@ namespace MuKai_Music.Controllers
         private readonly AccountService.AccountServiceClient client;
         private readonly TokenProvider tokenProvider;
         private readonly RedisClient redisClient;
+        private readonly IConfiguration config;
 
         public UserController(AccountService.AccountServiceClient client,
-            TokenProvider tokenProvider, RedisClient redisClient)
+            TokenProvider tokenProvider, RedisClient redisClient, IConfiguration config)
         {
             this.client = client;
             this.tokenProvider = tokenProvider;
             this.redisClient = redisClient;
+            this.config = config;
         }
 
         /// <summary>
@@ -46,11 +49,12 @@ namespace MuKai_Music.Controllers
         /// <param name="userInfo"></param>
         /// <returns></returns>
         /// //[Encrypt]
-        [HttpPost("account/register")]
+        [HttpPost("register")]
         [ResponseCache(NoStore = true)]
         [ApiCache(NoStore = true)]
+        [Encrypt]
         [AllowAnonymous]
-        public async Task<Result<string>> Register([FromBody] User userInfo)
+        public async Task<Result> Register([FromBody] User userInfo)
         {
             try
             {
@@ -68,12 +72,12 @@ namespace MuKai_Music.Controllers
                     NickName = userInfo.NickName,
                     PhoneNumber = userInfo.PhoneNumber
                 });
-                return reply.Success ? new Result<string>(reply.Message, 200, null) :
-                    new Result<string>(null, 400, reply.Message);
+                return reply.Success ? Result.SuccessReuslt(reply.Message) :
+                    Result.FailResult(reply.Message, 400);
             }
             catch (Exception)
             {
-                return new Result<string>(null, 503, "服务当前不可用");
+                return Result.FailResult("服务当前不可用", 503);
             }
         }
 
@@ -81,12 +85,12 @@ namespace MuKai_Music.Controllers
         /// 登录
         /// </summary>
         /// <returns></returns>
-        [HttpPost("account/login")]
+        [HttpPost("login")]
         [ResponseCache(NoStore = true)]
         [ApiCache(NoStore = true)]
         [Encrypt]
         [AllowAnonymous]
-        public async Task<Result<object>> LogIn([FromBody]LoginParam param)
+        public async Task<Result<object>> LogIn([FromBody] LoginParam param)
         {
             LoginReply reply;
             try
@@ -99,21 +103,21 @@ namespace MuKai_Music.Controllers
             }
             catch (Exception)
             {
-                return new Result<object>(null, 503, "服务当前不可用");
+                return Result.FailResult("服务当前不可用", 503);
 
             }
             if (reply.Success)
             {
                 this.HttpContext.Request.Headers.TryGetValue(HeaderNames.UserAgent, out StringValues ua);
-                return new Result<object>(new
+                return Result<object>.SuccessReuslt(new
                 {
                     accessToken = this.tokenProvider.CreateAccessToken(reply.Id.ToString()),
                     refreshToken = this.tokenProvider.CreateRefreshToken(reply.Id.ToString(), ua)
-                }, 200, null);
+                });
             }
             else
             {
-                return new Result<object>(null, 500, reply.Message);
+                return Result.FailResult(reply.Message);
             }
         }
 
@@ -121,23 +125,22 @@ namespace MuKai_Music.Controllers
         /// 登出
         /// </summary>
         /// <returns></returns>
-        [HttpGet("account/logout")]
+        [HttpGet("logout")]
         [ResponseCache(NoStore = true)]
         [ApiCache(NoStore = true)]
-        public async Task<IActionResult> LogOut([Required]int id)
+        [Authorization]
+        public async Task<IActionResult> LogOut(string token)
         {
-            if (this.HttpContext.Request.Headers.TryGetValue("Authorization", out StringValues authentication))
+            try
             {
-                string token = authentication.ToString().Substring("Bearer ".Length).Trim();
                 var handler = new JwtSecurityTokenHandler();
                 JwtSecurityToken jwtToken = handler.ReadJwtToken(token);
-                if (!jwtToken.Payload.TryGetValue("id", out object tid) || !id.ToString().Equals(tid as string))
-                {
-                    return Forbid();
-                }
                 TimeSpan expiry = jwtToken.ValidTo - new DateTime(1970, 1, 1, 0, 0, 0);
                 await this.redisClient.SetStringKeyAsync(token, token, expiry);
                 return Ok();
+            }
+            catch (Exception)
+            {
             }
             return Forbid();
         }
@@ -145,34 +148,23 @@ namespace MuKai_Music.Controllers
         /// <summary>
         /// 获取用户信息,通过Id
         /// </summary>
+        /// <param name="loginUserId">由Filter自动注入</param>
         /// <param name="id"></param>
         /// <returns></returns>
-        [HttpGet("account/info")]
+        [HttpGet("info")]
         [ResponseCache(Duration = 86400)]
-        public async Task<Result<User>> UserInfo(int? id)
+        //[Authorization]
+        [AllowAnonymous]
+        public async Task<Result<User>> UserInfo(long loginUserId, long? id)
         {
-            if (!id.HasValue)
-            {
-                this.HttpContext.Request.Headers.TryGetValue("Authorization", out StringValues authentication);
-                string token = authentication.ToString().Substring("Bearer ".Length).Trim();
-                var handler = new JwtSecurityTokenHandler();
-                JwtSecurityToken jwtToken = handler.ReadJwtToken(token);
-                if (!jwtToken.Payload.TryGetValue("id", out object tid) || !id.ToString().Equals(tid as string))
-                {
-                    await this.HttpContext.ForbidAsync();
-                    return null;
-                }
-                id = (int)tid;
-            }
             try
             {
-
                 var reply = await this.client.GetUserInfoAsync(new UserInfoRequest()
                 {
-                    Id = id.Value
+                    Id = id ?? loginUserId
                 });
                 return reply.UserInfo != null
-                    ? new Result<User>(new User()
+                    ? Result<User>.SuccessReuslt(new User()
                     {
                         Id = reply.UserInfo.Id,
                         UserName = reply.UserInfo.UserName,
@@ -180,48 +172,37 @@ namespace MuKai_Music.Controllers
                         Email = reply.UserInfo.Email,
                         PhoneNumber = reply.UserInfo.PhoneNumber,
                         AvatarUrl = reply.UserInfo.AvatarUrl
-                    }, 200, null)
-                    : new Result<User>(null, 400, reply.Message);
+                    })
+                    : Result<User>.FailResult(reply.Message, 400);
             }
-            catch (Exception)
+            catch (Exception e)
             {
-                return new Result<User>(null, 503, "当前服务不可用");
+                return Result<User>.FailResult("当前服务不可用", 503);
             }
         }
 
         /// <summary>
         /// 上传头像
         /// </summary>
-        /// <param name="id"></param>
+        /// <param name="loginUserId"></param>
         /// <param name="file"></param>
         /// <returns></returns>
-        [HttpPost("account/upload/avatar")]
+        [HttpPost("upload/avatar")]
         [ResponseCache(NoStore = true)]
-        [AllowAnonymous]
-        public async Task<Result<string>> UploadAvatar([Required]int id, [Required] IFormFile file)
+        [Authorization]
+        public async Task<Result<string>> UploadAvatar(long loginUserId, [Required] IFormFile file)
         {
-            #region 验证用户Id
-            this.HttpContext.Request.Headers.TryGetValue("Authorization", out StringValues authentication);
-            string token = authentication.ToString().Substring("Bearer ".Length).Trim();
-            var handler = new JwtSecurityTokenHandler();
-            JwtSecurityToken jwtToken = handler.ReadJwtToken(token);
-            if (!jwtToken.Payload.TryGetValue("id", out object tid) || !id.ToString().Equals(tid as string))
-            {
-                await this.HttpContext.ForbidAsync();
-                return null;
-            }
-            #endregion
-            long size = Startup.Configuration.GetMaxPicSize();
+            long size = config.GetMaxPicSize();
             if (size < file.Length / 1024)
             {
-                return new Result<string>(null, 400, "文件大小超过限制,最大支持2m,jpg,png,gif格式");
+                return Result<string>.FailResult("文件大小超过限制,最大支持2m,jpg,png,gif格式", 400);
             }
             else
             {
                 if (file.ContentType == "image/jpeg" || file.ContentType == "image/png" || file.ContentType == "image/gif")
                 {
-                    StringBuilder path = new StringBuilder(Startup.Configuration.GetPicRootPath());
-                    string fileName = $"avatar-{id}.{file.ContentType.Substring(6)}";
+                    StringBuilder path = new StringBuilder(config.GetPicRootPath());
+                    string fileName = $"avatar-{loginUserId}.{file.ContentType.Substring(6)}";
                     string filePath = path + fileName;
                     if (System.IO.File.Exists(filePath))
                     {
@@ -237,14 +218,14 @@ namespace MuKai_Music.Controllers
                     {
                         var reply = await this.client.UpdateAvatorAsync(new UpdateAvatorRequest()
                         {
-                            Id = id,
+                            Id = loginUserId,
                             NewUrl = url
                         });
                         if (reply.Success)
                         {
                             //删除原头像
                             System.IO.File.Delete(path + "old" + fileName);
-                            return new Result<string>(url, 200, null);
+                            return Result<string>.SuccessReuslt(url);
                         }
                         else
                         {
@@ -252,7 +233,7 @@ namespace MuKai_Music.Controllers
                             System.IO.File.Delete(filePath);
                             FileInfo fi = new FileInfo(path + "old" + fileName);
                             fi.MoveTo(filePath);
-                            return new Result<string>(null, 500, "服务器出错了，请稍后再试");
+                            return Result<string>.FailResult("服务器出错了，请稍后再试", 500);
                         }
                     }
                     catch (Exception)
@@ -261,12 +242,12 @@ namespace MuKai_Music.Controllers
                         System.IO.File.Delete(filePath);
                         FileInfo fi = new FileInfo(path + "old" + fileName);
                         fi.MoveTo(filePath);
-                        return new Result<string>(null, 503, "服务当前不可用");
+                        return Result<string>.FailResult("服务当前不可用", 503);
                     }
                 }
                 else
                 {
-                    return new Result<string>(null, 400, "不支持的文件格式，请选择jpg,png或gif格式");
+                    return Result<string>.FailResult("不支持的文件格式，请选择jpg,png或gif格式", 400);
                 }
             }
         }

@@ -1,4 +1,4 @@
-using Microsoft.AspNetCore.Authentication.JwtBearer;
+Ôªøusing Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.HttpOverrides;
@@ -11,8 +11,6 @@ using MuKai_Account;
 using MuKai_Account.Middleware;
 using MuKai_Music.Cache;
 using MuKai_Music.Middleware;
-using MuKai_Music.Middleware.ApiCache;
-using MuKai_Music.Middleware.TokenManager;
 using MuKai_Music.Model.Service;
 using MuKai_Music.Service;
 using System;
@@ -21,23 +19,23 @@ using System.Net.Http;
 using System.Text;
 using System.Text.Json;
 
-namespace MuKai_Music
+namespace MuKai_Music.Test
 {
-    public class Startup
+    public class TestStartup
     {
-        public Startup(IConfiguration configuration)
+        public TestStartup(IConfiguration configuration)
         {
-            config = configuration;
+            Configuration = configuration;
             TokenValidationParameters = new TokenValidationParameters()
             {
-                ValidateIssuer = true,// «∑Ò—È÷§Issuer
-                ValidateAudience = true,// «∑Ò—È÷§Audience
-                ValidateLifetime = true,// «∑Ò—È÷§ ß–ß ±º‰
+                ValidateIssuer = true,//ÊòØÂê¶È™åËØÅIssuer
+                ValidateAudience = true,//ÊòØÂê¶È™åËØÅAudience
+                ValidateLifetime = true,//ÊòØÂê¶È™åËØÅÂ§±ÊïàÊó∂Èó¥
                 ClockSkew = TimeSpan.FromSeconds(30),
-                ValidateIssuerSigningKey = true,// «∑Ò—È÷§SecurityKey
-                ValidAudience = configuration.GetDomain(),//Audience
-                ValidIssuer = configuration.GetDomain(),//Issuer£¨’‚¡ΩœÓ∫Õ«∞√Ê«©∑¢jwtµƒ…Ë÷√“ª÷¬
-                IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(configuration.GetSecurityKey()))
+                ValidateIssuerSigningKey = true,//ÊòØÂê¶È™åËØÅSecurityKey
+                ValidAudience = Configuration.GetDomain(),//Audience
+                ValidIssuer = Configuration.GetDomain(),//IssuerÔºåËøô‰∏§È°πÂíåÂâçÈù¢Á≠æÂèëjwtÁöÑËÆæÁΩÆ‰∏ÄËá¥
+                IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(Configuration.GetSecurityKey()))
             };
             JsonSerializerOptions = new JsonSerializerOptions()
             {
@@ -46,7 +44,7 @@ namespace MuKai_Music
             };
         }
 
-        private readonly IConfiguration config;
+        public static IConfiguration Configuration { get; private set; }
 
 
         public static JsonSerializerOptions JsonSerializerOptions { get; private set; }
@@ -63,14 +61,14 @@ namespace MuKai_Music
             services.AddSwaggerDocument();
             services.AddControllersWithViews();
 
-            //todo  ˝æ›ø‚
+            //todo Êï∞ÊçÆÂ∫ì
             services.AddSingleton((provider) =>
             {
-                var client = new MongoClient(config.GetConnectionString("MongoDB"));
-                return client.GetDatabase("mukai");
+                var client = new MongoClient(Configuration.GetConnectionString("MongoDB"));
+                return client.GetDatabase("mukai_test");
             });
 
-            services.AddSingleton<IConfiguration>(provider => config);
+            services.AddSingleton<IConfiguration>((provider) => TestStartup.Configuration);
 
             services.AddSingleton<MusicService>();
 
@@ -83,7 +81,7 @@ namespace MuKai_Music
             services.AddHttpClient();
 
             services.AddGrpcClient<AccountService.AccountServiceClient>(o =>
-            o.Address = new Uri(config.GetAccountAddress()))
+            o.Address = new Uri(Configuration.GetAccountAddress()))
                 .ConfigurePrimaryHttpMessageHandler(() =>
                 {
                     var handler = new HttpClientHandler
@@ -93,41 +91,43 @@ namespace MuKai_Music
                     return handler;
                 });
 
-            //«Â≥˝ƒ¨»œtokenHandler
+            //Ê∏ÖÈô§ÈªòËÆ§tokenHandler
             JwtSecurityTokenHandler.DefaultInboundClaimTypeMap.Clear();
-            //∆Ù”√json web token ◊ˆ—È÷§∑Ω∞∏
+            //ÂêØÁî®json web token ÂÅöÈ™åËØÅÊñπÊ°à
             services.AddAuthentication(options =>
-             {
-                 options.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
-                 options.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
-                 options.DefaultScheme = JwtBearerDefaults.AuthenticationScheme;
-             }
+            {
+                options.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
+                options.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
+                options.DefaultScheme = JwtBearerDefaults.AuthenticationScheme;
+            }
             ).AddJwtBearer(options =>
             {
                 options.RequireHttpsMetadata = false;
                 options.TokenValidationParameters = TokenValidationParameters;
             });
+
             services.AddHttpContextAccessor();
 
             // In production, the Angular files will be served from this directory
             services.AddSpaStaticFiles(configuration => configuration.RootPath = "mukaiMusic/dist/muKaiMusic");
-            //ÃÌº”ª∫¥Ê,“ª∂®‘⁄RedisClient÷Æ∫Û
+
+            //Ê∑ªÂä†ÁºìÂ≠ò
             services.AddICache(option =>
             {
-                option.Age = int.Parse(config.GetCacheAge());
-                option.CacheType = Enum.Parse<CacheType>(config.GetCacheType());
+                option.Age = int.Parse(Configuration.GetCacheAge());
+                option.CacheType = Enum.Parse<CacheType>(Configuration.GetCacheType());
             });
 
             services.AddMvc(option =>
             {
-                /*øÕªß∂Àª∫¥Ê*/
+                /*ÂÆ¢Êà∑Á´ØÁºìÂ≠ò*/
                 option.CacheProfiles.Add("default", new Microsoft.AspNetCore.Mvc.CacheProfile
                 {
-                    Duration = 86400 /*24–° ±◊ ‘¥ª∫¥Ê*/
+                    Duration = 86400 /*24Â∞èÊó∂ËµÑÊ∫êÁºìÂ≠ò*/
                 });
                 option.CacheProfiles.Add("longTime", new Microsoft.AspNetCore.Mvc.CacheProfile
                 {
-                    Duration = 86400 * 7 /*7ÃÏª∫¥Ê*/
+                    Duration = 86400 * 7 /*7Â§©ÁºìÂ≠ò*/
                 });
 
             }).AddJsonOptions(configure =>
@@ -154,17 +154,17 @@ namespace MuKai_Music
                 ForwardedHeaders = ForwardedHeaders.XForwardedFor | ForwardedHeaders.XForwardedProto
             });
 
-            app.UseTokenManager();
+            //app.UseTokenManager();
 
-            //≈‰÷√∆Ù”√æ≤Ã¨◊ ‘¥Œƒº˛
+            //ÈÖçÁΩÆÂêØÁî®ÈùôÊÄÅËµÑÊ∫êÊñá‰ª∂
             app.UseStaticFiles();
             app.UseOpenApi();
-            // π”√swagger
+            //‰ΩøÁî®swagger
             app.UseSwaggerUi3();
 
             app.UseRouting();
 
-            //‘ –ÌøÁ”Ú
+            //ÂÖÅËÆ∏Ë∑®Âüü
             app.UseCors(builder =>
             {
                 builder.AllowAnyOrigin();
@@ -172,15 +172,15 @@ namespace MuKai_Music
                 builder.AllowAnyHeader();
             });
 
-            //…Ì∑›»œ÷§
+            //Ë∫´‰ªΩËÆ§ËØÅ
             app.UseAuthentication();
-            // ⁄»®
+            //ÊéàÊùÉ
             app.UseAuthorization();
 
             app.UseMiddleware<DecryptMiddleware>();
 
 
-            app.UseApiCacheMiddleware();
+            //app.UseApiCacheMiddleware();
 
 
             app.UseEndpoints(endpoints =>
@@ -189,8 +189,8 @@ namespace MuKai_Music
                     name: "default",
                     pattern: "{controller}/{action=Index}/{id?}");
             });
-            //∆Ù”√µ•“≥√Êæ≤Ã¨◊ ‘¥Œƒº˛
-            if (env.IsProduction())
+            //ÂêØÁî®ÂçïÈ°µÈù¢ÈùôÊÄÅËµÑÊ∫êÊñá‰ª∂
+            if (!env.IsProduction())
             {
                 app.UseSpaStaticFiles();
                 app.UseSpa(spa =>

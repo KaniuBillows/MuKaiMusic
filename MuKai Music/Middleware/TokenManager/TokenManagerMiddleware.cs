@@ -69,12 +69,12 @@ namespace MuKai_Music.Middleware.TokenManager
                         ? this.tokenProvider.CreateRefreshToken(userId as string, ua)
                         : (string)refreshToken;
                     //生成新的返回内容
-                    string content = JsonSerializer.Serialize<Result<object>>(new Result<object>(
+                    string content = JsonSerializer.Serialize<Result<object>>(Result<object>.SuccessReuslt(
                         new
                         {
                             accessToken = this.tokenProvider.CreateAccessToken(userId as string),
                             refreshToken = reToken
-                        }, 200, null), Startup.JsonSerializerOptions);
+                        }), Startup.JsonSerializerOptions);
                     byte[] buffer = Encoding.UTF8.GetBytes(content);
                     httpContext.Response.ContentType = "application/json; charset=utf-8";
                     Task writeBodyTask = httpContext.Response.Body.WriteAsync(buffer, 0, buffer.Length);
@@ -89,6 +89,7 @@ namespace MuKai_Music.Middleware.TokenManager
             if (httpContext.Request.Headers.TryGetValue("Authorization", out StringValues authentication))
             {
                 string token = authentication.ToString().Substring("Bearer ".Length).Trim();
+                //黑名单
                 if (this._redisClient.Exists(token))
                 {
                     await httpContext.ForbidAsync();
