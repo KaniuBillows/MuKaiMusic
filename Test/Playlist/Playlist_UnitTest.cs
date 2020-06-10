@@ -79,7 +79,7 @@ namespace Test
         public async Task UserPlaylistsGet()
         {
             // Arrange
-            var userId0 = 1;
+            var userId0 = 4;
             int limit = 10, offset = 0;
             //Act
             var result0 = await Client.GetAsync<TestPageResult<UserPlaylist>>

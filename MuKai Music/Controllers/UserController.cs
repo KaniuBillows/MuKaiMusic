@@ -1,4 +1,10 @@
-﻿using DataAbstract;
+﻿using System;
+using System.ComponentModel.DataAnnotations;
+using System.IdentityModel.Tokens.Jwt;
+using System.IO;
+using System.Text;
+using System.Threading.Tasks;
+using DataAbstract;
 using DataAbstract.Account;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
@@ -13,12 +19,6 @@ using MuKai_Music.Cache;
 using MuKai_Music.Filter;
 using MuKai_Music.Model.RequestParam;
 using MuKai_Music.Service;
-using System;
-using System.ComponentModel.DataAnnotations;
-using System.IdentityModel.Tokens.Jwt;
-using System.IO;
-using System.Text;
-using System.Threading.Tasks;
 
 // For more information on enabling Web API for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
 
@@ -175,7 +175,7 @@ namespace MuKai_Music.Controllers
                     })
                     : Result<User>.FailResult(reply.Message, 400);
             }
-            catch (Exception e)
+            catch (Exception)
             {
                 return Result<User>.FailResult("当前服务不可用", 503);
             }
@@ -265,7 +265,6 @@ namespace MuKai_Music.Controllers
         [ApiCache(NoStore = true)]
         public async Task LoginPhone(string countrycode, string phone, string password)
         {
-
         }
 
 
@@ -277,7 +276,6 @@ namespace MuKai_Music.Controllers
         [ApiCache(Duration = 3600)]
         public async Task GetDetail(int id)
         {
-
         }
 
 

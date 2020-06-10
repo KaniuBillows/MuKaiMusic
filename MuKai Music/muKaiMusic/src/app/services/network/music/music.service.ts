@@ -55,7 +55,7 @@ export class MusicService {
    * @param limit 数量
    */
   public getPersonalizedPlaylist(limit?: number): Observable<Result<Playlist[]>> {
-    return this.httpClient.get<Result<Playlist[]>>(environment.baseUrl + `/api/playlist/personlized/?limit=${limit | 10}`);
+    return this.httpClient.get<Result<Playlist[]>>(environment.baseUrl + `/api/playlist/personlized?limit=${limit | 10}`);
   }
 
   /**

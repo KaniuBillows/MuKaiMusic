@@ -14,12 +14,12 @@ namespace Test
         public IServiceProvider ServiceProvider { get; set; }
         public BaseTest()
         {
-            IConfigurationRoot configuration = new ConfigurationBuilder()
-            .SetBasePath("D:/Programs/KaniuBillows/MuKai Music")
-            .AddJsonFile("appsettings.json")
-            .Build();
-            var server = new TestServer(WebHost.CreateDefaultBuilder().UseStartup<TestStartup>().
-                UseConfiguration(configuration)
+         /*   IConfigurationRoot configuration = new ConfigurationBuilder()
+             .SetBasePath("D:/Programs/KaniuBillows/MuKai Music")
+             .AddJsonFile("appsettings.json")
+             .Build();*/
+            var server = new TestServer(WebHost.CreateDefaultBuilder().UseStartup<TestStartup>()
+             //   .UseConfiguration(configuration)
                  .ConfigureAppConfiguration((hostingContext, config) =>
                      config.AddJsonFile($"appsettings.Development.json")
                  ));

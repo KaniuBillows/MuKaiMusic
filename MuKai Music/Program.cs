@@ -1,7 +1,6 @@
 using Microsoft.AspNetCore;
 using Microsoft.AspNetCore.Hosting;
-using Microsoft.Extensions.Configuration;
-using System;
+using Microsoft.Extensions.Hosting;
 
 namespace MuKai_Music
 {
@@ -14,15 +13,8 @@ namespace MuKai_Music
 
         public static IWebHostBuilder CreateWebHostBuilder(string[] args)
         {
-            IConfigurationRoot configuration = new ConfigurationBuilder()
-                  .SetBasePath(Environment.CurrentDirectory)
-                .AddJsonFile("appsettings.json")
-                .Build();
 
-            return WebHost.CreateDefaultBuilder(args).UseConfiguration(configuration)
-                 .UseStartup<Startup>()
-                 .ConfigureAppConfiguration((hostingContext, config) =>
-                     config.AddJsonFile($"appsettings.{hostingContext.HostingEnvironment.EnvironmentName}.json"));
+            return WebHost.CreateDefaultBuilder(args).UseStartup<Startup>();
         }
 
     }

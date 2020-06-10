@@ -4,6 +4,7 @@ using System.Threading.Tasks;
 using DataAbstract;
 using DataAbstract.Music;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Authorization;
 using MuKai_Music.Attribute;
 using MuKai_Music.Extions.Util;
 using MuKai_Music.Filter;
@@ -107,7 +108,7 @@ namespace MuKai_Music.Controllers
         /// 删除歌单
         /// </summary>
         /// <param name="loginUserId"></param>
-        /// <param name="listId"></param>
+        /// <param name="id"></param>
         /// <returns></returns>
 #if !DEBUG
         [Authorize]

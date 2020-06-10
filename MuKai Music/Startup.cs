@@ -70,8 +70,6 @@ namespace MuKai_Music
                 return client.GetDatabase("mukai");
             });
 
-            services.AddSingleton<IConfiguration>(provider => config);
-
             services.AddSingleton<MusicService>();
 
             services.AddSingleton<PlaylistService>();
@@ -189,7 +187,7 @@ namespace MuKai_Music
                     pattern: "{controller}/{action=Index}/{id?}");
             });
             //启用单页面静态资源文件
-            if (!env.IsProduction())
+            if (env.IsProduction())
             {
                 app.UseSpaStaticFiles();
                 app.UseSpa(spa =>

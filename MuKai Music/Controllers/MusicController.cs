@@ -16,8 +16,6 @@ namespace MuKai_Music.Service
     {
         private readonly MusicService musicService;
 
-        //   private readonly IHttpContextAccessor httpContextAccessor;
-
         public MusicController(MusicService musicService)
         {
             this.musicService = musicService;
