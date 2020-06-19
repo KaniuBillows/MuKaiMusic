@@ -1,6 +1,7 @@
 # MuKaiMusic with MicroService
 一个免费的音乐平台，致力于：一个平台 所有音乐。
 本项目只是个人学习开发用的，任何人，任何组织不得以任何理由商用。
+此分支为微服务架构，将主力维护此分支，原master分支为自己傻乎乎造轮子的产物。
 
 # 微服务架构
 这一段时间并没有添加新的功能，但是并没有偷懒。正在学习全新的微服务架构，奈何手上没啥项目，那就好拿Mukai Music开刀了。
@@ -16,6 +17,24 @@
 ### 整合三个音乐平台，基本能听许多许多歌曲了
 ### 不想每次都搜索，生成字节的歌单（已开发完成API，客户端正在开发，详见Mukai Playlist）
 
+## 功能（目前功能少得可怜，咱确实有点不争气，但会坚持开发维护的）以下已开启IP黑名单，仅供试验用
+1. 各个平台搜索: 
+ 咪咕[/migu/search?keyword=陈奕迅](https://api.kaniu.pro/migu/search?keyword=陈奕迅)
+ 酷我[/kuwo/search?keyword=陈奕迅](https://api.kaniu.pro/kuwo/search?keyword=陈奕迅)
+ 网易[/ne/search?keyword=陈奕迅](https://api.kaniu.pro/ne/search?keyword=陈奕迅), 要整合请自己整合，这里可以用编辑距离对排序进行优化哦
+2. 获取Url,直接平台对应的id
+ 酷我为例：[/kuwo/url?id=45275102](https://api.kaniu.pro/kuwo/url?id=45275102)
+3. 获取专辑图片，直接平台对应的id
+咪咕为例：[/migu/pic?id=54680](https://api.kaniu.pro/migu/pic?id=54680)
+4. 获取歌词，咪咕要的是copyrightId,酷我和网易是直接歌曲id
+网易为例: [/ne/lyric?id=551816010](https://api.kaniu.pro/ne/lyric?id=551816010)
+5. 获取推荐歌单，暂时只有网易云的，其他的我在考虑要不要也弄
+[/ne/playlist/personlized?limit=10](https://api.kaniu.pro/ne/playlist/personlized?limit=10)
+6. 获取歌单详情
+[/ne/playlist/detail?id=532711476](https://api.kaniu.pro/ne/playlist/detail?id=532711476)
+
+... 用户歌单功能做了API，客户端还没来得及做，先不放出来了，后面再更新吧
+
 # 如何部署（如果部署遇到问题，可以试试联系我，或许咱能帮你呢）
 0. 一个Docker，一个RDS（验证用），一个MongoDB（自定义歌单用）
 1. 配置Docker网络，新建名为“mynet”的network，并将其设置为172.18.0.0/16（当然你完全可以选择设置其他网段，但是你得更改所有项目的相关配置文件建议你还是照做）
@@ -30,3 +49,4 @@
 
 # 服务结构：
 ![结构](https://kaniu-pic.oss-cn-chengdu.aliyuncs.com/githubPic/Architecture.png)
+
