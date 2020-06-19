@@ -24,6 +24,7 @@
 4. 如果你在服务文件夹里发现了build.cmd,或者build.sh，那么麻烦在用docker-compose之前，先运行它。（因为这服务需要DataAbstarct中定义的数据结构，但是DataAbstract并不在Docker上下文中，所以我们直接构建应用程序，并复制到Docker镜像中）
 5. Mukai Auth，需要一个关系型数据库(我是postgresql)(你可以在它的配置文件中设置对应的连接字符串（appsettings.{Environment}.json）然后用对应的EF Core工具进行迁移，记得修改Startup.cs)。
 6. Mukai Playlist需要一个MongoDB,需要在appsettings.{Environment}.json中进行配置。
+7. Angular客户端，你需要修改Environment.ts中的BaseURL,并指向你的Ocelot网关地址。
 
 ## 部署步骤写的很详细，目的是帮助你更加熟悉它。你或许也可以试试用一个docker-compose.yml搞定所有。
 
