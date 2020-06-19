@@ -1,0 +1,40 @@
+<div id="playlist-container">
+    <li class="playlist-title">
+        <div class="playlist-item" id="title-item">
+            <div class="playlist-name"><span>歌曲</span></div>
+            <div class="playlist-artist"><span>艺术家</span></div>
+            <div class="playlist-album"><span>专辑</span></div>
+        </div>
+    </li>
+    <div id='playlist-box'>
+        <div id="ul">
+            <li class="playlist-title" *ngFor='let item of playlist;let i = index'>
+                <div class='playlist-number'>
+                    {{i+1}}
+                </div>
+                <div class='playlist-item'>
+                    <div class='{{this.currentPlayIndex==i? themeClass:"playlist-name"}} playlist-name'>
+                        <div class="item-name">
+                            <span [title]='item.name'>{{item.name}}</span>
+                        </div>
+                        <div [id]="'option-'+i" class="playlist-options">
+                            <mat-icon title="播放" class="click_button" (click)='clickPlay(i)'>play_circle_outline
+                            </mat-icon>
+                            <mat-icon title="下载" class="click_button" (click)='clickDownload(i)'>play_for_work
+                            </mat-icon>
+                            <mat-icon title="从列表删除" class="click_button" (click)='deleteMusic(i)'>delete</mat-icon>
+                        </div>
+                    </div>
+                    <div class='playlist-artist'>
+                        <span [title]='item.artists[0].name'>{{item.artists[0].name}}</span>
+                    </div>
+                    <div class='playlist-album'>{{item.album.name||"未知"}}</div>
+                </div>
+                <i></i>
+            </li>
+        </div>
+    </div>
+    <div class="scroll" id="scroll">
+        <div class="bar" id="bar"></div>
+    </div>
+</div>

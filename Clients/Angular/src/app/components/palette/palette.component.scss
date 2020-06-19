@@ -1,0 +1,37 @@
+#colors {
+    z-index: 1000;
+    margin: auto;
+    width: 120px;
+    max-height: calc(100vh - 48px);
+    position: absolute;
+    left: 0;
+    right: 0;
+    top: 4px;
+    bottom: 0;
+    margin: auto;
+}
+
+.themeBlock {
+    background-color: currentColor;
+    cursor: pointer;
+    height: 32px;
+    width: 32px;
+    border-radius: 50%;
+}
+
+#palette-container {
+    left: -60px;
+    bottom: 100%;
+    position: absolute;
+    height: 175px;
+    width: 140px;
+    border-radius: 10px;
+    background: rgba(255, 255, 255, 0.1);
+    box-shadow: 0 2px 4px -1px rgba(0, 0, 0, .2), 0 4px 5px 0 rgba(0, 0, 0, .14), 0 1px 10px 0 rgba(0, 0, 0, .12);
+}
+
+#skin {
+    height: 32px;
+    align-self: center;
+    cursor: pointer;
+}

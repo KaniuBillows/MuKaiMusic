@@ -1,0 +1,1 @@
+dotnet publish "Mukai Playlist/Mukai Playlist.csproj" -c Release -o ./dist

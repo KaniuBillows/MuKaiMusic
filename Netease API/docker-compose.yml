@@ -1,0 +1,15 @@
+version: '2'
+
+services: 
+    ne-api:
+        image: ne-api:latest
+        build: ./
+        ports: 
+            - "2003:2003"
+        networks: 
+            mynet:
+                 ipv4_address: 172.18.0.7
+        container_name: "ne-api"
+networks: 
+    mynet:
+        external: true

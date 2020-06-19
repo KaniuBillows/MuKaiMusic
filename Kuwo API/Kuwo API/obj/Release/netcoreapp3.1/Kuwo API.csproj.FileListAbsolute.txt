@@ -1,0 +1,27 @@
+D:\Programs\Kuwo API\Kuwo API\bin\Release\netcoreapp3.1\appsettings.Development.json
+D:\Programs\Kuwo API\Kuwo API\bin\Release\netcoreapp3.1\appsettings.json
+D:\Programs\Kuwo API\Kuwo API\bin\Release\netcoreapp3.1\Properties\launchSettings.json
+D:\Programs\Kuwo API\Kuwo API\bin\Release\netcoreapp3.1\Kuwo API.exe
+D:\Programs\Kuwo API\Kuwo API\bin\Release\netcoreapp3.1\Kuwo API.deps.json
+D:\Programs\Kuwo API\Kuwo API\bin\Release\netcoreapp3.1\Kuwo API.runtimeconfig.json
+D:\Programs\Kuwo API\Kuwo API\bin\Release\netcoreapp3.1\Kuwo API.runtimeconfig.dev.json
+D:\Programs\Kuwo API\Kuwo API\bin\Release\netcoreapp3.1\Kuwo API.dll
+D:\Programs\Kuwo API\Kuwo API\bin\Release\netcoreapp3.1\Kuwo API.pdb
+D:\Programs\Kuwo API\Kuwo API\bin\Release\netcoreapp3.1\DataAbstract.dll
+D:\Programs\Kuwo API\Kuwo API\bin\Release\netcoreapp3.1\DataAbstract.pdb
+D:\Programs\Kuwo API\Kuwo API\obj\Release\netcoreapp3.1\Kuwo API.csprojAssemblyReference.cache
+D:\Programs\Kuwo API\Kuwo API\obj\Release\netcoreapp3.1\Kuwo API.csproj.CoreCompileInputs.cache
+D:\Programs\Kuwo API\Kuwo API\obj\Release\netcoreapp3.1\Kuwo API.MvcApplicationPartsAssemblyInfo.cache
+D:\Programs\Kuwo API\Kuwo API\obj\Release\netcoreapp3.1\Kuwo API.AssemblyInfoInputs.cache
+D:\Programs\Kuwo API\Kuwo API\obj\Release\netcoreapp3.1\Kuwo API.AssemblyInfo.cs
+D:\Programs\Kuwo API\Kuwo API\obj\Release\netcoreapp3.1\Kuwo API.RazorTargetAssemblyInfo.cache
+D:\Programs\Kuwo API\Kuwo API\obj\Release\netcoreapp3.1\Kuwo API.csproj.CopyComplete
+D:\Programs\Kuwo API\Kuwo API\obj\Release\netcoreapp3.1\staticwebassets\Kuwo API.StaticWebAssets.Manifest.cache
+D:\Programs\Kuwo API\Kuwo API\obj\Release\netcoreapp3.1\staticwebassets\Kuwo API.StaticWebAssets.xml
+D:\Programs\Kuwo API\Kuwo API\obj\Release\netcoreapp3.1\Kuwo API.dll
+D:\Programs\Kuwo API\Kuwo API\obj\Release\netcoreapp3.1\Kuwo API.pdb
+D:\Programs\Kuwo API\Kuwo API\obj\Release\netcoreapp3.1\Kuwo API.genruntimeconfig.cache
+D:\Programs\Kuwo API\Kuwo API\bin\Release\netcoreapp3.1\System.Text.Json.dll
+D:\Programs\Kuwo API\Kuwo API\bin\Release\netcoreapp3.1\Consul.dll
+D:\Programs\Kuwo API\Kuwo API\bin\Release\netcoreapp3.1\MongoDB.Bson.dll
+D:\Programs\Kuwo API\Kuwo API\bin\Release\netcoreapp3.1\Newtonsoft.Json.dll

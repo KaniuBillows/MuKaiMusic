@@ -1,0 +1,152 @@
+#search-container {
+    height: 85%;
+    position: relative;
+    padding: 0 16px;
+    display: block;
+}
+
+#spinner {
+    top: 10%;
+    left: 40%;
+    position: absolute;
+}
+
+.result-title {
+    color: rgba(255, 255, 255, 0.6);
+    list-style: none;
+    width: 85%;
+    min-width: 670px;
+    position: relative;
+    margin: 20px auto;
+    height: 30px;
+    display: inline-flex;
+
+    .result-item {
+        min-width: 520px;
+        width: 80%;
+        margin: auto;
+        display: flex;
+    }
+
+    #title-item {
+        color: rgba(255, 255, 255, 0.4);
+        user-select: none;
+    }
+
+    i {
+        display: block;
+        width: 100%;
+        height: 1px;
+        background-color: #fff;
+        opacity: 0.1;
+        position: absolute;
+    }
+}
+
+#title-bar {
+    padding-left: 8%;
+}
+
+#result-container {
+    max-height: 90%;
+    height: 90%;
+    overflow: hidden;
+    user-select: none;
+    position: relative;
+
+    #r-ul {
+        transition-duration: 0.2s;
+        transition-timing-function: ease-out;
+        position: absolute;
+        clear: both;
+        width: 100%;
+    }
+}
+
+.option {
+    width: 10%;
+    margin: 20px 0px 0px 0px;
+    white-space: nowrap;
+
+    mat-icon {
+        margin: 0px 10px;
+        cursor: pointer;
+
+        &:hover {
+            color: rgba(255, 255, 255, 1);
+        }
+    }
+
+}
+
+.result-name {
+    width: 50%;
+    text-align: left;
+    position: relative;
+    overflow: hidden;
+    white-space: nowrap;
+    text-overflow: ellipsis;
+
+    span {
+        line-height: 64px;
+    }
+}
+
+.result-artist {
+    width: 25%;
+    text-align: left;
+    overflow: hidden;
+    white-space: nowrap;
+    text-overflow: ellipsis;
+
+    span {
+        line-height: 64px;
+    }
+}
+
+.result-album {
+    width: 20%;
+    text-align: left;
+    overflow: hidden;
+    white-space: nowrap;
+    text-overflow: ellipsis;
+
+    span {
+        line-height: 64px;
+    }
+}
+
+.result-time {
+    min-width: 40px;
+}
+
+.result-pic {
+    min-width: 60px;
+
+    img {
+        width: 60px;
+        height: 60px;
+        padding-top: 5px;
+        object-fit: cover;
+    }
+}
+
+.scroll {
+    width: 8px;
+    height: 90%;
+    border-radius: 5px;
+    background-color: rgba(255, 255, 255, 0.2);
+    visibility: hidden;
+    right: 5%;
+    position: absolute;
+    top: 5%;
+}
+
+.bar {
+    width: 100%;
+    height: 0px;
+    background-color: rgba(0, 0, 0, 0.5);
+    border-radius: 5px;
+    cursor: pointer;
+    position: absolute;
+}

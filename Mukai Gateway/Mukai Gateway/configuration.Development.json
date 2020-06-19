@@ -1,0 +1,10 @@
+{
+  "GlobalConfiguration": {
+    "BaseUrl": "http://127.0.0.1:9999",
+    "ServiceDiscoveryProvider": {
+      "Host": "172.17.0.2",
+      "Port": 8500,
+      "Type": "Consul"
+    }
+  }
+}

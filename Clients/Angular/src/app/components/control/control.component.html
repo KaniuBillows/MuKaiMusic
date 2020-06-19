@@ -1,0 +1,36 @@
+<div id="control-container">
+    <div id='control'>
+        <div class="control-item" id="control-buttons">
+            <mat-icon (click)='onLastTrackButtonClick()'>skip_previous</mat-icon>
+            <mat-icon *ngIf="playStatus=='pause'||playStatus=='stop'" (click)='playButtonClick()'>play_circle_outline
+            </mat-icon>
+            <mat-icon *ngIf="playStatus=='playing'||playStatus=='loading'" (click)='pauseButtonClick()'>
+                pause_circle_outline
+            </mat-icon>
+            <mat-icon (click)='onNextTrackButtonClick()'>skip_next</mat-icon>
+        </div>
+        <div class="control-item" id="control-seek">
+            <div>
+                <span id='music-title-bottom'>
+                    {{musicInfo.name!=null?musicInfo.name+' - '+musicInfo.artists[0].name:""}}
+                </span>
+                <span id='music-duration'>
+                    {{durationInfo}}
+                </span>
+            </div>
+            <mat-slider #playProgress value='0.1' id='seek-bar' (input)='progressInput($event)'>
+            </mat-slider>
+        </div>
+        <div class="control-item" id='volume' [ngSwitch]='volumeStatus'>
+            <mat-icon class="volumeIcon" *ngSwitchCase="'off'" (click)='reductionClick()'>volume_off</mat-icon>
+            <mat-icon class="volumeIcon" *ngSwitchCase="'mid'" (click)='muteClick()'>volume_down</mat-icon>
+            <mat-icon class="volumeIcon" *ngSwitchCase="'high'" (click)='muteClick()'>volume_up</mat-icon>
+            <mat-slider id='volume-seek-bar' [(value)]='volume' max=100 min=0></mat-slider>
+        </div>
+        <div class="control-item" id="play-mode" [ngSwitch]='mode'>
+            <mat-icon *ngSwitchCase="'single'" (click)="changeMode('random')" title="单曲循环">repeat_one</mat-icon>
+            <mat-icon *ngSwitchCase="'random'" (click)="changeMode('normal')" title="随机播放">shuffle</mat-icon>
+            <mat-icon *ngSwitchCase="'normal'" (click)="changeMode('single')" title="列表循环">repeat</mat-icon>
+        </div>
+    </div>
+</div>

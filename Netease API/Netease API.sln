@@ -1,0 +1,51 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 16
+VisualStudioVersion = 16.0.29920.165
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Netease API", "Netease API\Netease API.csproj", "{875EB9F4-9590-47AD-AC51-FD0C732BCB92}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{37558CC0-82F1-4777-8548-EE0D60C0B18B}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "DataAbstract", "..\KaniuBillows\DataAbstract\DataAbstract.csproj", "{45093CB1-0376-42D3-AD4F-22CD0A505A65}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "NetEaseMusic_API", "NetEaseMusic_API\NetEaseMusic_API.csproj", "{6BD62641-AD55-4BD7-B395-9155143958AE}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "RequestHandler", "RequestHandler\RequestHandler.csproj", "{89896190-B711-48AA-A68E-290C9CF46B2C}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Encrypt", "Encrypt\Encrypt.csproj", "{66EFC895-8F5B-4558-BEB1-7075F5C1DA5A}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{875EB9F4-9590-47AD-AC51-FD0C732BCB92}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{875EB9F4-9590-47AD-AC51-FD0C732BCB92}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{875EB9F4-9590-47AD-AC51-FD0C732BCB92}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{875EB9F4-9590-47AD-AC51-FD0C732BCB92}.Release|Any CPU.Build.0 = Release|Any CPU
+		{45093CB1-0376-42D3-AD4F-22CD0A505A65}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{45093CB1-0376-42D3-AD4F-22CD0A505A65}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{45093CB1-0376-42D3-AD4F-22CD0A505A65}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{45093CB1-0376-42D3-AD4F-22CD0A505A65}.Release|Any CPU.Build.0 = Release|Any CPU
+		{6BD62641-AD55-4BD7-B395-9155143958AE}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{6BD62641-AD55-4BD7-B395-9155143958AE}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{6BD62641-AD55-4BD7-B395-9155143958AE}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{6BD62641-AD55-4BD7-B395-9155143958AE}.Release|Any CPU.Build.0 = Release|Any CPU
+		{89896190-B711-48AA-A68E-290C9CF46B2C}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{89896190-B711-48AA-A68E-290C9CF46B2C}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{89896190-B711-48AA-A68E-290C9CF46B2C}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{89896190-B711-48AA-A68E-290C9CF46B2C}.Release|Any CPU.Build.0 = Release|Any CPU
+		{66EFC895-8F5B-4558-BEB1-7075F5C1DA5A}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{66EFC895-8F5B-4558-BEB1-7075F5C1DA5A}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{66EFC895-8F5B-4558-BEB1-7075F5C1DA5A}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{66EFC895-8F5B-4558-BEB1-7075F5C1DA5A}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {009752EA-13BC-4216-9685-BA4D71371F15}
+	EndGlobalSection
+EndGlobal

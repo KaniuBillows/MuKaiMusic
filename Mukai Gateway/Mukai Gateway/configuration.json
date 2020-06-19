@@ -1,0 +1,74 @@
+{
+  "Routes": [{
+      "DownstreamPathTemplate": "/{url}",
+      "DownstreamScheme": "http",
+      "UpstreamPathTemplate": "/migu/{url}",
+      "UpstreamHttpMethod": ["Get", "Post"],
+      "ServiceName": "Migu API",
+      "UseServiceDiscovery": true,
+      "LoadBanlancerOptions": {
+        "Type": "RoundRobin"
+      },
+      "RequireHttpsMetadata": false
+    },
+    {
+      "DownstreamPathTemplate": "/{url}",
+      "DownstreamScheme": "http",
+      "UpstreamPathTemplate": "/kuwo/{url}",
+      "UpstreamHttpMethod": ["Get", "Post"],
+      "ServiceName": "Kuwo API",
+      "UseServiceDiscovery": true,
+      "LoadBanlancerOptions": {
+        "Type": "RoundRobin"
+      }
+    },
+    {
+      "DownstreamPathTemplate": "/{url}",
+      "DownstreamScheme": "http",
+      "UpstreamPathTemplate": "/ne/{url}",
+      "UpstreamHttpMethod": ["Get", "Post"],
+      "ServiceName": "Netease API",
+      "UseServiceDiscovery": true,
+      "LoadBanlancerOptions": {
+        "Type": "RoundRobin"
+      }
+    },
+    {
+      "DownstreamPathTemplate": "/{url}",
+      "DownstreamScheme": "http",
+      "UpstreamPathTemplate": "/auth/{url}",
+      "UpstreamHttpMethod": ["Get", "Post"],
+      "ServiceName": "Auth Service",
+      "UseServiceDiscovery": true,
+      "LoadBanlancerOptions": {
+        "Type": "RoundRobin"
+      }
+    },
+    {
+      "DownstreamPathTemplate": "/{url}",
+      "DownstreamScheme": "http",
+      "UpstreamPathTemplate": "/account/{url}",
+      "UpstreamHttpMethod": ["Get", "Post"],
+      "ServiceName": "Account Service",
+      "UseServiceDiscovery": true,
+      "LoadBanlancerOptions": {
+        "Type": "RoundRobin"
+      }
+    },
+    {
+      "DownstreamPathTemplate": "/{url}",
+      "DownstreamScheme": "http",
+      "UpstreamPathTemplate": "/playlist/{url}",
+      "UpstreamHttpMethod": ["Get", "Post"],
+      "ServiceName": "Playlist Service",
+      "UseServiceDiscovery": true,
+      "LoadBanlancerOptions": {
+        "Type": "RoundRobin"
+      },
+      "AuthenticationOptions": {
+        "AuthenticationProviderKey": "MIGfMA0GCSqGSIb3DQEBAQUAA4GNADCBiQKBgQDI2a2EJ7m872v0afyoSDJT2o1+SitIeJSWtLJU8/Wz2m7gStexajkeD+Lka6DSTy8gt9UwfgVQo6uKjVLG5Ex7PiGOODVqAEghBuS7JzIYU5RvI543nNDAPfnJsas96mSA7L/mD7RTE2drj6hf3oZjJpMPZUQI/B1Qjb5H3K3PNwIDAQAB",
+        "AllowedScopes": []
+      }
+    }
+  ]
+}

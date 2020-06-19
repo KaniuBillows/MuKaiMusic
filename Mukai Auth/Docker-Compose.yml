@@ -1,0 +1,15 @@
+﻿version: '2'
+
+services: 
+    mukai-auth:
+        image: mukai-auth:latest
+        build: ./
+        ports: 
+            - "3000:2008"
+        networks: 
+            mynet:
+                 ipv4_address: 172.18.0.6
+        container_name: "mukai-auth"
+networks: 
+    mynet:
+        external: true

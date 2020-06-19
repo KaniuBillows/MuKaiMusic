@@ -1,0 +1,101 @@
+$control-button-color: rgba(225, 225, 225, .8);
+
+#github_icon {
+  cursor: pointer;
+  border-bottom: 0;
+  position: fixed;
+  right: 0;
+  text-decoration: none;
+  top: 0;
+  z-index: 4;
+
+  &:hover .octo-arm {
+    animation: shake .56s ease-in-out;
+  }
+
+
+  svg {
+    color: #fff;
+    height: 80px;
+    width: 80px;
+  }
+}
+
+@keyframes shake {
+
+  0%,
+  to {
+    transform: rotate(0)
+  }
+
+  20%,
+  60% {
+    transform: rotate(-25deg)
+  }
+
+  40%,
+  80% {
+    transform: rotate(10deg)
+  }
+}
+
+#contents-container {
+  height: 100%;
+  margin: 0px 15.638889%;
+  position: relative;
+  z-index: 3;
+}
+
+
+#contents {
+  position: relative;
+  top: 15%;
+  bottom: 18%;
+  min-height: 328px;
+  cursor: default;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+#music-info {
+  margin-left: auto;
+  width: 18%;
+  position: relative;
+  min-width: 180px;
+  max-width: 240px;
+}
+
+#playlist {
+  margin-left: auto;
+}
+
+#back-board {
+  display: flex;
+  position: absolute;
+  width: 100%;
+  z-index: -1;
+  height: 100%;
+  object-fit: cover;
+  filter: blur(10px);
+  transform: scale(1.1);
+}
+
+#back-board-mask {
+  position: absolute;
+  
+  background-color: rgba(0, 0, 0, .5);
+  z-index: 2;
+  width: 100%;
+  height: 100%;
+  overflow: hidden;
+}
+
+#app-logo {
+  position: absolute;
+  height: 7%;
+  max-height: 75px;
+  top: 5%;
+  left: 5%;
+  z-index: 3;
+}

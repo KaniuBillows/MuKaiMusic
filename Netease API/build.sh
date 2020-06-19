@@ -1,0 +1,1 @@
+dotnet publish "Netease API/Netease API.csproj" -c Release -o ./dist

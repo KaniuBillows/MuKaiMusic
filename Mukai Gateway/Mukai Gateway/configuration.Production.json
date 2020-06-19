@@ -1,0 +1,10 @@
+{
+  "GlobalConfiguration": {
+    "BaseUrl": "http://api.kaniu.pro",
+    "ServiceDiscoveryProvider": {
+      "Host": "172.18.0.2",
+      "Port": 8500,
+      "Type": "Consul"
+    }
+  }
+}

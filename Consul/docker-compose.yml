@@ -1,0 +1,24 @@
+version: '2'
+
+services: 
+    consul1:
+        image: consul:latest
+        ports: 
+            - "8500:8500"
+        networks: 
+            mynet:
+                 ipv4_address: 172.18.0.2
+        command: "agent -server -ui -bootstrap -node=1 -client='0.0.0.0'"
+        container_name: "consul_server_1"
+    
+    consul2:
+        image: consul:latest
+        networks: 
+            mynet:
+                 ipv4_address: 172.18.0.3
+        command: "agent -client -node=2 -join='172.18.0.2'  -client='0.0.0.0'"
+        container_name: "consul_server_2"
+
+networks: 
+    mynet:
+        external: true

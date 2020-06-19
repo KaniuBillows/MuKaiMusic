@@ -1,0 +1,15 @@
+version: '2'
+
+services: 
+    kuwo-api:
+        image: kuwo-api:latest
+        build: ./
+        ports: 
+            - "2002:2002"
+        networks: 
+            mynet:
+                 ipv4_address: 172.18.0.9
+        container_name: "kuwo-api"
+networks: 
+    mynet:
+        external: true

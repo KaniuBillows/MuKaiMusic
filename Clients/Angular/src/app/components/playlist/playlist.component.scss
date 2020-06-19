@@ -1,0 +1,182 @@
+$control-button-color: rgba(225, 225, 225, .8);
+
+#playlist-container {
+    min-width: 760px;
+    position: relative;
+    color: rgba(255, 255, 255, 0.7);
+    height: 520px;
+    overflow: hidden;
+    user-select: none
+}
+
+#playlist-box {
+    position: absolute;
+    margin: auto;
+    min-width: 600px;
+    width: 100%;
+    height: 85%;
+    color: $control-button-color;
+    user-select: none;
+    transition-property: -webkit-transform;
+    overflow: hidden;
+
+    #ul {
+        transition-duration: 0.2s;
+        transition-timing-function: ease-in-out;
+        margin-top: 0px;
+        clear: both;
+        width: 100%;
+        position: absolute;
+    }
+}
+
+
+.playlist-number {
+    position: absolute;
+    line-height: 30px;
+    display: inline-block;
+    vertical-align: top;
+    font-size: 14px;
+    left: 20px;
+}
+
+
+.playlist-options {
+    color: $control-button-color;
+    position: absolute;
+    cursor: pointer;
+    color: rgba(225, 225, 225, 0.8);
+    opacity: 0;
+    width: 110px;
+    margin-left: 30px;
+    right: 0px;
+    bottom: -2px;
+
+    .click_button {
+        font-size: 27px;
+        margin-right: 10px;
+
+        &:hover {
+            color: #fff;
+        }
+
+
+    }
+}
+
+.playlist-item {
+    clear: both;
+    overflow: hidden;
+    height: 30px;
+    min-width: 575px;
+    width: 85%;
+    margin: auto;
+    display: flex;
+}
+
+.playlist-name {
+    margin: auto 0px;
+    width: 60%;
+    text-align: left;
+    position: relative;
+    overflow: hidden;
+    white-space: nowrap;
+    height: 100%;
+    text-overflow: ellipsis;
+
+    .item-name {
+        max-width: calc(100% - 110px);
+        position: relative;
+        overflow: hidden;
+        white-space: nowrap;
+        text-overflow: ellipsis;
+        height: 100%;
+
+        span {
+            line-height: 30px;
+        }
+    }
+}
+
+.playlist-album {
+    min-width: 40px;
+    width: 30%;
+    margin: auto 10px;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    text-align: center;
+
+    span {
+        line-height: 30px;
+    }
+}
+
+.playlist-artist {
+    margin: auto 0px;
+    width: 30%;
+    text-align: left;
+    overflow: hidden;
+    white-space: nowrap;
+    text-overflow: ellipsis;
+
+    span {
+        line-height: 30px;
+    }
+
+    :hover {
+        cursor: pointer;
+        color: #fff;
+    }
+}
+
+.playlist-title {
+    color: rgba(255, 255, 255, 0.6);
+    list-style: none;
+    width: 95%;
+    min-width: 670px;
+    position: relative;
+    margin: 0px 0% 10px 5%;
+    height: 30px;
+
+
+    &:hover {
+        .playlist-item {
+            .playlist-name {
+                .playlist-options {
+                    opacity: 1;
+                }
+            }
+        }
+    }
+
+
+    i {
+        display: block;
+        width: 100%;
+        height: 1px;
+        background-color: #fff;
+        opacity: .02;
+    }
+}
+
+.scroll {
+    width: 5px;
+    height: 80%;
+    border-radius: 5px;
+    background-color: rgba(255, 255, 255, 0.4);
+    visibility: hidden;
+    right: 0;
+    position: absolute;
+    bottom: 10%;
+}
+
+.bar {
+    width: 100%;
+    height: 0px;
+    background-color: rgba(0, 0, 0, 0.7);
+
+    border-radius: 5px;
+    cursor: pointer;
+    position: absolute;
+}

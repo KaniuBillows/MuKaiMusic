@@ -1,0 +1,69 @@
+#recommend-playlist {
+    display: flex;
+    flex-flow: row wrap;
+    align-content: flex-start;
+    position: relative;
+}
+
+#playlist-title {
+    position: absolute;
+    color: white;
+    left: 1%;
+    top: 3%;
+}
+
+.playlist-item {
+    box-sizing: border-box;
+    flex: 0 0 17%;
+    margin-top: 55px;
+    margin-left: 10px;
+    margin-right: 10px;
+    cursor: pointer;
+    position: relative;
+
+    &:hover {
+        .playlist-option {
+            opacity: 1;
+        }
+
+        img {
+            filter: brightness(0.5);
+            transform: translateY(-10px);
+        }
+    }
+
+    img {
+        transition-duration: 0.2s;
+        transition-timing-function: ease-in-out;
+        width: 90%;
+
+    }
+
+    span {
+        display: flow-root;
+        color: rgba(255, 255, 255, 0.8);
+
+        &:hover {
+            color: #2196f3;
+        }
+    }
+}
+
+.playlist-option {
+    transition-timing-function: ease-in-out;
+    transition-duration: 0.3s;
+    opacity: 0;
+    position: absolute;
+    margin: auto;
+    left: 0;
+    right: 0;
+    top: 25%;
+    color: rgba(255, 255, 255, 0.8);
+    z-index: 10;
+
+    mat-icon {
+        font-size: 4rem;
+        height: 100%;
+        width: 100%;
+    }
+}

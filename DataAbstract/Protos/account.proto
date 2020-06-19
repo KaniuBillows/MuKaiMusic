@@ -1,0 +1,85 @@
+﻿syntax = "proto3";
+
+option csharp_namespace = "MuKai_Account";
+
+
+package account;
+
+service AccountService{
+    rpc Login (LoginRequest) returns (LoginReply);
+    rpc Register (RegisterRequest) returns (RegisterReply);
+    rpc ValidPhoneNumber (ValidRequest) returns (ValidReply);
+    rpc ValidUserName (ValidRequest) returns (ValidReply);
+    rpc ValidEmail (ValidRequest) returns (ValidReply);
+    rpc ChangePassword (ChangePasswordRequest) returns (ChangePasswordReply);
+    rpc GetUserInfo (UserInfoRequest) returns (UserInfoReply);
+    rpc UpdateAvator (UpdateAvatorRequest) returns (UpdateAvatorReply);
+    rpc UpdateUserInfo (UpdateUserInfoRequest) returns (UpateUserInfoReply);
+}
+message UserInfoRequest{
+    int64 id =1;
+}
+message UserInfoReply{
+    UserInfo userInfo=1;
+    string message =2;
+}
+message ValidRequest{
+    string message=1;
+}
+message ValidReply{
+    bool success=1;
+}
+message ChangePasswordRequest{
+    int64 id=1;
+    string oldPassword=2;
+    string newPassword=3;
+}
+message ChangePasswordReply{
+    string message=1;
+    bool success=2;
+}
+message LoginRequest {
+    string userName = 1;
+    string passWord = 2;
+}
+message LoginReply{
+    string message = 1;
+    int64 id=2;
+    bool success = 3;
+}
+message UserInfo{
+    int64 id =1;
+    string nickName =2;
+    string userName = 3;
+    string avatarUrl = 4;
+    string email = 5;
+    string phoneNumber=6;
+}
+message RegisterRequest{
+    string userName = 1;
+    string passWord = 2;
+    string avatarUrl = 3;
+    string nickName = 4;
+    string phoneNumber = 5;
+    string email = 6;
+}
+message RegisterReply{
+    string message =1;
+    bool success =2;
+}
+message UpdateAvatorRequest{
+    int64  Id=1;
+    string newUrl=2;
+}
+message UpdateAvatorReply{
+   bool success=1;
+}
+message UpdateUserInfoRequest{
+    int64 id=1;
+    string nickName=2;
+}
+message UpateUserInfoReply{
+   bool success =1;
+   string message =2;
+}
+
