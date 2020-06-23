@@ -191,8 +191,10 @@ export class PlayerService {
       this.player.pause();
       this._playlist.splice(index, 1);
       if (this._playlist.length == 0) return;
-      if (index == this.playlist.length - 1) this.currentMusic = this.playlist[0];
-      this.currentMusic = this.playlist[index];
+      if (index == this.playlist.length - 1)
+        this.currentMusic = this.playlist[0];
+      else
+        this.currentMusic = this.playlist[index];
       if (this._status == 'playing')
         this.start(this.currentMusic);
       this.playlistChange.emit();

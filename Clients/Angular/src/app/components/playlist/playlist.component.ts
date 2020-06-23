@@ -181,18 +181,14 @@ export class PlaylistComponent implements OnInit {
    */
   public clickDownload(index: number) {
     let item = this.playlist[index];
-    if (item.url) {
-      this.musicNet.downloadFile(item.url, item.name + " - " + item.artists[0].name);
-    } else {
-      this.musicNet.getUrl(item).subscribe((res: Result<string>) => {
-        if (res.content == null) {
-          this.snackBar.openFromComponent(SnackBarComponent, { duration: 2500, data: "这居然不让下载，试试其他的吧!" });
-          this.player.deleteFromPlaylist(index);
-          return;
-        }
-        this.musicNet.downloadFile(res.content, item.name + " - " + item.artists[0].name);
-      });
-    }
+    this.musicNet.getUrl(item).subscribe((res: Result<string>) => {
+      if (res.content == null) {
+        this.snackBar.openFromComponent(SnackBarComponent, { duration: 2500, data: "这居然不让下载，试试其他的吧!" });
+        this.player.deleteFromPlaylist(index);
+        return;
+      }
+      this.musicNet.downloadFile(res.content, item.name + " - " + item.artists[0].name);
+    });
   }
 
   /**
