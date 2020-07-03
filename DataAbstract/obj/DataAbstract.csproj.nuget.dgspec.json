@@ -39,6 +39,10 @@
       "frameworks": {
         "netcoreapp3.1": {
           "dependencies": {
+            "Chloe": {
+              "target": "Package",
+              "version": "[4.7.0, )"
+            },
             "MongoDB.Bson": {
               "target": "Package",
               "version": "[2.10.4, )"

@@ -1,0 +1,15 @@
+version: "2"
+
+services:
+  mukai-account:
+    image: mukai-account:latest
+    build: ./
+    ports:
+      - "2011:2011"
+    networks: 
+      - mynet
+        # ipv4_address: 172.18.0.12
+    container_name: "mukai-account"
+networks:
+  mynet:
+    external: true

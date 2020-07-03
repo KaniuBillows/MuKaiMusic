@@ -13,6 +13,6 @@ D:\Programs\Mukai Music\DataAbstract\bin\Debug\netcoreapp3.1\DataAbstract.pdb
 D:\Programs\Mukai Music\DataAbstract\obj\Debug\netcoreapp3.1\DataAbstract.csprojAssemblyReference.cache
 D:\Programs\Mukai Music\DataAbstract\obj\Debug\netcoreapp3.1\DataAbstract.AssemblyInfoInputs.cache
 D:\Programs\Mukai Music\DataAbstract\obj\Debug\netcoreapp3.1\DataAbstract.AssemblyInfo.cs
-D:\Programs\Mukai Music\DataAbstract\obj\Debug\netcoreapp3.1\DataAbstract.csproj.CoreCompileInputs.cache
 D:\Programs\Mukai Music\DataAbstract\obj\Debug\netcoreapp3.1\DataAbstract.dll
 D:\Programs\Mukai Music\DataAbstract\obj\Debug\netcoreapp3.1\DataAbstract.pdb
+D:\Programs\Mukai Music\DataAbstract\obj\Debug\netcoreapp3.1\DataAbstract.csproj.CoreCompileInputs.cache

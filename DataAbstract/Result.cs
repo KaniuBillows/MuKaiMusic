@@ -56,6 +56,11 @@ namespace DataAbstract
             return new Result(null, 500, message);
         }
 
+        public new static Result FailResult()
+        {
+            return new Result(null, 500, "服务器异常");
+        }
+
         public new static Result FailResult(string message, int code)
         {
             return new Result(null, code, message);

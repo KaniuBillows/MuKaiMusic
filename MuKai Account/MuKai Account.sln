@@ -1,0 +1,41 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 16
+VisualStudioVersion = 16.0.29926.136
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "MuKai Account", "MuKai Account\MuKai Account.csproj", "{92E1C81C-C9C6-49EF-9E46-BFF45949A8B3}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "DataAbstract", "..\DataAbstract\DataAbstract.csproj", "{9B6AA1E9-E8EF-4C4E-BED1-75908EE10FA1}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Debug|x64 = Debug|x64
+		Release|Any CPU = Release|Any CPU
+		Release|x64 = Release|x64
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{92E1C81C-C9C6-49EF-9E46-BFF45949A8B3}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{92E1C81C-C9C6-49EF-9E46-BFF45949A8B3}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{92E1C81C-C9C6-49EF-9E46-BFF45949A8B3}.Debug|x64.ActiveCfg = Debug|Any CPU
+		{92E1C81C-C9C6-49EF-9E46-BFF45949A8B3}.Debug|x64.Build.0 = Debug|Any CPU
+		{92E1C81C-C9C6-49EF-9E46-BFF45949A8B3}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{92E1C81C-C9C6-49EF-9E46-BFF45949A8B3}.Release|Any CPU.Build.0 = Release|Any CPU
+		{92E1C81C-C9C6-49EF-9E46-BFF45949A8B3}.Release|x64.ActiveCfg = Release|Any CPU
+		{92E1C81C-C9C6-49EF-9E46-BFF45949A8B3}.Release|x64.Build.0 = Release|Any CPU
+		{9B6AA1E9-E8EF-4C4E-BED1-75908EE10FA1}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{9B6AA1E9-E8EF-4C4E-BED1-75908EE10FA1}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{9B6AA1E9-E8EF-4C4E-BED1-75908EE10FA1}.Debug|x64.ActiveCfg = Debug|x64
+		{9B6AA1E9-E8EF-4C4E-BED1-75908EE10FA1}.Debug|x64.Build.0 = Debug|x64
+		{9B6AA1E9-E8EF-4C4E-BED1-75908EE10FA1}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{9B6AA1E9-E8EF-4C4E-BED1-75908EE10FA1}.Release|Any CPU.Build.0 = Release|Any CPU
+		{9B6AA1E9-E8EF-4C4E-BED1-75908EE10FA1}.Release|x64.ActiveCfg = Release|x64
+		{9B6AA1E9-E8EF-4C4E-BED1-75908EE10FA1}.Release|x64.Build.0 = Release|x64
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {43A9C812-1DC4-45D9-B784-830D9C719C8F}
+	EndGlobalSection
+EndGlobal

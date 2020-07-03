@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 D:\Programs\Mukai Music\DataAbstract\bin\Release\netcoreapp3.1\DataAbstract.deps.json
 D:\Programs\Mukai Music\DataAbstract\bin\Release\netcoreapp3.1\DataAbstract.dll
 D:\Programs\Mukai Music\DataAbstract\bin\Release\netcoreapp3.1\DataAbstract.pdb
@@ -7,3 +8,14 @@ D:\Programs\Mukai Music\DataAbstract\obj\Release\netcoreapp3.1\DataAbstract.Asse
 D:\Programs\Mukai Music\DataAbstract\obj\Release\netcoreapp3.1\DataAbstract.csproj.CoreCompileInputs.cache
 D:\Programs\Mukai Music\DataAbstract\obj\Release\netcoreapp3.1\DataAbstract.dll
 D:\Programs\Mukai Music\DataAbstract\obj\Release\netcoreapp3.1\DataAbstract.pdb
+=======
+/home/Mukai Music/DataAbstract/bin/Release/netcoreapp3.1/DataAbstract.deps.json
+/home/Mukai Music/DataAbstract/bin/Release/netcoreapp3.1/DataAbstract.dll
+/home/Mukai Music/DataAbstract/bin/Release/netcoreapp3.1/DataAbstract.pdb
+/home/Mukai Music/DataAbstract/obj/Release/netcoreapp3.1/DataAbstract.csprojAssemblyReference.cache
+/home/Mukai Music/DataAbstract/obj/Release/netcoreapp3.1/DataAbstract.csproj.CoreCompileInputs.cache
+/home/Mukai Music/DataAbstract/obj/Release/netcoreapp3.1/DataAbstract.AssemblyInfoInputs.cache
+/home/Mukai Music/DataAbstract/obj/Release/netcoreapp3.1/DataAbstract.AssemblyInfo.cs
+/home/Mukai Music/DataAbstract/obj/Release/netcoreapp3.1/DataAbstract.dll
+/home/Mukai Music/DataAbstract/obj/Release/netcoreapp3.1/DataAbstract.pdb
+>>>>>>> 3f93bf75338c5a7675f6ccb7acf19eeea395a8dc
