@@ -38,14 +38,15 @@ https://music.kaniu.pro
 ... 用户歌单功能做了API，客户端还没来得及做，先不放出来了，后面再更新吧
 
 # 如何部署（如果部署遇到问题，可以试试联系我，或许咱能帮你呢）
-0. 一个Docker，一个RDS（验证用），一个MongoDB（自定义歌单用）
+0. 一个Docker，一个RDS（账户用），一个MongoDB（自定义歌单用）
 1. 配置Docker网络，新建名为“mynet”的network，并将其设置为172.18.0.0/16（当然你完全可以选择设置其他网段，但是你得更改所有项目的相关配置文件建议你还是照做）
 2. 通过Consul路径下的docker-compose.yml，启动Consul，默认包含一个Server和Client。当然，你可以修改它。
 3. 在保证Consul已经Ok的情况下，其他的服务你可以以任意顺序启动（docker-compose.yml）。
 4. 如果你在服务文件夹里发现了build.cmd,或者build.sh，那么麻烦在用docker-compose之前，先运行它。（因为这服务需要DataAbstarct中定义的数据结构，但是DataAbstract并不在Docker上下文中，所以我们直接构建应用程序，并复制到Docker镜像中）
 5. Mukai Auth，需要一个关系型数据库(我是postgresql)(你可以在它的配置文件中设置对应的连接字符串（appsettings.{Environment}.json）然后用对应的EF Core工具进行迁移，记得修改Startup.cs)。
 6. Mukai Playlist需要一个MongoDB,需要在appsettings.{Environment}.json中进行配置。
-7. Angular客户端，你需要修改Environment.ts中的BaseURL,并指向你的Ocelot网关地址。
+7. Mukai Account 是账户服务，对用户注册，用户信息存储等服务。用户头像默认实现依靠的阿里云Oss，你可以自己实现IFileService接口，存储在数据库或是文件系统都可以。
+8. Angular客户端，你需要修改Environment.ts中的BaseURL,并指向你的Ocelot网关地址。
 
 ## 部署步骤写的很详细，目的是帮助你更加熟悉它。你或许也可以试试用一个docker-compose.yml搞定所有。
 
