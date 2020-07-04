@@ -10,6 +10,7 @@ import { request } from './util/request';
 import * as StringHelper from './util/StringHelper';
 import SongUrlSaver from './util/SongUrl';
 import consul = require('consul');
+import dns = require('dns');
 const uuid = require('node-uuid');
 const app = express();
 const UrlSaver = new SongUrlSaver();
@@ -80,17 +81,26 @@ Consul.agent.service.deregister(
     if (err) throw err;
   }
 );
+let hostname = require("os").hostname();
+dns.lookup(hostname, {
+  family: 4
+}, (err, address) => {
+  if (err) {
+    console.error(err.message);
+  } else {
+    Consul.agent.service.register({
+      name: "Migu API", address: address, port: 3500, id: id,
+      check: {
+        http: `http://${address}:3500/health`, interval: '10s', timeout: '5s',
+        deregisterCriticalServiceAfter: '60s'
+      }
+    }, function (err, result) {
+      if (err) { console.error(err); return; }
+      console.log("MiguAPI" + ' 注册成功！');
+    });
+  }
+});
 
-  Consul.agent.service.register({
-    name: "Migu API", address: '172.18.0.8', port: 3500, id: id,
-    check: {
-      http: 'http://172.18.0.8:3500/health', interval: '10s', timeout: '5s',
-      deregisterCriticalServiceAfter: '60s'
-    }
-  }, function (err, result) {
-    if (err) { console.error(err); }
-    console.log("MiguAPI" + ' 注册成功！');
-  });
 // error handler
 app.use(function (err, req, res, next) {
   // set locals, only providing error in development
