@@ -1,6 +1,6 @@
 <img id='album-pic' [src]='this.picUrl' onerror="this.src='../../../assets/img/music_white.jpg'" />
 <div id='lyric-box'>
-    <div id='lyrics' #lyrics>
+    <div id='lyrics'>
         <p [id]='"par-"+i' [class]='currentLrcIndex == i? themeClass :"lrc"'
             *ngFor='let lrc of lyric_paras; let i = index'> {{lrc.text}} </p>
     </div>

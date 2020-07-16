@@ -40,7 +40,8 @@ $control-button-color: rgba(225, 225, 225, .8);
 }
 
 #contents-container {
-  height: 100%;
+  height: 90%;
+  top: 15%;
   margin: 0px 15.638889%;
   position: relative;
   z-index: 3;
@@ -49,13 +50,14 @@ $control-button-color: rgba(225, 225, 225, .8);
 
 #contents {
   position: relative;
-  top: 15%;
-  bottom: 18%;
   min-height: 328px;
   cursor: default;
   display: flex;
   justify-content: center;
   align-items: center;
+  height: 75%;
+  top: 15%;
+  max-height: 520px;
 }
 
 #music-info {
@@ -68,6 +70,7 @@ $control-button-color: rgba(225, 225, 225, .8);
 
 #playlist {
   margin-left: auto;
+  height: 100%;
 }
 
 #back-board {
@@ -83,7 +86,7 @@ $control-button-color: rgba(225, 225, 225, .8);
 
 #back-board-mask {
   position: absolute;
-  
+
   background-color: rgba(0, 0, 0, .5);
   z-index: 2;
   width: 100%;
@@ -98,4 +101,8 @@ $control-button-color: rgba(225, 225, 225, .8);
   top: 5%;
   left: 5%;
   z-index: 3;
+}
+
+app-control {
+  position: relative;
 }

@@ -5,7 +5,10 @@ import { PlayerService } from 'src/app/services/player/player.service';
 import { Result } from 'src/app/entity/baseResult';
 import { UrlInfo } from 'src/app/entity/music';
 import { MusicService } from 'src/app/services/network/music/music.service';
-import { from } from 'rxjs';
+import BScroll from '@better-scroll/core';
+import ScrollBar from '@better-scroll/scroll-bar'
+import MouseWheel from '@better-scroll/mouse-wheel';
+import ObserveDOM from '@better-scroll/observe-dom';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { SnackBarComponent } from '../snackBar/snackBar.component';
 
@@ -15,118 +18,45 @@ import { SnackBarComponent } from '../snackBar/snackBar.component';
   styleUrls: ['./playlist.component.scss']
 })
 export class PlaylistComponent implements OnInit {
-
+  private scroll: BScroll;
   constructor(
     public theme: ThemeService,
     private musicNet: MusicService,
     public player: PlayerService,
     public snackBar: MatSnackBar
   ) {
-    //当播放列表元素改变时,更新scroll bar状态
-    this.player.playlistChange.subscribe(() => {
-      window.setInterval(() => {
-        this.initScroll();
-      }, 100);
-    });
   }
   ngOnInit() {
-    this.scrollBar();
+    let wrapper = document.getElementById('playlist-box');
+    BScroll.use(MouseWheel);
+    BScroll.use(ScrollBar);
+    BScroll.use(ObserveDOM);
+    this.scroll = new BScroll(wrapper, {
+      scrollY: true,
+      click: true,
+      mouseWheel: {
+        speed: 20,
+        invert: false,
+        easeTime: 300
+      },
+      scrollbar: true,
+      probeType: 3,
+      observeDOM: true
+    });
+    let scrollbar = document.querySelector<HTMLDivElement>(".bscroll-indicator");
+    scrollbar.style.border = 'none';
 
-  }
-  //#region 滚动条相关
-
-  private scrollBar() {
-    let playlist_container = document.getElementById("playlist-box") as HTMLDivElement;
-    let scroll = document.getElementById("scroll") as HTMLDivElement;
-    let bar = document.getElementById("bar") as HTMLDivElement;
-    let ul = document.getElementById("ul") as HTMLDivElement;
-    //记录上一次滚动距离，用于鼠标滚动
-    let oringin = 0;
-    //拖动滚动条 内容滑动
-    bar.onmousedown = function (e: MouseEvent) {
-      //鼠标在滚动条中的位置
-      let spaceY = e.clientY - bar.offsetTop;
-      //2.2鼠标在页面上移动的时候，滚动条的位置
-      document.onmousemove = function (e) {
-        let y = e.clientY - spaceY;//滑动条的举例
-        y = y < 0 ? 0 : y;
-        y = y > scroll.offsetHeight - bar.offsetHeight ? scroll.offsetHeight - bar.offsetHeight : y;
-        // 控制bar不能移除scroll
-        oringin = y;
-        bar.style.top = y + 'px';
-        //3.当拖拽时，内容跟着滚动
-        let offsetY = y * (ul.offsetHeight - playlist_container.offsetHeight) / (scroll.offsetHeight - bar.offsetHeight);
-        ul.style.top = -offsetY + "px";
-      }
-    }
-    document.onmouseup = function () {
-      //移除鼠标移动事件
-      document.onmousemove = null;
-    }
-    //设定是否允许鼠标滚动
-    playlist_container.onmouseenter = (e: MouseEvent) => {
-      this.allowScroll = true;
-    }
-    //设定是否允许鼠标滚动
-    playlist_container.onmouseleave = (e: MouseEvent) => {
-      this.allowScroll = false;
-    }
-    //鼠标滚轮滑动播放列表
-    window.addEventListener('mousewheel', window.onmousewheel = (e: MouseWheelEvent) => {
-      if (this.allowScroll && (!this.contentShow)) {
-        oringin += e.deltaY / 10;
-        //防止超出范围
-        oringin = oringin < 0 ? 0 : oringin;
-        oringin = oringin > scroll.clientHeight - bar.clientHeight ? scroll.clientHeight - bar.clientHeight : oringin;
-        var barY = oringin;
-        bar.style.top = barY + 'px';
-        let offsetY = barY * (ul.offsetHeight - playlist_container.offsetHeight) / (scroll.offsetHeight - bar.offsetHeight);
-        ul.style.top = -offsetY + "px";
-      }
-    })
-
-    //播放歌曲切换时，自动进行滑动
     this.player.currentMusicChange.subscribe(() => {
-      let barY = scroll.offsetHeight * (this.currentPlayIndex - 9) / this.playlist.length;
-      barY = barY < 0 ? 0 : barY;
-      barY = barY > scroll.clientHeight - bar.clientHeight ? scroll.clientHeight - bar.clientHeight : barY;
-      bar.style.top = barY + 'px';
-      let offsetY = barY * (ul.offsetHeight - playlist_container.offsetHeight) / (scroll.offsetHeight - bar.offsetHeight);
-      ul.style.top = -offsetY + "px";
+      let scrollElm = document.getElementById("playlist-item-" + this.player.currentMusicIndex);
+      this.scroll.scroller.scrollToElement(scrollElm, 200, false, true);
     });
   }
 
-  /**
-   * 当鼠标在播放列表范围内时，允许鼠标滚动
-   */
-  private allowScroll: boolean = false;
 
   private get contentShow(): boolean {
     return location.href.includes('/content/');
   }
-  /**
-   * scroll bar相关
-   * 由播放列表中元素数量决定
-   * 控制滚动条长度以及是否显示滚动条
-   */
-  private initScroll() {
-    let playlist_container = document.getElementById("playlist-box") as HTMLDivElement;
-    let scroll = document.getElementById("scroll") as HTMLDivElement;
-    let bar = document.getElementById("bar") as HTMLDivElement;
-    let ul = document.getElementById("ul") as HTMLDivElement;
-    let barHeight = 0;
-    let visible = "hidden";
-    this.allowScroll = false;
-    if (this.playlist.length > 10) {
-      barHeight = playlist_container.offsetHeight * scroll.offsetHeight / ul.offsetHeight;
-      visible = "visible";
-      this.allowScroll = true;
-    }
-    bar.style.height = barHeight + "px";
-    scroll.style.visibility = visible;
-  }
 
-  //#endregion
 
 
   public get currentPlayIndex() {

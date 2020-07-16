@@ -4,6 +4,8 @@ import { MusicService } from 'src/app/services/network/music/music.service';
 import { ThemeService } from 'src/app/services/theme/theme.service';
 import { Lyric, Song } from 'src/app/entity/music';
 import { Result } from 'src/app/entity/baseResult';
+import BScroll from '@better-scroll/core';
+import ObserveDOM from '@better-scroll/observe-dom';
 
 @Component({
   selector: 'app-music-info',
@@ -11,8 +13,7 @@ import { Result } from 'src/app/entity/baseResult';
   styleUrls: ['./music-info.component.scss']
 })
 export class MusicInfoComponent implements OnInit {
-  @ViewChild('lyrics', { static: true })
-  lyrics: ElementRef;
+  private scroll: BScroll;
   constructor(public player: PlayerService,
     public musicNet: MusicService,
     private theme: ThemeService) {
@@ -25,6 +26,15 @@ export class MusicInfoComponent implements OnInit {
   ngOnInit() {
     this.player.onCurrentTimeChange.subscribe((time: number) =>
       this.onTimeChange(time));
+    let wrapper = document.getElementById('lyric-box');
+    BScroll.use(ObserveDOM);
+    this.scroll = new BScroll(wrapper, {
+      scrollY: true,
+      click: true,
+      probeType: 3,
+      observeDOM: true
+    });
+
   }
 
   public get themeClass(): string {
@@ -55,12 +65,13 @@ export class MusicInfoComponent implements OnInit {
     * 订阅播放时间改变事件，实现歌词滚动
     */
   private onTimeChange(time: number) {
-    this._currentLrcIndex = this.lyric_paras.findIndex(item => item.time > time) - 1;
-    if (this._currentLrcIndex < 0) return;
-    let element = document.getElementById('par-' + this.currentLrcIndex);
-    if (element) {
-      this.lyrics.nativeElement.style.transform = `translateY(-${element.offsetTop}px)`;
+    let nowIndex = this.findLastIndexOf(this.lyric_paras, item => item.time != null && item.time <= time);
+    if (nowIndex < 0) return;
+    let element = document.getElementById('par-' + nowIndex);
+    if (element && nowIndex > this.currentLrcIndex) {
+      this.scroll.scroller.scrollToElement(element, 200, false, true);
     }
+    this._currentLrcIndex = nowIndex;
   }
 
   /**
@@ -74,17 +85,23 @@ export class MusicInfoComponent implements OnInit {
     return res;
   }
 
-  private getLyric() {
+  private async getLyric() {
     this._lyric_paras = [{ text: "正在加载歌词...", time: 0 }];
-    this.musicNet.getLyric(this.player.currentMusic).subscribe((res: Result<Lyric[]>) => {
-      if (res.code == 200) {
-        this._lyric_paras = res.content;
-      } else {
-        this._lyric_paras = [{ text: "暂无歌词", time: 0 }];
-      }
-    }, (err) => {
+    let lyricRes: Result<Lyric[]> = await this.musicNet.getLyric(this.player.currentMusic).toPromise()
+    if (lyricRes.code == 200) {
+      this._lyric_paras = lyricRes.content;
+    } else {
       this._lyric_paras = [{ text: "暂无歌词", time: 0 }];
-    });
+    }
+    if (this.scroll)
+      this.scroll.refresh();
+  }
 
+  private findLastIndexOf<T>(array: Array<T>, func: (T: T) => boolean): number {
+    for (let i = array.length - 1; i >= 0; i--) {
+      if (func(array[i]))
+        return i;
+    }
+    return -1;
   }
 }

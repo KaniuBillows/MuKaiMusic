@@ -5,6 +5,8 @@ import { Title } from '@angular/platform-browser';
 import { DataSource } from 'src/app/entity/param/musicUrlParam';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { SnackBarComponent } from 'src/app/components/snackBar/snackBar.component';
+
+
 export const CurrentMusicIndex = 'CURRENTMUSICINDEX';
 export const Playlist = 'PLAYLIST';
 export const PlayMode = 'PLAYMODE';
@@ -38,9 +40,9 @@ export class PlayerService {
     this.playlistChange.subscribe(() => {
       localStorage.setItem(Playlist, JSON.stringify(this._playlist));
     });
+    //播放出错的时候，尝试重新获取Url
     this.player.onerror = (ev) => {
-      this.currentMusic.url = null;
-      this.start(this.currentMusic);
+      this.reGetUrlAndPlay();
     };
     let mode: any = localStorage.getItem(PlayMode);
     this.mode = mode != null ? mode : 'normal';
@@ -141,7 +143,8 @@ export class PlayerService {
         song.url = song.url.replace("http://", "https://");
       this.player.src = song.url;
       this.play();
-      this.currentMusic = song;
+      if (this.currentMusic != song)
+        this.currentMusic = song;
     }
     else {
       this.musicNet.getUrl(song).subscribe(res => {
@@ -155,11 +158,32 @@ export class PlayerService {
           res.content = res.content.replace("http://", "https://");
         this.player.src = res.content;
         this.play();
-        this.currentMusic = song;
+        if (this.currentMusic != song)
+          this.currentMusic = song;
       }, err => {
         alert("无法访问服务器");
       });
     }
+  }
+
+  /**
+   * 重新获取CurrentMusic的Url并开始播放
+   */
+  private async reGetUrlAndPlay() {
+    this.musicNet.getUrl(this.currentMusic).subscribe(res => {
+      if (res.content == null) {
+        this.snackBar.openFromComponent(SnackBarComponent, { duration: 2500, data: "这首歌居然不让听了，试试其他的吧" });
+        this.deleteFromPlaylist(this.currentMusicIndex);
+        this.onEnded.emit();
+        return;
+      }
+      if (this.currentMusic.dataSource != DataSource.Migu)
+        res.content = res.content.replace("http://", "https://");
+      this.player.src = res.content;
+      this.play();
+    }, err => {
+      alert("无法访问服务器");
+    });
   }
 
   /**

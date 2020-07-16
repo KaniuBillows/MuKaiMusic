@@ -1,20 +1,20 @@
 $control-button-color: rgba(225, 225, 225, .8);
 
 #playlist-container {
-    min-width: 760px;
+    min-width: 440px;
     position: relative;
     color: rgba(255, 255, 255, 0.7);
-    height: 520px;
+    height: 100%;
     overflow: hidden;
     user-select: none
 }
 
 #playlist-box {
-    position: absolute;
     margin: auto;
-    min-width: 600px;
+    min-width: 520px;
     width: 100%;
-    height: 85%;
+    height: 80%;
+    position: relative;
     color: $control-button-color;
     user-select: none;
     transition-property: -webkit-transform;
@@ -24,7 +24,6 @@ $control-button-color: rgba(225, 225, 225, .8);
         transition-duration: 0.2s;
         transition-timing-function: ease-in-out;
         margin-top: 0px;
-        clear: both;
         width: 100%;
         position: absolute;
     }
@@ -158,25 +157,4 @@ $control-button-color: rgba(225, 225, 225, .8);
         background-color: #fff;
         opacity: .02;
     }
-}
-
-.scroll {
-    width: 5px;
-    height: 80%;
-    border-radius: 5px;
-    background-color: rgba(255, 255, 255, 0.4);
-    visibility: hidden;
-    right: 0;
-    position: absolute;
-    bottom: 10%;
-}
-
-.bar {
-    width: 100%;
-    height: 0px;
-    background-color: rgba(0, 0, 0, 0.7);
-
-    border-radius: 5px;
-    cursor: pointer;
-    position: absolute;
 }

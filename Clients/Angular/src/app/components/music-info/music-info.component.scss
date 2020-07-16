@@ -1,10 +1,13 @@
 $control-button-color: rgba(225, 225, 225, .8);
 
 #music-info {
-    width: 18%;
-    position: relative;
-    min-width: 180px;
+    margin-left: auto;
+    width: 22%;
+    min-width: 150px;
     max-width: 240px;
+    max-height: 400px;
+    min-height: 300px;
+    position: relative;
 }
 
 #album-pic {
@@ -12,8 +15,8 @@ $control-button-color: rgba(225, 225, 225, .8);
     height: 100%;
     max-height: 240px;
     max-width: 240px;
-    min-height: 180px;
-    min-width: 180px;
+    min-height: 150px;
+    min-width: 150px;
     object-fit: cover;
     position: relative;
     display: block;
@@ -22,13 +25,14 @@ $control-button-color: rgba(225, 225, 225, .8);
 
 #lyrics {
     width: 100%;
-    margin-top: 60px;
+    padding-top: 60px;
+    padding-bottom: 60px;
     cursor: -webkit-grab;
-    overflow-y: visible;
-    transition-property: -webkit-transform;
-    transition-duration: 0.4s;
-    transition-timing-function: ease-out;
-    transition-delay: 0s;
+    //overflow-y: visible;
+    // transition-property: -webkit-transform;
+    // transition-duration: 0.4s;
+    // transition-timing-function: ease-out;
+    // transition-delay: 0s;
     font-size: 100%;
     position: absolute;
 }
@@ -36,14 +40,13 @@ $control-button-color: rgba(225, 225, 225, .8);
 #lyric-box {
     position: relative;
     width: 100%;
-    min-height: 220px;
-    max-height: 240px;
+    min-height: 180px;
+    max-height: 220px;
     height: 100%;
     cursor: -webkit-grab;
     overflow-y: hidden;
     text-align: center;
-    user-select: none;
+    //user-select: none;
     color: $control-button-color;
     mask-image: linear-gradient(to bottom, rgba(255, 255, 255, 0) 0, rgba(255, 255, 255, .6) 15%, rgba(255, 255, 255, 1) 25%, rgba(255, 255, 255, 1) 75%, rgba(255, 255, 255, .6) 85%, rgba(255, 255, 255, 0) 100%);
 }
-

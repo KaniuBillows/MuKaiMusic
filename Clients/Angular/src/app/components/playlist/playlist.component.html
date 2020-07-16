@@ -7,8 +7,8 @@
         </div>
     </li>
     <div id='playlist-box'>
-        <div id="ul">
-            <li class="playlist-title" *ngFor='let item of playlist;let i = index'>
+        <div id="ul" class='content'>
+            <li class="playlist-title" [id]="'playlist-item-'+i" *ngFor='let item of playlist;let i = index'>
                 <div class='playlist-number'>
                     {{i+1}}
                 </div>
@@ -33,8 +33,5 @@
                 <i></i>
             </li>
         </div>
-    </div>
-    <div class="scroll" id="scroll">
-        <div class="bar" id="bar"></div>
     </div>
 </div>
