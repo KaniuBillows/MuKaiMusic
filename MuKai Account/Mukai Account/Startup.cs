@@ -27,28 +27,39 @@ namespace Mukai_Account
         // For more information on how to configure your application, visit https://go.microsoft.com/fwlink/?LinkID=398940
         public void ConfigureServices(IServiceCollection services)
         {
-
+            services.AddControllers();
             services.AddScoped<Chloe.IDbContext>((serviceProvider) =>
              new Chloe.PostgreSQL.PostgreSQLContext(
              new PostgreSQLConnectionFactory(Configuration.GetConnectionString("PostgreSQL"))));
-            services.AddSingleton<EncryptAttribute>(serviceProvider =>
-            {
-                return new EncryptAttribute(Configuration);
-            });
-            services.AddControllers();
+
+            services.AddAuthentication()
+           .AddJwtBearer(Configuration["Secret"], option =>
+           {
+               option.Authority = "kaniu.pro";
+               option.Audience = "kaniu.pro";
+               option.RequireHttpsMetadata = false;
+           });
+            services.AddAuthorization();
+
             //阿里云对象存储
             services.AddScoped<IOss, OssClient>(servicesProvider =>
             {
                 return new OssClient(Configuration["OssEndPoint"], Configuration["AccessKeyId"], Configuration["AccessKeySecret"]);
             });
+
             //Consul服务发现
             services.AddSingleton<IConsulClient, ConsulClient>(p => new ConsulClient(consulConfig =>
             {
                 consulConfig.Address = new Uri(Configuration.GetValue<string>("ConsulAddress"));
             }));
             services.AddSingleton<IHostedService, ConsulHostService>();
+
             services.AddScoped<AccountService>();
             services.AddScoped<IFileService, OssFileService>();
+            services.AddSingleton<EncryptAttribute>(serviceProvider =>
+           {
+               return new EncryptAttribute(Configuration);
+           });
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.

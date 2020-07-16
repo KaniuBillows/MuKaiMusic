@@ -6,6 +6,7 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
+using Mukai_Account.Filters;
 using Mukai_Auth.DataContext;
 using Mukai_Auth.Service;
 using MuKai_Auth;
@@ -46,6 +47,10 @@ namespace Mukai_Auth
                 consulConfig.Address = new Uri(Configuration["ConsulAddress"]);
             }));
             services.AddSingleton<TokenProvider>();
+            services.AddSingleton<EncryptAttribute>(serviceProvider =>
+            {
+                return new EncryptAttribute(Configuration);
+            });
             services.AddHttpClient();
         }
 

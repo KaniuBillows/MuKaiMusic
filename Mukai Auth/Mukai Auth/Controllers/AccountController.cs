@@ -11,6 +11,7 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Primitives;
+using Mukai_Account.Filters;
 using Mukai_Auth.DataContext;
 using Mukai_Auth.Models;
 using Mukai_Auth.Service;
@@ -40,6 +41,7 @@ namespace Mukai_Auth.Controllers
         /// <param name="loginInfo"></param>
         /// <returns></returns>
         [HttpPost("login")]
+        [ServiceFilter(typeof(EncryptAttribute))]
         [AllowAnonymous]
         public async Task<IActionResult> Login([FromBody] LoginModel loginInfo)
         {
@@ -50,11 +52,8 @@ namespace Mukai_Auth.Controllers
                 userInfo = await this.accountContext.Users.AsNoTracking().SingleOrDefaultAsync(u => u.Email == loginInfo.LoginName);
             }
             else
-            { //验证登录方式是否为手机号码登录
-                var phoneRegex = new Regex(@"^1(3[0-9]|4[56789]|5[0-9]|6[6]|7[0-9]|8[0-9]|9[189])\d{8}$");
-                userInfo = phoneRegex.IsMatch(loginInfo.LoginName)
-                    ? await this.accountContext.Users.AsNoTracking().SingleOrDefaultAsync(u => u.PhoneNumber == loginInfo.LoginName)
-                    : await this.accountContext.Users.AsNoTracking().SingleOrDefaultAsync(u => u.UserName == loginInfo.LoginName);
+            {
+                userInfo = await this.accountContext.Users.AsNoTracking().SingleOrDefaultAsync(u => u.PhoneNumber == loginInfo.LoginName);
             }
             return ValidPassword(userInfo, loginInfo.PasswordHashed)
                 ? new JsonResult(Result<object>.SuccessReuslt(new
@@ -105,7 +104,6 @@ namespace Mukai_Auth.Controllers
         {
             byte[] buffer = Encoding.UTF8.GetBytes(str);
             byte[] data = SHA1.Create().ComputeHash(buffer);
-
             var sb = new StringBuilder();
             foreach (byte t in data)
             {

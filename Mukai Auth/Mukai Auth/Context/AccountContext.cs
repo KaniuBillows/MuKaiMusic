@@ -18,7 +18,6 @@ namespace Mukai_Auth.DataContext
                 .ToTable("UserInfo").HasIndex(u => new
                 {
                     u.PhoneNumber,
-                    u.UserName,
                     u.Email,
                 }).IsUnique();
         }

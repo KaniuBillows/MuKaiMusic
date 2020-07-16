@@ -1,28 +1,25 @@
 {
   "format": 1,
   "restore": {
-    "D:\\Programs\\Mukai Auth\\Mukai Auth\\Mukai Auth.csproj": {}
+    "/home/Mukai Music/Mukai-Auth/Mukai Auth/Mukai Auth.csproj": {}
   },
   "projects": {
-    "D:\\Programs\\Mukai Auth\\DataAbstract\\DataAbstract.csproj": {
+    "/home/Mukai Music/DataAbstract/DataAbstract.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "D:\\Programs\\Mukai Auth\\DataAbstract\\DataAbstract.csproj",
+        "projectUniqueName": "/home/Mukai Music/DataAbstract/DataAbstract.csproj",
         "projectName": "DataAbstract",
-        "projectPath": "D:\\Programs\\Mukai Auth\\DataAbstract\\DataAbstract.csproj",
-        "packagesPath": "D:\\packages",
-        "outputPath": "D:\\Programs\\Mukai Auth\\DataAbstract\\obj\\",
+        "projectPath": "/home/Mukai Music/DataAbstract/DataAbstract.csproj",
+        "packagesPath": "/root/.nuget/packages/",
+        "outputPath": "/home/Mukai Music/DataAbstract/obj/",
         "projectStyle": "PackageReference",
         "configFilePaths": [
-          "C:\\Users\\10568\\AppData\\Roaming\\NuGet\\NuGet.Config",
-          "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.Offline.config",
-          "C:\\Program Files (x86)\\NuGet\\Config\\NuGet.Config"
+          "/root/.nuget/NuGet/NuGet.Config"
         ],
         "originalTargetFrameworks": [
           "netcoreapp3.1"
         ],
         "sources": {
-          "C:\\Program Files (x86)\\Microsoft SDKs\\NuGetPackages\\": {},
           "https://api.nuget.org/v3/index.json": {}
         },
         "frameworks": {
@@ -39,6 +36,10 @@
       "frameworks": {
         "netcoreapp3.1": {
           "dependencies": {
+            "Chloe": {
+              "target": "Package",
+              "version": "[4.7.0, )"
+            },
             "MongoDB.Bson": {
               "target": "Package",
               "version": "[2.10.4, )"
@@ -62,51 +63,38 @@
           ],
           "assetTargetFallback": true,
           "warn": true,
-          "downloadDependencies": [
-            {
-              "name": "Microsoft.NETCore.App.Ref",
-              "version": "[3.1.0, 3.1.0]"
-            },
-            {
-              "name": "Microsoft.WindowsDesktop.App.Ref",
-              "version": "[3.1.0, 3.1.0]"
-            }
-          ],
           "frameworkReferences": {
             "Microsoft.NETCore.App": {
               "privateAssets": "all"
             }
           },
-          "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\3.1.301\\RuntimeIdentifierGraph.json"
+          "runtimeIdentifierGraphPath": "/usr/share/dotnet/sdk/3.1.200/RuntimeIdentifierGraph.json"
         }
       }
     },
-    "D:\\Programs\\Mukai Auth\\Mukai Auth\\Mukai Auth.csproj": {
+    "/home/Mukai Music/Mukai-Auth/Mukai Auth/Mukai Auth.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "D:\\Programs\\Mukai Auth\\Mukai Auth\\Mukai Auth.csproj",
+        "projectUniqueName": "/home/Mukai Music/Mukai-Auth/Mukai Auth/Mukai Auth.csproj",
         "projectName": "Mukai Auth",
-        "projectPath": "D:\\Programs\\Mukai Auth\\Mukai Auth\\Mukai Auth.csproj",
-        "packagesPath": "D:\\packages",
-        "outputPath": "D:\\Programs\\Mukai Auth\\Mukai Auth\\obj\\",
+        "projectPath": "/home/Mukai Music/Mukai-Auth/Mukai Auth/Mukai Auth.csproj",
+        "packagesPath": "/root/.nuget/packages/",
+        "outputPath": "/home/Mukai Music/Mukai-Auth/Mukai Auth/obj/",
         "projectStyle": "PackageReference",
         "configFilePaths": [
-          "C:\\Users\\10568\\AppData\\Roaming\\NuGet\\NuGet.Config",
-          "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.Offline.config",
-          "C:\\Program Files (x86)\\NuGet\\Config\\NuGet.Config"
+          "/root/.nuget/NuGet/NuGet.Config"
         ],
         "originalTargetFrameworks": [
           "netcoreapp3.1"
         ],
         "sources": {
-          "C:\\Program Files (x86)\\Microsoft SDKs\\NuGetPackages\\": {},
           "https://api.nuget.org/v3/index.json": {}
         },
         "frameworks": {
           "netcoreapp3.1": {
             "projectReferences": {
-              "D:\\Programs\\Mukai Auth\\DataAbstract\\DataAbstract.csproj": {
-                "projectPath": "D:\\Programs\\Mukai Auth\\DataAbstract\\DataAbstract.csproj"
+              "/home/Mukai Music/DataAbstract/DataAbstract.csproj": {
+                "projectPath": "/home/Mukai Music/DataAbstract/DataAbstract.csproj"
               }
             }
           }
@@ -120,6 +108,10 @@
       "frameworks": {
         "netcoreapp3.1": {
           "dependencies": {
+            "BouncyCastle.NetCore": {
+              "target": "Package",
+              "version": "[1.8.6, )"
+            },
             "Consul": {
               "target": "Package",
               "version": "[1.6.1.1, )"
@@ -127,6 +119,10 @@
             "Microsoft.AspNetCore.Authentication.JwtBearer": {
               "target": "Package",
               "version": "[3.1.5, )"
+            },
+            "Microsoft.EntityFrameworkCore.Design": {
+              "target": "Package",
+              "version": "[3.1.6, )"
             },
             "Microsoft.VisualStudio.Azure.Containers.Tools.Targets": {
               "target": "Package",
@@ -147,16 +143,6 @@
           ],
           "assetTargetFallback": true,
           "warn": true,
-          "downloadDependencies": [
-            {
-              "name": "Microsoft.NETCore.App.Ref",
-              "version": "[3.1.0, 3.1.0]"
-            },
-            {
-              "name": "Microsoft.WindowsDesktop.App.Ref",
-              "version": "[3.1.0, 3.1.0]"
-            }
-          ],
           "frameworkReferences": {
             "Microsoft.AspNetCore.App": {
               "privateAssets": "none"
@@ -165,7 +151,7 @@
               "privateAssets": "all"
             }
           },
-          "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\3.1.301\\RuntimeIdentifierGraph.json"
+          "runtimeIdentifierGraphPath": "/usr/share/dotnet/sdk/3.1.200/RuntimeIdentifierGraph.json"
         }
       }
     }
