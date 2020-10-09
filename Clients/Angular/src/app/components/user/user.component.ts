@@ -3,6 +3,7 @@ import { UserInfo } from 'src/app/entity/user';
 import { MatDialog } from '@angular/material/dialog';
 import { LoginComponent } from '../login/login.component';
 import { AccountService } from 'src/app/services/network/account/account.service';
+import { RegisterComponent } from '../register/register.component';
 
 @Component({
   selector: 'app-user',
@@ -43,6 +44,6 @@ export class UserComponent implements OnInit {
   }
 
   public registerClick() {
-
+    this.dialog.open(RegisterComponent);
   }
 }

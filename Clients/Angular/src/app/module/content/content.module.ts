@@ -9,6 +9,7 @@ import { MatExpansionModule } from '@angular/material/expansion';
 import { MatDialogModule } from '@angular/material/dialog';
 import { MatInputModule } from '@angular/material/input';
 import { LoginComponent } from 'src/app/components/login/login.component';
+import { RegisterComponent } from 'src/app/components/register/register.component';
 import { FormsModule } from '@angular/forms';
 import { HTTP_INTERCEPTORS } from '@angular/common/http';
 import { AccountInterceptor } from 'src/app/services/network/accountInterceptor';
@@ -32,6 +33,7 @@ const routes: Routes = [
   declarations: [
     ContentComponent,
     LoginComponent,
+    RegisterComponent,
     UserComponent
   ],
   entryComponents: [

@@ -163,7 +163,7 @@ $orange-theme:mat-light-theme($app-primary, $orange-accent, $app-warn);
 html,
 body {
     width: 100%;
-    height: 100%;
+    height: 100vh;
     overflow: hidden;
 }
 
@@ -191,21 +191,17 @@ body {
         background-color: rgba(225, 225, 225, .8);
     }
 }
+
 .mat-slider-thumb-labe {
     background-color: currentColor;
+}
+
+.mat-slider-thumb {
+    background-color: #2196f3;
 }
 
 #volume-seek-bar:hover {
     .mat-slider-track-background {
         background-color: #fff;
     }
-}
-//设置mat输入框底部边框样式
-.mat-form-field-infix {
-    border-bottom: 1px solid #bfbfbf;
-}
-
-//设置mat输入框的placeholder以及输入文本颜色
-.mat-form-field-label {
-    color: rgba(255, 255, 255, .7);
 }

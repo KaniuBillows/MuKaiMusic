@@ -25,6 +25,12 @@ export class PlaylistComponent implements OnInit {
     public player: PlayerService,
     public snackBar: MatSnackBar
   ) {
+    this.player.currentMusicChange.subscribe(() => {
+      window.setTimeout(() => {
+        let scrollElm = document.getElementById("playlist-item-" + this.player.currentMusicIndex);
+        this.scroll.scroller.scrollToElement(scrollElm, 200, false, true);
+      });
+    });
   }
   ngOnInit() {
     let wrapper = document.getElementById('playlist-box');
@@ -46,10 +52,7 @@ export class PlaylistComponent implements OnInit {
     let scrollbar = document.querySelector<HTMLDivElement>(".bscroll-indicator");
     scrollbar.style.border = 'none';
 
-    this.player.currentMusicChange.subscribe(() => {
-      let scrollElm = document.getElementById("playlist-item-" + this.player.currentMusicIndex);
-      this.scroll.scroller.scrollToElement(scrollElm, 200, false, true);
-    });
+
   }
 
 

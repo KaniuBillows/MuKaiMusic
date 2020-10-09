@@ -43,7 +43,7 @@ export class LoginComponent implements OnInit {
     this.accountService.login(this.user.username, this.user.password).subscribe(async res => {
       if (res.code != 200) {
         this.isLoading = false;
-        this.errorInfo = res.error;
+        this.errorInfo = res.message;
       } else {
         await this.accountService.getUserInfo().toPromise().then(() => {
           this.dialogRef.close();

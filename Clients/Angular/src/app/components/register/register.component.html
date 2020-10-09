@@ -1,0 +1,42 @@
+<div id="container">
+    <h1 id="register-title" mat-dialog-title>
+        感谢您的注册
+    </h1>
+    <form class="register-form" autocomplete="off">
+        <mat-form-field class="register-form-item" appearance="legacy">
+            <input matInput required [(ngModel)]="user.nickName" type="text" placeholder="昵称"
+                (input)="onInputChange()">
+            <mat-hint>昵称长度2-18个字符</mat-hint>
+        </mat-form-field>
+        <mat-form-field class="register-form-item" appearance="legacy">
+            <input matInput [(ngModel)]="user.email" type="password" placeholder="邮箱"
+                (input)="onInputChange()">
+            <mat-hint>现在还发不了邮件</mat-hint>
+        </mat-form-field>
+        <mat-form-field class="register-form-item" appearance="legacy">
+            <input matInput [(ngModel)]="user.password" type="password" placeholder="密码"
+                (input)="onInputChange()">
+            <mat-hint>密码长度在6-16个字符之间</mat-hint>
+        </mat-form-field>
+        <mat-form-field class="register-form-item" appearance="legacy">
+            <input matInput [(ngModel)]="user.phoneNumber" type="phoneNumber" placeholder="手机号"
+                (input)="onInputChange()">
+            <mat-hint>手机号可以不用填哟</mat-hint>
+        </mat-form-field>
+    </form>
+    <div class="item-contain">
+        <mat-error id="errorInfo" *ngIf="errorInfo!=''">
+            {{errorInfo}}
+        </mat-error>
+    </div>
+    <div class="item-contain" *ngIf="!isLoading">
+        <div class="{{currentTheme}} register-button" (click)="register()">
+            <span>注册</span>
+        </div>
+    </div>
+    <div [class]="currentTheme">
+        <mat-spinner *ngIf="isLoading" value='100' id="spinner" diameter=40>
+        </mat-spinner>
+    </div>
+
+</div>

@@ -50,12 +50,12 @@ export class AccountService {
   public login(usr: string, pwd: string): Observable<Result<Token>> {
     let aesKey = this.getKey();
     let str = JSON.stringify({
-      "userName": usr,
+      "loginName": usr,
       "password": pwd
     });
     let encrypt = this.aesEncrypt(str, aesKey);
     let encryptedKey = this.rsaEncrypt(aesKey);
-    return this.httpClient.post<Result<Token>>(environment.baseUrl + `/api/account/login?key=${encryptedKey}`,
+    return this.httpClient.post<Result<Token>>(environment.baseUrl + `/auth/login?key=${encryptedKey}`,
       encrypt
       , {
         headers: {
