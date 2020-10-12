@@ -15,7 +15,9 @@ https://music.kaniu.pro
 * 感谢React-Native-Community.
 
 ## React-Native客户端
- 1. 配置好React-Native开发环境以及Expo Cli，准备一台设备,目前仅在Android环境测试过 
+ 1. 配置好React-Native开发环境以及Expo Cli，准备一台设备,目前仅在Android环境测试过,
+ 由于项目依赖的react-native-sound在Windows运行会出现一个'[RNSound.IsAndroid](https://github.com/zmxv/react-native-sound/issues/592)'的错误，所以只能在设备上跑,
+ 后续会继续尝试解决此问题，如果实在无法解决，会考虑使用Expo.Audio来进行音频播放.
  2. 进入MuKaiMusic/Clients/React-Native
  3. `yarn add`
  4. `expo eject`
