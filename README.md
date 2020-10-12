@@ -10,6 +10,9 @@ https://music.kaniu.pro
 本人才疏学浅，也是第一次玩这个，如果能帮到你，我非常高兴。如果做的不好，希望能得到建议。
 
 ## 项目基于原Mukai Music重构而来
+* 感谢[jsososo/MiguMusicApi](https://github.com/jsososo/MiguMusicApi)
+* 感谢[Binaryify/NeteaseCloudMusicApi](https://github.com/Binaryify/NeteaseCloudMusicApi)
+* 感谢React-Native-Community.
 
 ## React-Native客户端
  1. 配置好React-Native开发环境以及Expo Cli，准备一台设备,目前仅在Android环境测试过 
