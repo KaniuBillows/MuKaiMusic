@@ -18,32 +18,35 @@ namespace Netease_API.Service
         /// </summary>
         /// <param name="musics"></param>
         /// <returns></returns>
-        public async Task<List<MusicInfo>> MuiscsProcess(List<MusicInfo> musics)
+        public async Task<List<MusicInfo>> MusicsProcess(List<MusicInfo> musics)
         {
-            long[] ids = musics.Select(res => res.Ne_Id.Value).ToArray();
+            var ids = musics.Select(res => res.Ne_Id.Value).ToArray();
             Music_Url urlReq = new Music_Url(new Hashtable(), ids, 999000);
             MusicDetail detailReq = new MusicDetail(new Hashtable(), ids);
-            Task<HttpResponseMessage> urlTask = urlReq.Request();
-            Task<HttpResponseMessage> detailTask = detailReq.Request();
+            var urlTask = urlReq.Request();
+            var detailTask = detailReq.Request();
             HttpResponseMessage detail = await detailTask;
-            SongDetailResult detail_Result = JsonSerializer.Deserialize<SongDetailResult>(await detail.Content.ReadAsStringAsync());
+            SongDetailResult detailResult =
+                JsonSerializer.Deserialize<SongDetailResult>(await detail.Content.ReadAsStringAsync());
             HttpResponseMessage url = await urlTask;
-            NetEaseUrl_Result url_Result = JsonSerializer.Deserialize<NetEaseUrl_Result>(await url.Content.ReadAsStringAsync());
-            Dictionary<long, string> picHs = detail_Result.GetIdPicInfo();
-            Dictionary<long, string> urlHs = url_Result.ToProcessedData();
-            for (int i = 0; i < musics.Count; i++)
+            NetEaseUrl_Result urlResult =
+                JsonSerializer.Deserialize<NetEaseUrl_Result>(await url.Content.ReadAsStringAsync());
+            var picHs = detailResult.GetIdPicInfo();
+            var urlHs = urlResult.ToProcessedData();
+
+            for (var i = musics.Count - 1; i >= 0; i--)
             {
-                if (!urlHs.ContainsKey(musics[i].Ne_Id.Value))
+                var neId = musics[i].Ne_Id;
+                urlHs.TryGetValue(neId.Value, out var value);
+                if (value != null)
                 {
-                    musics.RemoveAt(i);
-                    continue;
-                }
-                else
-                {
-                    musics[i].Url = urlHs.GetValueOrDefault(musics[i].Ne_Id.Value, null);
+                    musics[i].Url = value;
                     musics[i].Album.PicUrl = picHs.GetValueOrDefault(musics[i].Ne_Id.Value, null);
                 }
+                else
+                    musics.RemoveAt(i);
             }
+
             return musics;
         }
 
@@ -54,24 +57,25 @@ namespace Netease_API.Service
         /// <returns></returns>
         public async Task<List<MusicInfo>> FilterUrl(List<MusicInfo> musics)
         {
-            long[] ids = musics.Select(mic => mic.Ne_Id.Value).ToArray();
+            var ids = musics.Select(mic => mic.Ne_Id.Value).ToArray();
             Music_Url urlReq = new Music_Url(new Hashtable(), ids, 999000);
-            Task<HttpResponseMessage> urlTask = urlReq.Request();
+            var urlTask = urlReq.Request();
             HttpResponseMessage url = await urlTask;
-            NetEaseUrl_Result url_Result = JsonSerializer.Deserialize<NetEaseUrl_Result>(await url.Content.ReadAsStringAsync());
-            Dictionary<long, string> urlHs = url_Result.ToProcessedData();
-            for (int i = 0; i < musics.Count; i++)
+            NetEaseUrl_Result urlResult =
+                JsonSerializer.Deserialize<NetEaseUrl_Result>(await url.Content.ReadAsStringAsync());
+            var urlHs = urlResult.ToProcessedData();
+            for (var i = musics.Count - 1; i >= 0; i--)
             {
-                if (!urlHs.ContainsKey(musics[i].Ne_Id.Value))
+                var neId = musics[i].Ne_Id;
+                urlHs.TryGetValue(neId.Value, out var value);
+                if (value != null)
                 {
-                    musics.RemoveAt(i);
-                    continue;
+                    musics[i].Url = value;
                 }
                 else
-                {
-                    musics[i].Url = urlHs.GetValueOrDefault(musics[i].Ne_Id.Value, null);
-                }
+                    musics.RemoveAt(i);
             }
+
             return musics;
         }
     }

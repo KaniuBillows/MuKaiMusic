@@ -22,11 +22,11 @@ namespace Netease_API.Controllers
     [Route("/")]
     public class NetEaseController : ControllerBase
     {
-        private readonly MusicService musicService;
+        private readonly MusicService _musicService;
 
         public NetEaseController(MusicService musicService)
         {
-            this.musicService = musicService;
+            this._musicService = musicService;
         }
 
 
@@ -38,8 +38,9 @@ namespace Netease_API.Controllers
             HttpResponseMessage response = await search.Request();
             try
             {
-                List<MusicInfo> res = JsonSerializer.Deserialize<MusicSearchResult>(await response.Content.ReadAsStringAsync()).ToProcessedData().ToList();
-                return await this.musicService.MuiscsProcess(res);
+                var res = JsonSerializer.Deserialize<MusicSearchResult>(await response.Content.ReadAsStringAsync())
+                    .ToProcessedData().ToList();
+                return await this._musicService.MusicsProcess(res);
             }
             catch (Exception)
             {
@@ -58,8 +59,9 @@ namespace Netease_API.Controllers
             MusicDetail req = new MusicDetail(id);
             try
             {
-                var response = await req.Request();
-                var res = JsonSerializer.Deserialize<SongDetailResult>(await response.Content.ReadAsStringAsync());
+                HttpResponseMessage response = await req.Request();
+                SongDetailResult res =
+                    JsonSerializer.Deserialize<SongDetailResult>(await response.Content.ReadAsStringAsync());
                 return Result<MusicInfo>.SuccessReuslt(res.ToProcessedData().FirstOrDefault());
             }
             catch (Exception)
@@ -69,13 +71,14 @@ namespace Netease_API.Controllers
         }
 
         [HttpGet("lyric")]
-        public async Task<Result<Lyric[]>> GetLyirc(int id)
+        public async Task<Result<Lyric[]>> GetLyric(int id)
         {
             GetLyric request = new GetLyric(id);
             HttpResponseMessage response = await request.Request();
             try
             {
-                return Result<Lyric[]>.SuccessReuslt(JsonSerializer.Deserialize<LyricResult>(await response.Content.ReadAsStringAsync()).ToProcessedData());
+                return Result<Lyric[]>.SuccessReuslt(JsonSerializer
+                    .Deserialize<LyricResult>(await response.Content.ReadAsStringAsync()).ToProcessedData());
             }
             catch (Exception)
             {
@@ -90,7 +93,8 @@ namespace Netease_API.Controllers
             HttpResponseMessage res = await request.Request();
             try
             {
-                return Result<string>.SuccessReuslt(JsonSerializer.Deserialize<NetEaseUrl_Result>(await res.Content.ReadAsStringAsync()).Data[0].Url);
+                return Result<string>.SuccessReuslt(JsonSerializer
+                    .Deserialize<NetEaseUrl_Result>(await res.Content.ReadAsStringAsync()).Data[0].Url);
             }
             catch (Exception)
             {
@@ -105,7 +109,8 @@ namespace Netease_API.Controllers
             HttpResponseMessage response = await request.Request();
             try
             {
-                return Result<string>.SuccessReuslt(JsonSerializer.Deserialize<PicResult>(await response.Content.ReadAsStringAsync()).Songs[0].Album.PicUrl);
+                return Result<string>.SuccessReuslt(JsonSerializer
+                    .Deserialize<PicResult>(await response.Content.ReadAsStringAsync()).Songs[0].Album.PicUrl);
             }
             catch (Exception)
             {

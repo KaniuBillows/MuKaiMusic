@@ -1,4 +1,7 @@
 ﻿using System;
+using System.Linq;
+using System.Net;
+using System.Net.Sockets;
 using System.Threading;
 using System.Threading.Tasks;
 using Consul;
@@ -9,44 +12,51 @@ namespace Netease_API
 {
     public class ConsulHostService : IHostedService
     {
-        private readonly IConsulClient consulClient;
-        private readonly IConfiguration configuration;
-        private CancellationTokenSource cts;
-        private string serviceId;
-        public ConsulHostService(IConsulClient consulClient,IConfiguration configuration)
+        private readonly IConsulClient _consulClient;
+        private readonly IConfiguration _configuration;
+        private CancellationTokenSource _cts;
+        private string _serviceId;
+
+        public ConsulHostService(IConsulClient consulClient, IConfiguration configuration)
         {
-            this.consulClient = consulClient;
-            this.configuration = configuration;
+            this._consulClient = consulClient;
+            this._configuration = configuration;
         }
 
         public async Task StartAsync(CancellationToken cancellationToken)
         {
-            cts = CancellationTokenSource.CreateLinkedTokenSource(cancellationToken);
-            var uri = new Uri(configuration["Address"]);
-            serviceId = "service:" + Guid.NewGuid();
-            var registration = new AgentServiceRegistration()
+            _cts = CancellationTokenSource.CreateLinkedTokenSource(cancellationToken);
+            var name = Dns.GetHostName(); // get container id
+            IPAddress ip =
+                (await Dns.GetHostEntryAsync(name)).AddressList.FirstOrDefault(x =>
+                    x.AddressFamily == AddressFamily.InterNetwork);
+            var address = ip.ToString();
+            var port = int.Parse(_configuration["Port"]);
+            _serviceId = "service:" + Guid.NewGuid();
+            AgentServiceRegistration registration = new AgentServiceRegistration()
             {
-                ID = serviceId,
+                ID = _serviceId,
                 Name = "Netease API",
-                Address = uri.Host,
-                Port = uri.Port,
-                Tags = new[] { "api" },
+                Address = address,
+                Port = port,
+                Tags = new[] {"api"},
                 Check = new AgentServiceCheck()
                 {
                     Interval = TimeSpan.FromSeconds(30),
-                    HTTP = $"http://{uri.Host}:{uri.Port}/api/health/index",
+                    HTTP = $"http://{address}:{port}/api/health/index",
                     Timeout = TimeSpan.FromSeconds(5),
                     DeregisterCriticalServiceAfter = TimeSpan.FromSeconds(60)
                 }
             };
             // 首先移除服务，避免重复注册
-            await consulClient.Agent.ServiceDeregister(registration.ID, cts.Token);
-            await consulClient.Agent.ServiceRegister(registration, cts.Token);
+            await _consulClient.Agent.ServiceDeregister(registration.ID, _cts.Token);
+            await _consulClient.Agent.ServiceRegister(registration, _cts.Token);
         }
+
         public async Task StopAsync(CancellationToken cancellationToken)
         {
-            cts.Cancel();
-            await consulClient.Agent.ServiceDeregister(serviceId, cancellationToken);
+            _cts.Cancel();
+            await _consulClient.Agent.ServiceDeregister(_serviceId, cancellationToken);
         }
     }
 }

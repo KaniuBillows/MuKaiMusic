@@ -7,8 +7,6 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Netease API", "Netease API\
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{37558CC0-82F1-4777-8548-EE0D60C0B18B}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "DataAbstract", "..\KaniuBillows\DataAbstract\DataAbstract.csproj", "{45093CB1-0376-42D3-AD4F-22CD0A505A65}"
-EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "NetEaseMusic_API", "NetEaseMusic_API\NetEaseMusic_API.csproj", "{6BD62641-AD55-4BD7-B395-9155143958AE}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "RequestHandler", "RequestHandler\RequestHandler.csproj", "{89896190-B711-48AA-A68E-290C9CF46B2C}"
@@ -25,10 +23,6 @@ Global
 		{875EB9F4-9590-47AD-AC51-FD0C732BCB92}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{875EB9F4-9590-47AD-AC51-FD0C732BCB92}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{875EB9F4-9590-47AD-AC51-FD0C732BCB92}.Release|Any CPU.Build.0 = Release|Any CPU
-		{45093CB1-0376-42D3-AD4F-22CD0A505A65}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{45093CB1-0376-42D3-AD4F-22CD0A505A65}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{45093CB1-0376-42D3-AD4F-22CD0A505A65}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{45093CB1-0376-42D3-AD4F-22CD0A505A65}.Release|Any CPU.Build.0 = Release|Any CPU
 		{6BD62641-AD55-4BD7-B395-9155143958AE}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{6BD62641-AD55-4BD7-B395-9155143958AE}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{6BD62641-AD55-4BD7-B395-9155143958AE}.Release|Any CPU.ActiveCfg = Release|Any CPU

@@ -1,0 +1,47 @@
+{
+  "scripts": {
+    "start": "react-native start",
+    "android": "react-native run-android",
+    "ios": "react-native run-ios",
+    "web": "expo start --web"
+  },
+  "dependencies": {
+    "@react-native-community/masked-view": "0.1.10",
+    "@react-navigation/bottom-tabs": "^5.9.0",
+    "@react-navigation/native": "^5.7.4",
+    "expo": "~39.0.2",
+    "expo-splash-screen": "~0.6.1",
+    "expo-status-bar": "~1.0.2",
+    "expo-updates": "~0.3.2",
+    "react": "16.13.1",
+    "react-dom": "16.13.1",
+    "react-native": "~0.63.3",
+    "react-native-elements": "^2.3.2",
+    "react-native-gesture-handler": "~1.7.0",
+    "react-native-marquee-ab": "^1.2.6",
+    "react-native-progress": "^4.1.2",
+    "react-native-reanimated": "~1.13.0",
+    "react-native-safe-area-context": "3.1.4",
+    "react-native-screens": "~2.10.1",
+    "react-native-sound": "^0.11.0",
+    "react-native-swiper": "^1.6.0",
+    "react-native-text-ticker": "1.7.0",
+    "react-native-unimodules": "~0.11.0",
+    "react-native-vector-icons": "^7.1.0",
+    "react-native-web": "~0.13.12"
+  },
+  "devDependencies": {
+    "@babel/core": "~7.9.0",
+    "@types/react": "~16.9.35",
+    "@types/react-dom": "~16.9.8",
+    "@types/react-native": "~0.63.2",
+    "babel-jest": "~25.2.6",
+    "jest": "~25.2.6",
+    "react-native-web": "~0.13.7",
+    "react-test-renderer": "~16.13.1",
+    "typescript": "~3.9.5"
+  },
+  "private": true,
+  "name": "mukai-music",
+  "version": "1.0.0"
+}

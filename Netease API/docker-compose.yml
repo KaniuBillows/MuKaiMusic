@@ -7,8 +7,7 @@ services:
         ports: 
             - "2003:2003"
         networks: 
-            mynet:
-                 ipv4_address: 172.18.0.7
+            - mynet
         container_name: "ne-api"
 networks: 
     mynet:

@@ -39,20 +39,20 @@ namespace Netease_API.Controllers
             try
             {
                 HttpResponseMessage response = await request.Request();
-                var res = JsonSerializer.Deserialize<PlaylistDetailResult>(await response.Content.ReadAsStringAsync());
+                PlaylistDetailResult res =
+                    JsonSerializer.Deserialize<PlaylistDetailResult>(await response.Content.ReadAsStringAsync());
                 if (res.Code != 200) return Result<PlaylistInfo>.FailResult("服务不可用");
                 var ids = res.Playlist.SongIds.Select(i => i.Id).ToArray();
                 MusicDetail musicDetailReq = new MusicDetail(ids);
                 var detailTask = musicDetailReq.Request();
-                Music_Url musicUrlReq = new Music_Url(new Hashtable(), ids, 999000);
-                var urlTask = musicUrlReq.Request();
-                var detailResult = JsonSerializer.Deserialize<SongDetailResult>(await (await detailTask).Content.ReadAsStringAsync());
+                SongDetailResult detailResult =
+                    JsonSerializer.Deserialize<SongDetailResult>(await (await detailTask).Content.ReadAsStringAsync());
                 return Result<PlaylistInfo>.SuccessReuslt(new PlaylistInfo()
                 {
                     DataSource = DataSource.NetEase,
                     Id = res.Playlist.Id,
                     MusicCount = res.Playlist.SongCount,
-                    Musics = await this.musicService.MuiscsProcess(detailResult.ToProcessedData()),
+                    Musics = await musicService.MusicsProcess(detailResult.ToProcessedData()),
                     Name = res.Playlist.Name,
                     PicUrl = res.Playlist.PicUrl
                 });
@@ -61,29 +61,28 @@ namespace Netease_API.Controllers
             {
                 return Result<PlaylistInfo>.FailResult("服务不可用");
             }
-
         }
 
         /// <summary>
         /// 网易云推荐歌单
         /// </summary>
-        /// <param name="limit">数量,默认30</param>
+        /// <param name="limit">数量,默认5</param>
         /// <returns></returns>
-        [HttpGet("personlized")]
-        public async Task<Result<PlaylistInfo[]>> PersonlizedPlaylist(int? limit)
+        [HttpGet("personalized")]
+        public async Task<Result<PlaylistInfo[]>> PersonalizedPlaylist(int limit = 5)
         {
-            PlaylistPersonalized request = limit.HasValue ? new PlaylistPersonalized(limit.Value) : new PlaylistPersonalized();
+            PlaylistPersonalized request = new PlaylistPersonalized(limit);
             HttpResponseMessage response = await request.Request();
             try
             {
-                var result = JsonSerializer.Deserialize<PersonlizedPlaylistResult>(await response.Content.ReadAsStringAsync());
+                PersonlizedPlaylistResult result =
+                    JsonSerializer.Deserialize<PersonlizedPlaylistResult>(await response.Content.ReadAsStringAsync());
                 return Result<PlaylistInfo[]>.SuccessReuslt(result.ToProcessedData());
             }
             catch (Exception)
             {
                 return Result<PlaylistInfo[]>.FailResult("获取歌单异常");
             }
-
         }
     }
 }
