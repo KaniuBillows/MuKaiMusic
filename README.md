@@ -11,6 +11,15 @@ https://music.kaniu.pro
 
 ## 项目基于原Mukai Music重构而来
 
+## React-Native客户端
+0.配置好React-Native开发环境以及Expo Cli.
+1.进入 MuKaiMusic/Clients/React-Native
+2.`yarn add
+3.`expo eject
+3.5 准备一台设备,目前仅在Android环境测试过.
+4.`yarn android
+2020-10-12：目前仅包含一个miniPlayer，后续会持续更新.
+
 ### 使用Docker，更加易于部署（我的数据库用的RDS（便宜），不然直接放Docker里面了，会更方便）
 ### Ocelot网关，咱.NET就是好啊
 ### Consul服务治理，微服务必备
