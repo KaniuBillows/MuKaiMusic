@@ -23,9 +23,11 @@ namespace Kuwo_API
             services.AddControllers();
             services.AddHttpClient();
             services.AddSingleton<IHostedService, ConsulHostService>();
+            services.AddSingleton<IHostedService, CsrfTokenService>();
+            services.AddSingleton<MusicService>();
             services.AddSingleton<IConsulClient>(option =>
                 new ConsulClient(c =>
-                   c.Address = new System.Uri(Configuration["ConsulAddress"]))
+                    c.Address = new System.Uri(Configuration["ConsulAddress"]))
             );
         }
 
@@ -39,10 +41,7 @@ namespace Kuwo_API
 
             app.UseRouting();
 
-            app.UseEndpoints(endpoints =>
-            {
-                endpoints.MapControllers();
-            });
+            app.UseEndpoints(endpoints => { endpoints.MapControllers(); });
         }
     }
 }

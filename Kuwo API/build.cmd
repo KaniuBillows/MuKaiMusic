@@ -1,0 +1,1 @@
+dotnet publish "Kuwo API/Kuwo API.csproj" -c Release -o ./dist

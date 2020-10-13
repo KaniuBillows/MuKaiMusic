@@ -3,7 +3,7 @@
 namespace DataAbstract.Playlist
 {
     /// <summary>
-    /// 歌单信息，暂只计划网易云
+    /// 歌单信息
     /// </summary>
     public class PlaylistInfo
     {
@@ -17,6 +17,6 @@ namespace DataAbstract.Playlist
 
         public int MusicCount { get; set; }
 
-        public List<MusicInfo> Musics { get; set; }
+        public List<MusicInfo> Musics { get; set; } = new List<MusicInfo>();
     }
 }

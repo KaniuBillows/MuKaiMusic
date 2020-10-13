@@ -7,8 +7,7 @@ services:
         ports: 
             - "2002:2002"
         networks: 
-            mynet:
-                 ipv4_address: 172.18.0.9
+            - mynet
         container_name: "kuwo-api"
 networks: 
     mynet:
