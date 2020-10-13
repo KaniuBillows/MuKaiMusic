@@ -10,6 +10,20 @@ https://music.kaniu.pro
 本人才疏学浅，也是第一次玩这个，如果能帮到你，我非常高兴。如果做的不好，希望能得到建议。
 
 ## 项目基于原Mukai Music重构而来
+* 感谢[jsososo/MiguMusicApi](https://github.com/jsososo/MiguMusicApi)
+* 感谢[Binaryify/NeteaseCloudMusicApi](https://github.com/Binaryify/NeteaseCloudMusicApi)
+* 感谢React-Native-Community.
+
+## React-Native客户端
+ 1. 配置好React-Native开发环境以及Expo Cli，准备一台设备,目前仅在Android环境测试过,
+ 由于项目依赖的react-native-sound在Windows运行会出现一个'[RNSound.IsAndroid](https://github.com/zmxv/react-native-sound/issues/592)'的错误，所以只能在设备上跑,
+ 后续会继续尝试解决此问题，如果实在无法解决，会考虑使用Expo.Audio来进行音频播放.
+ 2. 进入MuKaiMusic/Clients/React-Native
+ 3. `yarn add`
+ 4. `expo eject`
+ 5. `yarn android`
+ 
+2020-10-12：目前仅包含一个miniPlayer，后续会持续更新.
 
 ### 使用Docker，更加易于部署（我的数据库用的RDS（便宜），不然直接放Docker里面了，会更方便）
 ### Ocelot网关，咱.NET就是好啊
