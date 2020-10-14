@@ -20,8 +20,8 @@ namespace Netease_API.Results
             {
                 return Array.Empty<MusicInfo>();
             }
-            MusicInfo[] res = new MusicInfo[this.Content.Songs.Count];
-            for (int i = 0; i < res.Length; i++)
+            var res = new MusicInfo[this.Content.Songs.Count];
+            for (var i = 0; i < res.Length; i++)
             {
                 res[i] = new MusicInfo()
                 {

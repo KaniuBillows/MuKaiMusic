@@ -15,6 +15,7 @@ using System.Linq;
 using System.Net.Http;
 using System.Text.Json;
 using System.Threading.Tasks;
+using Result = DataAbstract.Result;
 
 namespace Netease_API.Controllers
 {
@@ -77,8 +78,9 @@ namespace Netease_API.Controllers
             HttpResponseMessage response = await request.Request();
             try
             {
-                return Result<Lyric[]>.SuccessReuslt(JsonSerializer
-                    .Deserialize<LyricResult>(await response.Content.ReadAsStringAsync()).ToProcessedData());
+                return Result<Lyric[]>.SuccessReuslt(
+                    JsonSerializer.Deserialize<LyricResult>(await response.Content.ReadAsStringAsync())
+                        .ToProcessedData());
             }
             catch (Exception)
             {
@@ -115,6 +117,22 @@ namespace Netease_API.Controllers
             catch (Exception)
             {
                 return Result<string>.FailResult("获取失败");
+            }
+        }
+
+        [HttpGet("personal_fm")]
+        public async Task<Result<List<MusicInfo>>> PersonalFm()
+        {
+            PersonalFm fm = new PersonalFm(new Hashtable());
+            HttpResponseMessage response = await fm.Request();
+            try
+            {
+                FmResult result = JsonSerializer.Deserialize<FmResult>(await response.Content.ReadAsStringAsync());
+                return Result<List<MusicInfo>>.SuccessReuslt(result.ToProcessedData());
+            }
+            catch (Exception)
+            {
+                return Result<List<MusicInfo>>.FailResult("获取失败");
             }
         }
     }

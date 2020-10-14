@@ -1,4 +1,5 @@
 ﻿using System.Collections;
+using System.Collections.Generic;
 
 namespace MusicApi.NetEase.Music
 {
@@ -7,7 +8,7 @@ namespace MusicApi.NetEase.Music
     /// </summary>
     public class Music_Url : BaseRequestOption
     {
-        public Music_Url(Hashtable cookies, long[] ids, int br) : base(cookies)
+        public Music_Url(Hashtable cookies, IEnumerable<long> ids, int br) : base(cookies)
         {
 
             this.Params.Add("ids", "[" + string.Join(',', ids) + "]");
