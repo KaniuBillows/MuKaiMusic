@@ -2,9 +2,7 @@ import { Lyric } from "../Abstract/Abstract";
 
 export default class Lyrics {
     constructor(lyrics: Lyric[]) {
-        if (!lyrics) {
-            //TODO: DEBUG console.error
-            console.error("lyrics is null or undefined");
+        if (!lyrics) {           
             throw new Error("argument cannot be null");
         }
         this._lyrics = lyrics;
@@ -19,7 +17,7 @@ export default class Lyrics {
         let index = this.findLastIndexOf(this._lyrics, item => item.time != null && item.time <= time);
         let s = {
             index: index === -1 ? 0 : index,
-            text: this._lyrics[index === -1 ? 0 : index].text
+            text: this._lyrics[index === -1 ? 0 : index]?.text ?? ''
         };
         return s;
     }

@@ -1,10 +1,13 @@
-import React, { useEffect, useState } from 'react';
+import { EventEmitter } from '@react-navigation/native';
+import React, { useCallback, useEffect, useState } from 'react';
+import { DeviceEventEmitter } from 'react-native';
 import Sound from 'react-native-sound';
 import { MusicInfo, DataSource } from './Abstract/Abstract';
 import { MusicNetwork } from './service/Network';
 import Lyrics from './util/Lyrics';
 import Playlist from './util/Playlist';
-
+import { shuffle } from './util/Util';
+import NotificationModule, { subscribeMediaEvent, unSubscribeMediaEvent } from './Module/NativeNotificationModule';
 //TODO: use Expo Audio to replace the React-native Sound
 export const PlayControlContext = React.createContext<PlayControl>(null);
 
@@ -18,10 +21,15 @@ export interface PlayControl {
     nextTrack: () => void,
     lastTrack: () => void,
     switchNext: () => void,
-    switchLast: () => void
+    switchLast: () => void,
+    initPlaylist: (musics: MusicInfo[]) => void,
+    changePlayMode: (mode: PlayMode) => void,
+    onFmPlayEnded: (callback: (state: PlayState) => void) => void,
+    removeFmPlayEnded: (callback: (state: PlayState) => void) => void,
+    addAndPlay: (musicInfo: MusicInfo) => void
 }
 
-interface PlayState {
+export interface PlayState {
     isPlaying: boolean,
     isLoaded: boolean,
     isLoading: boolean,
@@ -61,9 +69,19 @@ export enum PlayMode {
      * in this mode, the player will play the playlist tracks circularly.
      */
     listCycle,
+
+    /**
+     * in this mode, user cannot switch music to pre. they can only use next.
+     */
+    fm,
 }
 
-let _setState
+const ON_FM_PLAY_ENDED = "ON_FM_PLAY_ENDED";
+
+const ON_MUSIC_PLAY_ENDED = "ON_MUSIC_PLAY_ENDED";
+
+
+let _setState;
 let _control: PlayControl
 
 /**
@@ -84,19 +102,24 @@ let _onEnd: (success: boolean) => void;
  * the playlist
  * //TODO: the palylist should be a function that returns the cur
  */
-let playlist: Playlist;
+let playlist: Playlist = new Playlist([]);
 
 /**
  * the playlist for shuffle mode.
  * TODO: implement the shuffle mode.
  */
-let shufflePlaylist: Playlist;
+let shufflePlaylist: Playlist = new Playlist([]);
+
+/**
+ * the player's playmode.
+ */
+let playMode: PlayMode;
 
 /**
  * the lyrics object.
  */
 let lyrics: Lyrics;
-
+// TODO: should read the playlist from the storage.
 export function AppPlayer(props) {
     const [control, setState] = useState<PlayControl>({
         playState: {
@@ -120,31 +143,66 @@ export function AppPlayer(props) {
         nextTrack: nextTrack,
         lastTrack: lastTrack,
         switchLast: switchLast,
-        switchNext: switchNext
+        switchNext: switchNext,
+        initPlaylist: initPlaylist,
+        changePlayMode: changePlayMode,
+        onFmPlayEnded: onFmPlayEnded,
+        removeFmPlayEnded: removeFmPlayEnded,
+        addAndPlay: addAndPlay
     });
     _setState = setState;
     _control = control;
     useEffect(() => {
-        /**
-         * TODO: this is just some test code here for the backend API
-         */
-        MusicNetwork.searchMusic('陈奕迅', DataSource.migu).then(musics => {
-            playlist = new Playlist(musics, 0);
-            setCurrentMusic(playlist.currentMusic());
-        });
-
-        setInterval(() => {
+        const id = setInterval(() => {
             if (currentSound && currentSound.isLoaded && _control.playState.isPlaying) {
                 currentSound.getCurrentTime((secondes, isPlaying) => {
-                    updatePlayState({ currentTime: secondes });
+                    const update = {} as PlayState;
+                    if (_control.playState.lyricReady) {
+                        const lyric = lyrics.getCurrent(secondes)
+                        if (_control.playState.currentLyric?.text !== lyric.text) {
+                            update.currentLyric = lyric;
+                        }
+                    }
+                    updatePlayState({ ...update, currentTime: secondes });
                 });
-                if (_control.playState.lyricReady) {
-                    updatePlayState({ currentLyric: lyrics.getCurrent(_control.playState.currentTime) });
-                }
             }
-        }, 100)
+        }, 1000);
+        return () => {
+            clearInterval(id);
+        }
     }, []);
+    const handleNotifyPlay = useCallback(() => {
+        if (control.playState.isLoaded) {
+            if (control.playState.isPlaying) {
+                control.pause();
+            } else control.resume();
+        } else control.start();
+    }, [control.playState.isLoaded, control.playState.isPlaying]);
+    useEffect(() => {
+        subscribeMediaEvent("onNextPressed", nextTrack);
+        subscribeMediaEvent("onPausePressed", pause);
+        subscribeMediaEvent("onPrePressed", lastTrack);
+        subscribeMediaEvent("onPlayPressed", handleNotifyPlay);
+        return () => {
+            unSubscribeMediaEvent("onNextPressed", nextTrack);
+            unSubscribeMediaEvent("onPausePressed", pause);
+            unSubscribeMediaEvent("onPrePressed", lastTrack);
+            unSubscribeMediaEvent("onPlayPressed", handleNotifyPlay);
+        }
+    }, [handleNotifyPlay]);
+
     return (<PlayControlContext.Provider value={control} >{props.children}</PlayControlContext.Provider>);
+}
+React.memo(AppPlayer);
+/**
+ * init the playlist.
+ */
+function initPlaylist(musicInfos: MusicInfo[]) {
+    playlist = new Playlist(musicInfos);
+    shufflePlaylist = new Playlist(shuffle<MusicInfo>([...musicInfos]));
+    updatePlayState({ playlist: playlist });
+    let list = getplaylist();
+    setCurrentMusic(list.currentMusic());
 }
 
 /**
@@ -162,7 +220,7 @@ function updatePlayState(state) {
  * this function will try to load sound and change the current music info.
  * it will also try to get the lyrics.
  */
-function setCurrentMusic(musicinfo: MusicInfo, onFinish?: (success: boolean) => void) {
+async function setCurrentMusic(musicinfo: MusicInfo, onFinish?: (success: boolean) => void) {
     updatePlayState({ isLoading: true, isLoaded: false, currentTime: 0, lyricReady: false });
     //free the current sound resource
     if (currentSound) {
@@ -170,32 +228,37 @@ function setCurrentMusic(musicinfo: MusicInfo, onFinish?: (success: boolean) => 
     }
     //the old lyrics.
     lyrics = null;
-    updatePlayState({ currentMusicInfo: musicinfo, nextMusicInfo: playlist.getNext(), lastMusicInfo: playlist.getLast() });
-    //TODO: try to get the music url.
-    currentSound = new Sound(musicinfo.url, null, (error) => {
+    if (musicinfo === null) {
         updatePlayState({ isLoading: false });
+        return;
+    }
+    updatePlayState({ currentMusicInfo: musicinfo, nextMusicInfo: playlist.getNext(), lastMusicInfo: playlist.getLast() });
+    //some music's url may be null.so try to get it.
+    if (musicinfo.url === null) {
+        let res = await MusicNetwork.getMusicUrl(musicinfo);
+        if (res.code === 200) musicinfo.url = res.content;
+    }
+    currentSound = new Sound(musicinfo.url, null, (error) => {
         if (error) {
-            //TODO: this is a DEBUG console.error
-            console.error('failed to load the sound ', error);
             if (currentSound) {
                 currentSound.release();
             }
             if (onFinish) onFinish(false);
             return;
         }
-        updatePlayState({ totalTime: currentSound.getDuration(), isLoaded: true });
+        updatePlayState({ totalTime: currentSound.getDuration(), isLoaded: true, isLoading: false });
         if (onFinish) onFinish(true);
     });
-    
     //get lyrics.
-    MusicNetwork.getLyric(musicinfo).then(res => {
-        if (res.code === 200) {
-            lyrics = new Lyrics(res.content);
-            updatePlayState({ currentLyric: lyrics.getCurrent(1) });
-            updatePlayState({ lyricReady: true });
-        }
-    }).catch(err => {
-        console.error(err);
+    let lyricRes = await MusicNetwork.getLyric(musicinfo);
+    if (lyricRes.code === 200) {
+        lyrics = new Lyrics(lyricRes.content);
+        updatePlayState({ currentLyric: lyrics.getCurrent(1), lyricReady: true });
+    }
+    NotificationModule.sendMediaNotification({
+        name: musicinfo.name,
+        isPlaying: false, artist: musicinfo.artists[0].name,
+        picUrl: musicinfo.album.picUrl
     });
 }
 
@@ -206,7 +269,7 @@ function setCurrentMusic(musicinfo: MusicInfo, onFinish?: (success: boolean) => 
 */
 function start(musicInfo?: MusicInfo, onEnd?: (success: boolean) => void) {
     if (!musicInfo) {
-        musicInfo = playlist.currentMusic();
+        musicInfo = getplaylist().currentMusic();
     }
     setCurrentMusic(musicInfo, (success) => {
         if (success) {
@@ -216,8 +279,6 @@ function start(musicInfo?: MusicInfo, onEnd?: (success: boolean) => void) {
             //TODO: some try to replay. 
             return;
     });
-
-
 };
 
 /** 
@@ -226,9 +287,14 @@ function start(musicInfo?: MusicInfo, onEnd?: (success: boolean) => void) {
  * @param callback this callback will be called when the sound has been stoped.
  */
 function stop(callback?: () => void) {
-    if (currentSound?.isPlaying())
+    if (_control.playState.isPlaying)
         currentSound.stop(() => {
-            updatePlayState({ isPlaying: false })
+            updatePlayState({ isPlaying: false });
+            NotificationModule.sendMediaNotification({
+                name: _control.playState.currentMusicInfo.name,
+                isPlaying: false, artist: _control.playState.currentMusicInfo.artists[0].name,
+                picUrl: _control.playState.currentMusicInfo.album.picUrl
+            });
             if (callback) callback();
         });
 }
@@ -254,6 +320,11 @@ function play() {
             if (_onEnd) _onEnd(success);
         });
         updatePlayState({ isPlaying: true });
+        NotificationModule.sendMediaNotification({
+            name: _control.playState.currentMusicInfo.name,
+            isPlaying: true, artist: _control.playState.currentMusicInfo.artists[0].name,
+            picUrl: _control.playState.currentMusicInfo.album.picUrl
+        });
     }
 }
 
@@ -263,20 +334,30 @@ function play() {
  * @param callback this callback will be called when the sound has been paused.
  */
 function pause(callback?: () => void) {
-    if (currentSound?.isPlaying())
+    if (_control.playState.isPlaying)
         currentSound.pause(() => {
             updatePlayState({ isPlaying: false });
+            NotificationModule.sendMediaNotification({
+                name: _control.playState.currentMusicInfo.name,
+                isPlaying: false, artist: _control.playState.currentMusicInfo.artists[0].name,
+                picUrl: _control.playState.currentMusicInfo.album.picUrl
+            });
             if (callback) callback();
         });
 }
 
 /**
  * call this function to switch to next track.
- * note: in shuffle mode,this function should change track from the suffle playlist.
- * TODO: shuffle mode next&last 
+ * note: in shuffle mode,this function should change track from the suffle playlist. 
  */
 function nextTrack() {
-    start(playlist.next());
+    let list = getplaylist();
+    if (_control.playState.playMode === PlayMode.fm && list.isLast()) {
+        DeviceEventEmitter.emit(ON_FM_PLAY_ENDED, _control.playState);
+        updatePlayState({ isPlaying: _control.playState.isPlaying });
+        return;
+    }
+    start(list.next());
 }
 
 /**
@@ -284,27 +365,42 @@ function nextTrack() {
  * note: in shuffle mode,this function should change track from the suffle playlist.
  */
 function lastTrack() {
-    start(playlist.last());
+    if (playMode === PlayMode.fm) {
+        start(_control.playState.currentMusicInfo);
+        return;
+    }
+    start(getplaylist().last());
 }
 
 /**
  * change the current music to next track.
  */
-function switchNext() {
-    if (currentSound.isPlaying())
+function switchNext(play?: boolean) {
+    if (_control.playState.isPlaying)
         nextTrack();
-    else
-        setCurrentMusic(playlist.next());
+    else {
+        let list = getplaylist();
+        if (_control.playState.playMode === PlayMode.fm && list.isLast()) {
+            DeviceEventEmitter.emit(ON_FM_PLAY_ENDED, _control.playState);
+            return;
+        }
+        setCurrentMusic(getplaylist().next());
+    }
 }
 
 /**
  * change the current music to next track.
  */
-function switchLast() {
-    if (currentSound.isPlaying())
+function switchLast(play?: boolean) {
+    if (_control.playState.isPlaying)
         lastTrack();
-    else
-        setCurrentMusic(playlist.last());
+    else {
+        if (playMode === PlayMode.fm) {
+            setCurrentMusic(_control.playState.currentMusicInfo);
+            return;
+        }
+        setCurrentMusic(getplaylist().last());
+    }
 }
 
 /**
@@ -319,10 +415,11 @@ function seek(time: number) {
 /**
  * call this function to change the Player's mode.
  * this function will update the state
- * @param playMode 
+ * @param mode 
  */
-function changePlayMode(playMode: PlayMode) {
-    //TODO:change the playmode.
+function changePlayMode(mode: PlayMode) {
+    playMode = mode;
+    updatePlayState({ playMode: playMode });
 }
 
 /**
@@ -330,6 +427,57 @@ function changePlayMode(playMode: PlayMode) {
  * it will update the playState and execute logics with playMode.
  */
 function defaultOnEnd() {
-    //TODO:diffrent playMode.Like loop, single,list,random,once
-    updatePlayState(updatePlayState({ isPlaying: false }));
+    if (playMode === PlayMode.singleCycle) {
+        start(_control.playState.currentMusicInfo);
+    }
+    else if (playMode === PlayMode.onlyOnce) {
+        stop();
+    }
+    else if (playMode === PlayMode.listOrder) {
+        let list = getplaylist();
+        if (list.isLast()) {
+            stop();
+        } else {
+            start(list.next());
+        }
+    } else if (playMode === PlayMode.fm) {
+
+        let list = getplaylist();
+        if (list.isLast())
+            DeviceEventEmitter.emit(ON_FM_PLAY_ENDED, _control.playState);
+        else start(list.next())
+    }
+    else {
+        start(getplaylist().next());
+    }
 }
+
+/**
+ * get the current playlist.
+ */
+function getplaylist() {
+    if (playMode === PlayMode.shuffle) return shufflePlaylist;
+    else return playlist;
+}
+
+function addAndPlay(musicInfo: MusicInfo) {
+    let index = getplaylist().addToNext(musicInfo);
+    console.log(index);
+    start(getplaylist().setMusic(index));
+}
+
+/**
+ * a compoent should only call the function once.
+ * this event will emit while player finish the play list in FM mode.
+ * we just need emit the event. other component that subscribe the event
+ * should call the init playlist function. and start new playback.
+ * @param callback 
+ */
+function onFmPlayEnded(callback: (e: PlayState) => void) {
+    DeviceEventEmitter.addListener(ON_FM_PLAY_ENDED, callback);
+}
+
+function removeFmPlayEnded(callback: (e: PlayState) => void) {
+    DeviceEventEmitter.removeListener(ON_FM_PLAY_ENDED, callback);
+}
+

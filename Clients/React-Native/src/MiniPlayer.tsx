@@ -1,5 +1,5 @@
 import React, { useCallback, useContext, useRef, useState } from 'react';
-import { Image, RegisteredStyle, Text, View, ViewPropTypes, ViewStyle } from "react-native";
+import { Image, RegisteredStyle, Text, View, ViewPropTypes, ViewStyle, Dimensions } from "react-native";
 import PropTypes from 'prop-types';
 import { MaterialCommunityIcons } from '@expo/vector-icons';
 import { Theme } from '@react-navigation/native';
@@ -8,18 +8,19 @@ import ProgressBar from 'react-native-progress/Bar';
 import { PlayControl, PlayControlContext } from './AppPlayer';
 import Swiper from 'react-native-swiper';
 import FadeInImage from './FadeInView';
-
-export default function MiniPlayer(props: { style?: ViewStyle }) {
+const screenWidth = Dimensions.get('window').width;
+const progressWidth = ((screenWidth * 0.9 * 5) / 6) - 25;
+export default function MiniPlayer(props: { style }) {
     const { currentTheme } = useContext(ThemeContext);
     const [swiperIndex, setIndex] = useState(0);
     const control = useContext(PlayControlContext);
-    const handlePlay = useCallback((ev) => {
+    const handlePlay = useCallback(() => {
         if (control.playState.isLoaded) {
             if (control.playState.isPlaying) {
                 control.pause();
             } else control.resume();
         } else control.start();
-    }, [control]);
+    }, [control.playState.isLoaded, control.playState.isPlaying]);
     const imageSource = useCallback(control.playState.currentMusicInfo ? { uri: control.playState.currentMusicInfo.album.picUrl }
         : require('../assets/default_cover.png'), [control.playState.currentMusicInfo]);
     return (
@@ -30,8 +31,8 @@ export default function MiniPlayer(props: { style?: ViewStyle }) {
             width: '90%',
             display: "flex",
             flexDirection: 'row',
-            backgroundColor: currentTheme.dark ? 'rgb(40,40,40)' : 'rgb(240,240,240)',
-            borderColor: currentTheme.colors.border,
+            backgroundColor: currentTheme.colors.contentBackground,
+            borderColor: "transparent",
             borderRadius: 5,
             overflow: 'hidden',
             ...props.style,
@@ -40,14 +41,13 @@ export default function MiniPlayer(props: { style?: ViewStyle }) {
             <FadeInImage style={{ flex: 1, height: '100%' }} source={imageSource} />
 
             <View style={{
-                flex: 6,
-                width: '82%',
+                flex: 5,
                 height: '100%',
                 display: 'flex',
-                flexDirection: 'column'
+                flexDirection: 'column',
             }}>
-                <View style={{ justifyContent: 'center', flexDirection: 'row', height: '96%', display: 'flex' }}>
-                    <View style={{ flex: 3 }}>
+                <View style={{ justifyContent: 'center', flexDirection: 'row', height: '95%', display: 'flex' }}>
+                    <View style={{ flex: 4 }}>
                         <Swiper index={0} showsPagination={false} onIndexChanged={index => {
                             setTimeout(() => {
                                 let temp = index - swiperIndex
@@ -108,9 +108,11 @@ export default function MiniPlayer(props: { style?: ViewStyle }) {
                         </ThemeButton >
                     </View>
                 </View>
+
                 <ProgressBar progress={control.playState.currentTime / control.playState.totalTime}
-                    width={200} height={2} borderWidth={0} >
+                    width={progressWidth} height={2} borderWidth={0} >
                 </ProgressBar>
+
             </View>
         </View >
     );

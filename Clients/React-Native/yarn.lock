@@ -1976,6 +1976,14 @@
   dependencies:
     nanoid "^3.1.12"
 
+"@react-navigation/stack@^5.9.3":
+  version "5.9.3"
+  resolved "https://registry.npm.taobao.org/@react-navigation/stack/download/@react-navigation/stack-5.9.3.tgz?cache=0&other_urls=https%3A%2F%2Fregistry.npm.taobao.org%2F%40react-navigation%2Fstack%2Fdownload%2F%40react-navigation%2Fstack-5.9.3.tgz#c12cbd7cc8436e3995aa291d7617c5b8f7a950ea"
+  integrity sha1-wSy9fMhDbjmVqikddhfFuPepUOo=
+  dependencies:
+    color "^3.1.2"
+    react-native-iphone-x-helper "^1.2.1"
+
 "@sinonjs/commons@^1.7.0":
   version "1.8.1"
   resolved "https://registry.npm.taobao.org/@sinonjs/commons/download/@sinonjs/commons-1.8.1.tgz?cache=0&sync_timestamp=1594975802135&other_urls=https%3A%2F%2Fregistry.npm.taobao.org%2F%40sinonjs%2Fcommons%2Fdownload%2F%40sinonjs%2Fcommons-1.8.1.tgz#e7df00f98a203324f6dc7cc606cad9d4a8ab2217"
@@ -2089,9 +2097,9 @@
     "@types/react-native" "*"
 
 "@types/react-native@*":
-  version "0.63.25"
-  resolved "https://registry.npm.taobao.org/@types/react-native/download/@types/react-native-0.63.25.tgz?cache=0&other_urls=https%3A%2F%2Fregistry.npm.taobao.org%2F%40types%2Freact-native%2Fdownload%2F%40types%2Freact-native-0.63.25.tgz#a08bbe17a75cce993f52655a8fe75f30bf77e965"
-  integrity sha1-oIu+F6dczpk/UmVaj+dfML936WU=
+  version "0.63.30"
+  resolved "https://registry.npm.taobao.org/@types/react-native/download/@types/react-native-0.63.30.tgz#a0bd61e61b7a020a538ea22901be2f5d178fe02f"
+  integrity sha1-oL1h5ht6AgpTjqIpAb4vXReP4C8=
   dependencies:
     "@types/react" "*"
 
@@ -2450,6 +2458,18 @@ atob@^2.1.2:
   version "2.1.2"
   resolved "https://registry.npm.taobao.org/atob/download/atob-2.1.2.tgz#6d9517eb9e030d2436666651e86bd9f6f13533c9"
   integrity sha1-bZUX654DDSQ2ZmZR6GvZ9vE1M8k=
+
+auto-changelog@^2.2.1:
+  version "2.2.1"
+  resolved "https://registry.npm.taobao.org/auto-changelog/download/auto-changelog-2.2.1.tgz?cache=0&sync_timestamp=1600755954763&other_urls=https%3A%2F%2Fregistry.npm.taobao.org%2Fauto-changelog%2Fdownload%2Fauto-changelog-2.2.1.tgz#a031fbf1dfe140dda2ec8c77a524031478a0e933"
+  integrity sha1-oDH78d/hQN2i7Ix3pSQDFHig6TM=
+  dependencies:
+    commander "^5.0.0"
+    handlebars "^4.7.3"
+    lodash.uniqby "^4.7.0"
+    node-fetch "^2.6.0"
+    parse-github-url "^1.0.2"
+    semver "^6.3.0"
 
 available-typed-arrays@^1.0.0, available-typed-arrays@^1.0.2:
   version "1.0.2"
@@ -2990,7 +3010,7 @@ color-support@^1.1.3:
   resolved "https://registry.npm.taobao.org/color-support/download/color-support-1.1.3.tgz#93834379a1cc9a0c61f82f52f0d04322251bd5a2"
   integrity sha1-k4NDeaHMmgxh+C9S8NBDIiUb1aI=
 
-color@^3.1.0, color@^3.1.2:
+color@^3.1.2:
   version "3.1.2"
   resolved "https://registry.npm.taobao.org/color/download/color-3.1.2.tgz#68148e7f85d41ad7649c5fa8c8106f098d229e10"
   integrity sha1-aBSOf4XUGtdknF+oyBBvCY0inhA=
@@ -3020,7 +3040,7 @@ commander@^2.19.0:
   resolved "https://registry.npm.taobao.org/commander/download/commander-2.20.3.tgz?cache=0&sync_timestamp=1598576088458&other_urls=https%3A%2F%2Fregistry.npm.taobao.org%2Fcommander%2Fdownload%2Fcommander-2.20.3.tgz#fd485e84c03eb4881c20722ba48035e8531aeb33"
   integrity sha1-/UhehMA+tIgcIHIrpIA16FMa6zM=
 
-commander@^5.1.0:
+commander@^5.0.0, commander@^5.1.0:
   version "5.1.0"
   resolved "https://registry.npm.taobao.org/commander/download/commander-5.1.0.tgz?cache=0&sync_timestamp=1598576088458&other_urls=https%3A%2F%2Fregistry.npm.taobao.org%2Fcommander%2Fdownload%2Fcommander-5.1.0.tgz#46abbd1652f8e059bddaef99bbdcb2ad9cf179ae"
   integrity sha1-Rqu9FlL44Fm92u+Zu9yyrZzxea4=
@@ -4205,6 +4225,18 @@ growly@^1.3.0:
   resolved "https://registry.npm.taobao.org/growly/download/growly-1.3.0.tgz#f10748cbe76af964b7c96c93c6bcc28af120c081"
   integrity sha1-8QdIy+dq+WS3yWyTxrzCivEgwIE=
 
+handlebars@^4.7.3:
+  version "4.7.6"
+  resolved "https://registry.npm.taobao.org/handlebars/download/handlebars-4.7.6.tgz#d4c05c1baf90e9945f77aa68a7a219aa4a7df74e"
+  integrity sha1-1MBcG6+Q6ZRfd6pop6IZqkp9904=
+  dependencies:
+    minimist "^1.2.5"
+    neo-async "^2.6.0"
+    source-map "^0.6.1"
+    wordwrap "^1.0.0"
+  optionalDependencies:
+    uglify-js "^3.1.4"
+
 har-schema@^2.0.0:
   version "2.0.0"
   resolved "https://registry.npm.taobao.org/har-schema/download/har-schema-2.0.0.tgz#a94c2224ebcac04782a0d9035521f24735b7ec92"
@@ -4283,12 +4315,17 @@ hermes-profile-transformer@^0.0.6:
   dependencies:
     source-map "^0.7.3"
 
+highlight-words-core@^1.0.3:
+  version "1.2.2"
+  resolved "https://registry.npm.taobao.org/highlight-words-core/download/highlight-words-core-1.2.2.tgz#1eff6d7d9f0a22f155042a00791237791b1eeaaa"
+  integrity sha1-Hv9tfZ8KIvFVBCoAeRI3eRse6qo=
+
 hoist-non-react-statics@^2.3.1:
   version "2.5.5"
   resolved "https://registry.npm.taobao.org/hoist-non-react-statics/download/hoist-non-react-statics-2.5.5.tgz#c5903cf409c0dfd908f388e619d86b9c1174cb47"
   integrity sha1-xZA89AnA39kI84jmGdhrnBF0y0c=
 
-hoist-non-react-statics@^3.1.0:
+hoist-non-react-statics@^3.3.2:
   version "3.3.2"
   resolved "https://registry.npm.taobao.org/hoist-non-react-statics/download/hoist-non-react-statics-3.3.2.tgz#ece0acaf71d62c2969c2ec59feff42a4b1a85b45"
   integrity sha1-7OCsr3HWLClpwuxZ/v9CpLGoW0U=
@@ -5566,6 +5603,11 @@ lodash.throttle@^4.1.1:
   resolved "https://registry.npm.taobao.org/lodash.throttle/download/lodash.throttle-4.1.1.tgz#c23e91b710242ac70c37f1e1cda9274cc39bf2f4"
   integrity sha1-wj6RtxAkKscMN/HhzaknTMOb8vQ=
 
+lodash.uniqby@^4.7.0:
+  version "4.7.0"
+  resolved "https://registry.npm.taobao.org/lodash.uniqby/download/lodash.uniqby-4.7.0.tgz#d99c07a669e9e6d24e1362dfe266c67616af1302"
+  integrity sha1-2ZwHpmnp5tJOE2Lf4mbGdhavEwI=
+
 lodash@^4.17.13, lodash@^4.17.14, lodash@^4.17.15, lodash@^4.17.19, lodash@^4.17.4, lodash@^4.3.0, lodash@^4.5.0, lodash@^4.6.0:
   version "4.17.20"
   resolved "https://registry.npm.taobao.org/lodash/download/lodash-4.17.20.tgz#b44a9b6297bcb698f1c51a3545a2b3b368d59c52"
@@ -6151,6 +6193,11 @@ negotiator@0.6.2:
   resolved "https://registry.npm.taobao.org/negotiator/download/negotiator-0.6.2.tgz#feacf7ccf525a77ae9634436a64883ffeca346fb"
   integrity sha1-/qz3zPUlp3rpY0Q2pkiD/+yjRvs=
 
+neo-async@^2.6.0:
+  version "2.6.2"
+  resolved "https://registry.npm.taobao.org/neo-async/download/neo-async-2.6.2.tgz?cache=0&sync_timestamp=1594317853334&other_urls=https%3A%2F%2Fregistry.npm.taobao.org%2Fneo-async%2Fdownload%2Fneo-async-2.6.2.tgz#b4aafb93e3aeb2d8174ca53cf163ab7d7308305f"
+  integrity sha1-tKr7k+OustgXTKU88WOrfXMIMF8=
+
 nice-try@^1.0.4:
   version "1.0.5"
   resolved "https://registry.npm.taobao.org/nice-try/download/nice-try-1.0.5.tgz#a3378a7696ce7d223e88fc9b764bd7ef1089e366"
@@ -6372,7 +6419,7 @@ open@^6.2.0:
   dependencies:
     is-wsl "^1.1.0"
 
-opencollective-postinstall@^2.0.0:
+opencollective-postinstall@^2.0.3:
   version "2.0.3"
   resolved "https://registry.npm.taobao.org/opencollective-postinstall/download/opencollective-postinstall-2.0.3.tgz#7a0fff978f6dbfa4d006238fbac98ed4198c3259"
   integrity sha1-eg//l49tv6TQBiOPusmO1BmMMlk=
@@ -6493,6 +6540,11 @@ parse-bmfont-xml@^1.1.4:
   dependencies:
     xml-parse-from-string "^1.0.0"
     xml2js "^0.4.5"
+
+parse-github-url@^1.0.2:
+  version "1.0.2"
+  resolved "https://registry.npm.taobao.org/parse-github-url/download/parse-github-url-1.0.2.tgz?cache=0&other_urls=https%3A%2F%2Fregistry.npm.taobao.org%2Fparse-github-url%2Fdownload%2Fparse-github-url-1.0.2.tgz#242d3b65cbcdda14bb50439e3242acf6971db395"
+  integrity sha1-JC07ZcvN2hS7UEOeMkKs9pcds5U=
 
 parse-headers@^2.0.0:
   version "2.0.3"
@@ -6744,7 +6796,7 @@ prompts@^2.0.1:
     kleur "^3.0.3"
     sisteransi "^1.0.4"
 
-prop-types@^15.5.10, prop-types@^15.6.0, prop-types@^15.6.2, prop-types@^15.7.2:
+prop-types@^15.5.10, prop-types@^15.5.7, prop-types@^15.6.0, prop-types@^15.6.2, prop-types@^15.7.2:
   version "15.7.2"
   resolved "https://registry.npm.taobao.org/prop-types/download/prop-types-15.7.2.tgz?cache=0&sync_timestamp=1594736040896&other_urls=https%3A%2F%2Fregistry.npm.taobao.org%2Fprop-types%2Fdownload%2Fprop-types-15.7.2.tgz#52c41e75b8c87e72b9d9360e0206b99dcbffa6c5"
   integrity sha1-UsQedbjIfnK52TYOAga5ncv/psU=
@@ -6828,20 +6880,27 @@ react-is@^16.12.0, react-is@^16.13.0, react-is@^16.7.0, react-is@^16.8.1, react-
   resolved "https://registry.npm.taobao.org/react-is/download/react-is-16.13.1.tgz#789729a4dc36de2999dc156dd6c1d9c18cea56a4"
   integrity sha1-eJcppNw23imZ3BVt1sHZwYzqVqQ=
 
-react-native-elements@^2.3.2:
-  version "2.3.2"
-  resolved "https://registry.npm.taobao.org/react-native-elements/download/react-native-elements-2.3.2.tgz#f6b974127a3484bb46ebd98fbc012fb2208decd7"
-  integrity sha1-9rl0Eno0hLtG69mPvAEvsiCN7Nc=
+react-native-elements@^3.0.0-alpha.1:
+  version "3.0.0-alpha.1"
+  resolved "https://registry.npm.taobao.org/react-native-elements/download/react-native-elements-3.0.0-alpha.1.tgz#03b9d5cbfc413226cee209dbbce2d22077fe3b1f"
+  integrity sha1-A7nVy/xBMibO4gnbvOLSIHf+Ox8=
   dependencies:
     "@types/react-native-vector-icons" "^6.4.5"
-    color "^3.1.0"
+    auto-changelog "^2.2.1"
+    color "^3.1.2"
     deepmerge "^4.2.2"
-    hoist-non-react-statics "^3.1.0"
+    hoist-non-react-statics "^3.3.2"
     lodash.isequal "^4.5.0"
-    opencollective-postinstall "^2.0.0"
+    opencollective-postinstall "^2.0.3"
     prop-types "^15.7.2"
-    react-native-ratings "^7.2.0"
+    react-native-ratings "^7.3.0"
+    react-native-size-matters "^0.3.1"
     react-native-status-bar-height "^2.5.0"
+
+react-native-exit-app@^1.1.0:
+  version "1.1.0"
+  resolved "https://registry.npm.taobao.org/react-native-exit-app/download/react-native-exit-app-1.1.0.tgz#5ec082152974240e2d6a93f1608efb49a4385f21"
+  integrity sha1-XsCCFSl0JA4tapPxYI77SaQ4XyE=
 
 react-native-gesture-handler@~1.7.0:
   version "1.7.0"
@@ -6852,6 +6911,14 @@ react-native-gesture-handler@~1.7.0:
     hoist-non-react-statics "^2.3.1"
     invariant "^2.2.4"
     prop-types "^15.7.2"
+
+react-native-highlight-words@^1.0.1:
+  version "1.0.1"
+  resolved "https://registry.npm.taobao.org/react-native-highlight-words/download/react-native-highlight-words-1.0.1.tgz#d998f8eb88765820367c6e8a12e1392df7fd58c7"
+  integrity sha1-2Zj464h2WCA2fG6KEuE5Lff9WMc=
+  dependencies:
+    highlight-words-core "^1.0.3"
+    prop-types "^15.5.7"
 
 react-native-iphone-x-helper@^1.2.1:
   version "1.2.1"
@@ -6871,7 +6938,7 @@ react-native-progress@^4.1.2:
     "@react-native-community/art" "^1.1.2"
     prop-types "^15.7.2"
 
-react-native-ratings@^7.2.0:
+react-native-ratings@^7.3.0:
   version "7.3.0"
   resolved "https://registry.npm.taobao.org/react-native-ratings/download/react-native-ratings-7.3.0.tgz#32e11e4ed944ba8adbbc995d601df3f131619b6f"
   integrity sha1-MuEeTtlEuorbvJldYB3z8TFhm28=
@@ -6886,6 +6953,21 @@ react-native-reanimated@~1.13.0:
   dependencies:
     fbjs "^1.0.0"
 
+react-native-root-siblings@^4.0.0:
+  version "4.0.6"
+  resolved "https://registry.npm.taobao.org/react-native-root-siblings/download/react-native-root-siblings-4.0.6.tgz#6dd7eedb725faacd7ba19c159dd279cf2e6d8476"
+  integrity sha1-bdfu23Jfqs17oZwVndJ5zy5thHY=
+  dependencies:
+    static-container "^1.5.1"
+
+react-native-root-toast@^3.2.1:
+  version "3.2.1"
+  resolved "https://registry.npm.taobao.org/react-native-root-toast/download/react-native-root-toast-3.2.1.tgz#f456d029f5c5b76e4b686334f25371465478a3be"
+  integrity sha1-9FbQKfXFt25LaGM08lNxRlR4o74=
+  dependencies:
+    prop-types "^15.5.10"
+    react-native-root-siblings "^4.0.0"
+
 react-native-safe-area-context@3.1.4:
   version "3.1.4"
   resolved "https://registry.npm.taobao.org/react-native-safe-area-context/download/react-native-safe-area-context-3.1.4.tgz#9b7f883a5ae8da6218d17467a350434005893602"
@@ -6895,6 +6977,11 @@ react-native-screens@~2.10.1:
   version "2.10.1"
   resolved "https://registry.npm.taobao.org/react-native-screens/download/react-native-screens-2.10.1.tgz?cache=0&sync_timestamp=1600252395002&other_urls=https%3A%2F%2Fregistry.npm.taobao.org%2Freact-native-screens%2Fdownload%2Freact-native-screens-2.10.1.tgz#06d22fae87ef0ce51c616c34a199726db1403b95"
   integrity sha1-BtIvrofvDOUcYWw0oZlybbFAO5U=
+
+react-native-size-matters@^0.3.1:
+  version "0.3.1"
+  resolved "https://registry.npm.taobao.org/react-native-size-matters/download/react-native-size-matters-0.3.1.tgz#24d0cfc335a2c730f6d58bd7b43ea5a41be4b49f"
+  integrity sha1-JNDPwzWixzD21YvXtD6lpBvktJ8=
 
 react-native-sound@^0.11.0:
   version "0.11.0"
@@ -7312,6 +7399,13 @@ rxjs@^5.4.3:
   dependencies:
     symbol-observable "1.0.1"
 
+rxjs@^6.6.3:
+  version "6.6.3"
+  resolved "https://registry.npm.taobao.org/rxjs/download/rxjs-6.6.3.tgz?cache=0&sync_timestamp=1602770892387&other_urls=https%3A%2F%2Fregistry.npm.taobao.org%2Frxjs%2Fdownload%2Frxjs-6.6.3.tgz#8ca84635c4daa900c0d3967a6ee7ac60271ee552"
+  integrity sha1-jKhGNcTaqQDA05Z6buesYCce5VI=
+  dependencies:
+    tslib "^1.9.0"
+
 safe-buffer@5.1.2, safe-buffer@~5.1.0, safe-buffer@~5.1.1:
   version "5.1.2"
   resolved "https://registry.npm.taobao.org/safe-buffer/download/safe-buffer-5.1.2.tgz#991ec69d296e0313747d59bdfd2b745c35f8828d"
@@ -7699,6 +7793,11 @@ stacktrace-parser@^0.1.3:
   dependencies:
     type-fest "^0.7.1"
 
+static-container@^1.5.1:
+  version "1.5.1"
+  resolved "https://registry.npm.taobao.org/static-container/download/static-container-1.5.1.tgz#9d7a94e04dea864539a7b6a1304843ada740dc19"
+  integrity sha1-nXqU4E3qhkU5p7ahMEhDradA3Bk=
+
 static-extend@^0.1.1:
   version "0.1.2"
   resolved "https://registry.npm.taobao.org/static-extend/download/static-extend-0.1.2.tgz#60809c39cbff55337226fd5e0b520f341f1fb5c6"
@@ -8024,6 +8123,11 @@ tr46@^1.0.1:
   dependencies:
     punycode "^2.1.0"
 
+tslib@^1.9.0:
+  version "1.14.1"
+  resolved "https://registry.npm.taobao.org/tslib/download/tslib-1.14.1.tgz?cache=0&sync_timestamp=1602286730817&other_urls=https%3A%2F%2Fregistry.npm.taobao.org%2Ftslib%2Fdownload%2Ftslib-1.14.1.tgz#cf2d38bdc34a134bcaf1091c41f6619e2f672d00"
+  integrity sha1-zy04vcNKE0vK8QkcQfZhni9nLQA=
+
 tunnel-agent@^0.6.0:
   version "0.6.0"
   resolved "https://registry.npm.taobao.org/tunnel-agent/download/tunnel-agent-0.6.0.tgz#27a5dea06b36b04a0a9966774b290868f0fc40fd"
@@ -8102,6 +8206,11 @@ uglify-es@^3.1.9:
   dependencies:
     commander "~2.13.0"
     source-map "~0.6.1"
+
+uglify-js@^3.1.4:
+  version "3.11.3"
+  resolved "https://registry.npm.taobao.org/uglify-js/download/uglify-js-3.11.3.tgz?cache=0&sync_timestamp=1603066027950&other_urls=https%3A%2F%2Fregistry.npm.taobao.org%2Fuglify-js%2Fdownload%2Fuglify-js-3.11.3.tgz#b2f8c87826344f091ba48c417c499d6cba5d5786"
+  integrity sha1-svjIeCY0TwkbpIxBfEmdbLpdV4Y=
 
 ultron@1.0.x:
   version "1.0.2"

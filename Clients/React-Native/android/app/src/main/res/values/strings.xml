@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<resources>
+    <string name="app_name">Mukai Music</string>
+    <string name="media_channel_name">媒体通知</string>
+    <string name="media_channel_description">媒体播放控制栏，如果禁用将无法在锁屏或通知栏中进行媒体操作</string>
+</resources>

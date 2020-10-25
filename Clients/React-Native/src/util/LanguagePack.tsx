@@ -13,6 +13,11 @@ export interface LanguageContents {
      * 音乐馆
      */
     pavilion: string,
+    todaysSong: string,
+    personalFm: string,
+    cancel: string,
+    placeHolder: string,
+    daily30: string,
 }
 
 export const ChinesePack: LanguagePack = {
@@ -24,7 +29,12 @@ export const ChinesePack: LanguagePack = {
         pause: '暂停',
         mine: '我的',
         recommend: '推荐',
-        pavilion: '音乐馆'
+        pavilion: '音乐馆',
+        todaysSong: '今日推荐',
+        personalFm: '私人FM',
+        cancel: "取消",
+        placeHolder: "搜索",
+        daily30: '每日30首',
     }
 }
 
@@ -37,6 +47,11 @@ export const EnglishPack: LanguagePack = {
         pause: 'pause',
         mine: 'mine',
         recommend: 'recommend',
-        pavilion: 'pavilion'
+        pavilion: 'pavilion',
+        todaysSong: 'today\'s song',
+        personalFm: 'Personal FM',
+        cancel: "cancel",
+        placeHolder: "Type Here...",
+        daily30: "Daily 30"
     }
 }

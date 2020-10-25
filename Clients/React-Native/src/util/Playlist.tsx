@@ -4,8 +4,6 @@ import { MusicInfo } from "../Abstract/Abstract";
 export default class Playlist {
     constructor(tracks: MusicInfo[], index?: number) {
         if (!tracks) {
-            //TODO:DEBUG console.error
-            console.error("tracks is null or undefined");
             throw new Error('argument cannot be null!');
         }
         this._playlist = tracks;
@@ -17,7 +15,7 @@ export default class Playlist {
 
     private _playlist: MusicInfo[];
 
-    private currentIndex: number
+    private currentIndex: number = -1;
 
     /**
      * return the current music info object.
@@ -27,6 +25,14 @@ export default class Playlist {
         if (this.isEmpty())
             return null;
         else return this._playlist[this.currentIndex];
+    }
+
+    public setMusic(index: number) {
+        if (index >= 0 && index < this.count()) {
+            this.currentIndex = index;
+            return this._playlist[this.currentIndex];
+        }
+        throw new Error("invaild param: index");
     }
 
     /**
@@ -89,16 +95,18 @@ export default class Playlist {
      * Add elements to the end of the list
      * @param musicinfo 
      */
-    public addTrack(musicinfo: MusicInfo) {
+    public addTrack(musicinfo: MusicInfo): number {
         this._playlist.push(musicinfo);
+        return this.count() - 1;
     }
 
     /**
      * Add elements to the next postion.
      * @param musicInfo 
      */
-    public addToNext(musicInfo: MusicInfo) {
+    public addToNext(musicInfo: MusicInfo): number {
         this._playlist.splice(this.currentIndex + 1, 0, musicInfo);
+        return this.currentIndex + 1;
     }
 
     /**
@@ -113,5 +121,10 @@ export default class Playlist {
      */
     public count() {
         return this._playlist.length;
+    }
+
+    public isLast() {
+        if (this.isEmpty()) return true;
+        return this.currentIndex === (this._playlist.length - 1);
     }
 }   
