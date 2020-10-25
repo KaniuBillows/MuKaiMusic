@@ -63,7 +63,7 @@ namespace Netease_API.Results.Music
                          PicUrl = song.Album.PicUrl
                      },
                      Artists = new Collection<DataAbstract.Artist>(
-                         song.Artists.Select(ar => new DataAbstract.Artist()
+                         song.Artists.Select(ar => new DataAbstract.Artist
                          {
                              Name = ar.Name,
                              Id = ar.Id

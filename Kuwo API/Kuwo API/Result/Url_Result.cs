@@ -18,7 +18,7 @@ namespace Kuwo_API.Result
             this.Code != 200 ? new UrlInfo(DataSource.Kuwo) :
                 new UrlInfo(DataSource.Kuwo)
                 {
-                    Url = this.Url
+                    Url = this.Url.Replace("http","https")
                 };
     }
 }

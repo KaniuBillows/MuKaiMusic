@@ -13,6 +13,8 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "RequestHandler", "RequestHa
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Encrypt", "Encrypt\Encrypt.csproj", "{66EFC895-8F5B-4558-BEB1-7075F5C1DA5A}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DataAbstract", "..\DataAbstract\DataAbstract.csproj", "{FBA1B367-754A-4C01-BEC3-C90E1FCA423E}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -35,6 +37,10 @@ Global
 		{66EFC895-8F5B-4558-BEB1-7075F5C1DA5A}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{66EFC895-8F5B-4558-BEB1-7075F5C1DA5A}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{66EFC895-8F5B-4558-BEB1-7075F5C1DA5A}.Release|Any CPU.Build.0 = Release|Any CPU
+		{FBA1B367-754A-4C01-BEC3-C90E1FCA423E}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{FBA1B367-754A-4C01-BEC3-C90E1FCA423E}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{FBA1B367-754A-4C01-BEC3-C90E1FCA423E}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{FBA1B367-754A-4C01-BEC3-C90E1FCA423E}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

@@ -43,10 +43,11 @@ namespace Kuwo_API.Result
                         Id = kuwoMusicInfo.AlbumId,
                         PicUrl = kuwoMusicInfo.AlbumPic
                     },
-                    DataSource = DataSource.Kuwo
+                    DataSource = DataSource.Kuwo,
                 });
             }
 
+            result.MusicCount = Data.MusicList.Count;
             return result;
         }
 

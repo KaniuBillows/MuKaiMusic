@@ -45,7 +45,7 @@ namespace Kuwo_API.Result
                     Album = new Album()
                     {
                         Name = this.Data.List[i].Album,
-                        PicUrl = this.Data.List[i].Pic,
+                        PicUrl = Data.List[i].Pic.Replace("http", "https"),
                     },
                     DataSource = DataSource.Kuwo
                 };

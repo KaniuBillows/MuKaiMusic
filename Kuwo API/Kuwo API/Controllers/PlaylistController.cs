@@ -27,7 +27,7 @@ namespace Kuwo_API.Controllers
             _musicService = musicService;
         }
 
-        [HttpGet("personalized")]
+        [HttpGet("daily30")]
         public async Task<Result<PlaylistInfo>> GetTodayPlaylist()
         {
             Guid gid = Guid.NewGuid();

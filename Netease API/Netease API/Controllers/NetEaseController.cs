@@ -43,7 +43,7 @@ namespace Netease_API.Controllers
                     .ToProcessedData().ToList();
                 return await this._musicService.MusicsProcess(res);
             }
-            catch (Exception)
+            catch (Exception e)
             {
                 return new List<MusicInfo>();
             }
@@ -96,7 +96,7 @@ namespace Netease_API.Controllers
             try
             {
                 return Result<string>.SuccessReuslt(JsonSerializer
-                    .Deserialize<NetEaseUrl_Result>(await res.Content.ReadAsStringAsync()).Data[0].Url);
+                    .Deserialize<NetEaseUrl_Result>(await res.Content.ReadAsStringAsync()).Data[0].Url.Replace("http","https"));
             }
             catch (Exception)
             {
@@ -123,14 +123,25 @@ namespace Netease_API.Controllers
         [HttpGet("personal_fm")]
         public async Task<Result<List<MusicInfo>>> PersonalFm()
         {
-            PersonalFm fm = new PersonalFm(new Hashtable());
-            HttpResponseMessage response = await fm.Request();
+            var res = new List<MusicInfo>(6);
             try
             {
-                FmResult result = JsonSerializer.Deserialize<FmResult>(await response.Content.ReadAsStringAsync());
-                return Result<List<MusicInfo>>.SuccessReuslt(result.ToProcessedData());
+                while (res.Count < 3)
+                {
+                    PersonalFm fm = new PersonalFm(new Hashtable());
+                    HttpResponseMessage response = await fm.Request();
+                    FmResult result = JsonSerializer.Deserialize<FmResult>(await response.Content.ReadAsStringAsync());
+                    var ms = result.ToProcessedData();
+                    var musics = await _musicService.FilterUrl(ms);
+                    res.AddRange(musics);
+                }
+                if (res.Count > 3)
+                {
+                    res.RemoveRange(3, res.Count - 3);
+                }
+                return Result<List<MusicInfo>>.SuccessReuslt(res);
             }
-            catch (Exception)
+            catch (Exception e)
             {
                 return Result<List<MusicInfo>>.FailResult("获取失败");
             }

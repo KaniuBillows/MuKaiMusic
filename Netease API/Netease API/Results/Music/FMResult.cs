@@ -26,7 +26,7 @@ namespace Netease_API.Results.Music
                 DataSource = DataSource.NetEase,
                 Duration = item.Duration / 1000,
                 Album = new DataAbstract.Album()
-                    {Id = item.Album.Id, PicUrl = item.Album.PicUrl, Name = item.Album.Name},
+                    {Id = item.Album.Id, PicUrl = item.Album.PicUrl.Replace("http","https"), Name = item.Album.Name},
                 Artists = new Collection<DataAbstract.Artist>(item.Artists
                     .Select(artist => new DataAbstract.Artist() {Name = artist.Name, Id = artist.Id}).ToList())
             }));

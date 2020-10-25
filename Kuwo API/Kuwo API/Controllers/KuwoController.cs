@@ -1,6 +1,8 @@
 ﻿using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
+using System.Linq;
 using System.Net.Http;
 using System.Text.Json;
 using System.Threading.Tasks;
@@ -120,11 +122,45 @@ namespace Kuwo_API.Controllers
             try
             {
                 PicResult result = JsonSerializer.Deserialize<PicResult>(await response.Content.ReadAsStringAsync());
-                return Result<string>.SuccessReuslt(result.Data.PicUrl);
+                return Result<string>.SuccessReuslt(result.Data.PicUrl.Replace("http", "https"));
             }
             catch (Exception)
             {
                 return Result<string>.FailResult("获取失败");
+            }
+        }
+
+
+        [HttpGet("search_hotkey")]
+        public async Task<Result<List<string>>> GetSearchHotkey()
+        {
+            Guid gid = Guid.NewGuid();
+            var url = $"http://www.kuwo.cn/api/www/search/searchKey?key=&httpsStatus=1&reqId={gid}";
+            string token;
+            if (_memoryCache.TryGetValue("token", out string value))
+            {
+                token = value;
+            }
+            else
+            {
+                token = await _musicService.GetKuwoToken() ?? "91M13L92PH";
+            }
+
+            using HttpClient client = _httpClientFactory.CreateClient();
+            client.DefaultRequestHeaders.Add(HeaderNames.Cookie, $"kw_token={token}");
+            client.DefaultRequestHeaders.Add("csrf", token);
+            client.DefaultRequestHeaders.Add(HeaderNames.Referer, "http://www.kuwo.cn/");
+            client.DefaultRequestHeaders.Add(HeaderNames.Host, "www.kuwo.cn");
+            HttpResponseMessage response = await client.GetAsync(url);
+            try
+            {
+                return Result<List<string>>.SuccessReuslt(JsonSerializer
+                    .Deserialize<SearchHotkeyResult>(await response.Content.ReadAsStringAsync()).Data);
+            }
+            catch (Exception e)
+            {
+                Console.WriteLine(e);
+                throw;
             }
         }
     }

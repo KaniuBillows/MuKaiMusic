@@ -14,11 +14,11 @@ namespace Netease_API.Results
 
         public Dictionary<long, string> ToProcessedData()
         {
-            Dictionary<long, string> res = new Dictionary<long, string>();
+            var res = new Dictionary<long, string>();
             if (this.Code != 200) return res;
             foreach (Url_Info data in this.Data)
             {
-                res.Add(data.Id, data.Url);
+                res.Add(data.Id, data.Url?.Replace("http","https"));
             }
             return res;
         }
