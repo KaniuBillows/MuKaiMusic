@@ -5433,11 +5433,11 @@
   "project": {
     "version": "1.0.0",
     "restore": {
-      "projectUniqueName": "D:\\Programs\\Mukai Music\\DataAbstract\\DataAbstract.csproj",
+      "projectUniqueName": "D:\\Programs\\Mukai Music\\MicroService\\DataAbstract\\DataAbstract.csproj",
       "projectName": "DataAbstract",
-      "projectPath": "D:\\Programs\\Mukai Music\\DataAbstract\\DataAbstract.csproj",
+      "projectPath": "D:\\Programs\\Mukai Music\\MicroService\\DataAbstract\\DataAbstract.csproj",
       "packagesPath": "D:\\NugetPackages",
-      "outputPath": "D:\\Programs\\Mukai Music\\DataAbstract\\obj\\",
+      "outputPath": "D:\\Programs\\Mukai Music\\MicroService\\DataAbstract\\obj\\",
       "projectStyle": "PackageReference",
       "configFilePaths": [
         "C:\\Users\\kaniu\\AppData\\Roaming\\NuGet\\NuGet.Config"
@@ -5450,6 +5450,7 @@
       },
       "frameworks": {
         "netcoreapp3.1": {
+          "targetAlias": "netcoreapp3.1",
           "projectReferences": {}
         }
       },
@@ -5461,6 +5462,7 @@
     },
     "frameworks": {
       "netcoreapp3.1": {
+        "targetAlias": "netcoreapp3.1",
         "dependencies": {
           "BouncyCastle.NetCore": {
             "target": "Package",
@@ -5513,7 +5515,7 @@
             "privateAssets": "all"
           }
         },
-        "runtimeIdentifierGraphPath": "D:\\dotnet\\sdk\\3.1.402\\RuntimeIdentifierGraph.json"
+        "runtimeIdentifierGraphPath": "D:\\dotnet\\sdk\\5.0.100\\RuntimeIdentifierGraph.json"
       }
     }
   }

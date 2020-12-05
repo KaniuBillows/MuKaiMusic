@@ -1,20 +1,20 @@
 {
   "format": 1,
   "restore": {
-    "/home/Mukai Music/Mukai-Auth/Mukai Auth/Mukai Auth.csproj": {}
+    "D:\\Programs\\Mukai Music\\MicroService\\Mukai Auth\\Mukai Auth\\Mukai Auth.csproj": {}
   },
   "projects": {
-    "/home/Mukai Music/DataAbstract/DataAbstract.csproj": {
+    "D:\\Programs\\Mukai Music\\MicroService\\DataAbstract\\DataAbstract.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "/home/Mukai Music/DataAbstract/DataAbstract.csproj",
+        "projectUniqueName": "D:\\Programs\\Mukai Music\\MicroService\\DataAbstract\\DataAbstract.csproj",
         "projectName": "DataAbstract",
-        "projectPath": "/home/Mukai Music/DataAbstract/DataAbstract.csproj",
-        "packagesPath": "/root/.nuget/packages/",
-        "outputPath": "/home/Mukai Music/DataAbstract/obj/",
+        "projectPath": "D:\\Programs\\Mukai Music\\MicroService\\DataAbstract\\DataAbstract.csproj",
+        "packagesPath": "D:\\NugetPackages",
+        "outputPath": "D:\\Programs\\Mukai Music\\MicroService\\DataAbstract\\obj\\",
         "projectStyle": "PackageReference",
         "configFilePaths": [
-          "/root/.nuget/NuGet/NuGet.Config"
+          "C:\\Users\\kaniu\\AppData\\Roaming\\NuGet\\NuGet.Config"
         ],
         "originalTargetFrameworks": [
           "netcoreapp3.1"
@@ -24,6 +24,7 @@
         },
         "frameworks": {
           "netcoreapp3.1": {
+            "targetAlias": "netcoreapp3.1",
             "projectReferences": {}
           }
         },
@@ -35,10 +36,27 @@
       },
       "frameworks": {
         "netcoreapp3.1": {
+          "targetAlias": "netcoreapp3.1",
           "dependencies": {
+            "BouncyCastle.NetCore": {
+              "target": "Package",
+              "version": "[1.8.6, )"
+            },
             "Chloe": {
               "target": "Package",
               "version": "[4.7.0, )"
+            },
+            "Microsoft.AspNetCore.Http.Abstractions": {
+              "target": "Package",
+              "version": "[2.2.0, )"
+            },
+            "Microsoft.AspNetCore.Routing.Abstractions": {
+              "target": "Package",
+              "version": "[2.2.0, )"
+            },
+            "Microsoft.Extensions.Configuration.Abstractions": {
+              "target": "Package",
+              "version": "[3.1.6, )"
             },
             "MongoDB.Bson": {
               "target": "Package",
@@ -64,25 +82,28 @@
           "assetTargetFallback": true,
           "warn": true,
           "frameworkReferences": {
+            "Microsoft.AspNetCore.App": {
+              "privateAssets": "none"
+            },
             "Microsoft.NETCore.App": {
               "privateAssets": "all"
             }
           },
-          "runtimeIdentifierGraphPath": "/usr/share/dotnet/sdk/3.1.200/RuntimeIdentifierGraph.json"
+          "runtimeIdentifierGraphPath": "D:\\dotnet\\sdk\\5.0.100\\RuntimeIdentifierGraph.json"
         }
       }
     },
-    "/home/Mukai Music/Mukai-Auth/Mukai Auth/Mukai Auth.csproj": {
+    "D:\\Programs\\Mukai Music\\MicroService\\Mukai Auth\\Mukai Auth\\Mukai Auth.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "/home/Mukai Music/Mukai-Auth/Mukai Auth/Mukai Auth.csproj",
+        "projectUniqueName": "D:\\Programs\\Mukai Music\\MicroService\\Mukai Auth\\Mukai Auth\\Mukai Auth.csproj",
         "projectName": "Mukai Auth",
-        "projectPath": "/home/Mukai Music/Mukai-Auth/Mukai Auth/Mukai Auth.csproj",
-        "packagesPath": "/root/.nuget/packages/",
-        "outputPath": "/home/Mukai Music/Mukai-Auth/Mukai Auth/obj/",
+        "projectPath": "D:\\Programs\\Mukai Music\\MicroService\\Mukai Auth\\Mukai Auth\\Mukai Auth.csproj",
+        "packagesPath": "D:\\NugetPackages",
+        "outputPath": "D:\\Programs\\Mukai Music\\MicroService\\Mukai Auth\\Mukai Auth\\obj\\",
         "projectStyle": "PackageReference",
         "configFilePaths": [
-          "/root/.nuget/NuGet/NuGet.Config"
+          "C:\\Users\\kaniu\\AppData\\Roaming\\NuGet\\NuGet.Config"
         ],
         "originalTargetFrameworks": [
           "netcoreapp3.1"
@@ -92,9 +113,10 @@
         },
         "frameworks": {
           "netcoreapp3.1": {
+            "targetAlias": "netcoreapp3.1",
             "projectReferences": {
-              "/home/Mukai Music/DataAbstract/DataAbstract.csproj": {
-                "projectPath": "/home/Mukai Music/DataAbstract/DataAbstract.csproj"
+              "D:\\Programs\\Mukai Music\\MicroService\\DataAbstract\\DataAbstract.csproj": {
+                "projectPath": "D:\\Programs\\Mukai Music\\MicroService\\DataAbstract\\DataAbstract.csproj"
               }
             }
           }
@@ -107,6 +129,7 @@
       },
       "frameworks": {
         "netcoreapp3.1": {
+          "targetAlias": "netcoreapp3.1",
           "dependencies": {
             "BouncyCastle.NetCore": {
               "target": "Package",
@@ -143,6 +166,12 @@
           ],
           "assetTargetFallback": true,
           "warn": true,
+          "downloadDependencies": [
+            {
+              "name": "Microsoft.NETCore.App.Host.win-x64",
+              "version": "[3.1.9, 3.1.9]"
+            }
+          ],
           "frameworkReferences": {
             "Microsoft.AspNetCore.App": {
               "privateAssets": "none"
@@ -151,7 +180,7 @@
               "privateAssets": "all"
             }
           },
-          "runtimeIdentifierGraphPath": "/usr/share/dotnet/sdk/3.1.200/RuntimeIdentifierGraph.json"
+          "runtimeIdentifierGraphPath": "D:\\dotnet\\sdk\\5.0.100\\RuntimeIdentifierGraph.json"
         }
       }
     }

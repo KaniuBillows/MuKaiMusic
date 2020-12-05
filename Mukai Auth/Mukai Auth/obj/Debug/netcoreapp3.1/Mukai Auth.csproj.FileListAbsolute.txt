@@ -56,3 +56,61 @@ D:\Programs\Mukai Music\Mukai Auth\Mukai Auth\obj\Debug\netcoreapp3.1\Mukai Auth
 D:\Programs\Mukai Music\Mukai Auth\Mukai Auth\obj\Debug\netcoreapp3.1\Mukai Auth.pdb
 D:\Programs\Mukai Music\Mukai Auth\Mukai Auth\obj\Debug\netcoreapp3.1\Mukai Auth.genruntimeconfig.cache
 D:\Programs\Mukai Music\Mukai Auth\Mukai Auth\bin\Debug\netcoreapp3.1\Microsoft.EntityFrameworkCore.Design.dll
+D:\Programs\Mukai Music\MicroService\Mukai Auth\Mukai Auth\obj\Debug\netcoreapp3.1\Mukai Auth.dll
+D:\Programs\Mukai Music\MicroService\Mukai Auth\Mukai Auth\obj\Debug\netcoreapp3.1\Mukai Auth.pdb
+D:\Programs\Mukai Music\MicroService\Mukai Auth\Mukai Auth\bin\Debug\netcoreapp3.1\appsettings.Development.json
+D:\Programs\Mukai Music\MicroService\Mukai Auth\Mukai Auth\bin\Debug\netcoreapp3.1\appsettings.json
+D:\Programs\Mukai Music\MicroService\Mukai Auth\Mukai Auth\bin\Debug\netcoreapp3.1\appsettings.Production.json
+D:\Programs\Mukai Music\MicroService\Mukai Auth\Mukai Auth\bin\Debug\netcoreapp3.1\Mukai Auth.exe
+D:\Programs\Mukai Music\MicroService\Mukai Auth\Mukai Auth\bin\Debug\netcoreapp3.1\Mukai Auth.deps.json
+D:\Programs\Mukai Music\MicroService\Mukai Auth\Mukai Auth\bin\Debug\netcoreapp3.1\Mukai Auth.runtimeconfig.json
+D:\Programs\Mukai Music\MicroService\Mukai Auth\Mukai Auth\bin\Debug\netcoreapp3.1\Mukai Auth.runtimeconfig.dev.json
+D:\Programs\Mukai Music\MicroService\Mukai Auth\Mukai Auth\bin\Debug\netcoreapp3.1\Mukai Auth.dll
+D:\Programs\Mukai Music\MicroService\Mukai Auth\Mukai Auth\bin\Debug\netcoreapp3.1\Mukai Auth.pdb
+D:\Programs\Mukai Music\MicroService\Mukai Auth\Mukai Auth\bin\Debug\netcoreapp3.1\BouncyCastle.Crypto.dll
+D:\Programs\Mukai Music\MicroService\Mukai Auth\Mukai Auth\bin\Debug\netcoreapp3.1\Chloe.dll
+D:\Programs\Mukai Music\MicroService\Mukai Auth\Mukai Auth\bin\Debug\netcoreapp3.1\Consul.dll
+D:\Programs\Mukai Music\MicroService\Mukai Auth\Mukai Auth\bin\Debug\netcoreapp3.1\Microsoft.AspNetCore.Authentication.JwtBearer.dll
+D:\Programs\Mukai Music\MicroService\Mukai Auth\Mukai Auth\bin\Debug\netcoreapp3.1\Microsoft.Bcl.AsyncInterfaces.dll
+D:\Programs\Mukai Music\MicroService\Mukai Auth\Mukai Auth\bin\Debug\netcoreapp3.1\Microsoft.Bcl.HashCode.dll
+D:\Programs\Mukai Music\MicroService\Mukai Auth\Mukai Auth\bin\Debug\netcoreapp3.1\Microsoft.EntityFrameworkCore.dll
+D:\Programs\Mukai Music\MicroService\Mukai Auth\Mukai Auth\bin\Debug\netcoreapp3.1\Microsoft.EntityFrameworkCore.Abstractions.dll
+D:\Programs\Mukai Music\MicroService\Mukai Auth\Mukai Auth\bin\Debug\netcoreapp3.1\Microsoft.EntityFrameworkCore.Design.dll
+D:\Programs\Mukai Music\MicroService\Mukai Auth\Mukai Auth\bin\Debug\netcoreapp3.1\Microsoft.EntityFrameworkCore.Relational.dll
+D:\Programs\Mukai Music\MicroService\Mukai Auth\Mukai Auth\bin\Debug\netcoreapp3.1\Microsoft.Extensions.Caching.Abstractions.dll
+D:\Programs\Mukai Music\MicroService\Mukai Auth\Mukai Auth\bin\Debug\netcoreapp3.1\Microsoft.Extensions.Caching.Memory.dll
+D:\Programs\Mukai Music\MicroService\Mukai Auth\Mukai Auth\bin\Debug\netcoreapp3.1\Microsoft.Extensions.Configuration.dll
+D:\Programs\Mukai Music\MicroService\Mukai Auth\Mukai Auth\bin\Debug\netcoreapp3.1\Microsoft.Extensions.Configuration.Abstractions.dll
+D:\Programs\Mukai Music\MicroService\Mukai Auth\Mukai Auth\bin\Debug\netcoreapp3.1\Microsoft.Extensions.Configuration.Binder.dll
+D:\Programs\Mukai Music\MicroService\Mukai Auth\Mukai Auth\bin\Debug\netcoreapp3.1\Microsoft.Extensions.DependencyInjection.dll
+D:\Programs\Mukai Music\MicroService\Mukai Auth\Mukai Auth\bin\Debug\netcoreapp3.1\Microsoft.Extensions.DependencyInjection.Abstractions.dll
+D:\Programs\Mukai Music\MicroService\Mukai Auth\Mukai Auth\bin\Debug\netcoreapp3.1\Microsoft.Extensions.Logging.dll
+D:\Programs\Mukai Music\MicroService\Mukai Auth\Mukai Auth\bin\Debug\netcoreapp3.1\Microsoft.Extensions.Logging.Abstractions.dll
+D:\Programs\Mukai Music\MicroService\Mukai Auth\Mukai Auth\bin\Debug\netcoreapp3.1\Microsoft.Extensions.Options.dll
+D:\Programs\Mukai Music\MicroService\Mukai Auth\Mukai Auth\bin\Debug\netcoreapp3.1\Microsoft.Extensions.Primitives.dll
+D:\Programs\Mukai Music\MicroService\Mukai Auth\Mukai Auth\bin\Debug\netcoreapp3.1\Microsoft.IdentityModel.JsonWebTokens.dll
+D:\Programs\Mukai Music\MicroService\Mukai Auth\Mukai Auth\bin\Debug\netcoreapp3.1\Microsoft.IdentityModel.Logging.dll
+D:\Programs\Mukai Music\MicroService\Mukai Auth\Mukai Auth\bin\Debug\netcoreapp3.1\Microsoft.IdentityModel.Protocols.dll
+D:\Programs\Mukai Music\MicroService\Mukai Auth\Mukai Auth\bin\Debug\netcoreapp3.1\Microsoft.IdentityModel.Protocols.OpenIdConnect.dll
+D:\Programs\Mukai Music\MicroService\Mukai Auth\Mukai Auth\bin\Debug\netcoreapp3.1\Microsoft.IdentityModel.Tokens.dll
+D:\Programs\Mukai Music\MicroService\Mukai Auth\Mukai Auth\bin\Debug\netcoreapp3.1\MongoDB.Bson.dll
+D:\Programs\Mukai Music\MicroService\Mukai Auth\Mukai Auth\bin\Debug\netcoreapp3.1\Newtonsoft.Json.dll
+D:\Programs\Mukai Music\MicroService\Mukai Auth\Mukai Auth\bin\Debug\netcoreapp3.1\Npgsql.dll
+D:\Programs\Mukai Music\MicroService\Mukai Auth\Mukai Auth\bin\Debug\netcoreapp3.1\Npgsql.EntityFrameworkCore.PostgreSQL.dll
+D:\Programs\Mukai Music\MicroService\Mukai Auth\Mukai Auth\bin\Debug\netcoreapp3.1\System.Collections.Immutable.dll
+D:\Programs\Mukai Music\MicroService\Mukai Auth\Mukai Auth\bin\Debug\netcoreapp3.1\System.Diagnostics.DiagnosticSource.dll
+D:\Programs\Mukai Music\MicroService\Mukai Auth\Mukai Auth\bin\Debug\netcoreapp3.1\System.IdentityModel.Tokens.Jwt.dll
+D:\Programs\Mukai Music\MicroService\Mukai Auth\Mukai Auth\bin\Debug\netcoreapp3.1\System.Text.Json.dll
+D:\Programs\Mukai Music\MicroService\Mukai Auth\Mukai Auth\bin\Debug\netcoreapp3.1\DataAbstract.dll
+D:\Programs\Mukai Music\MicroService\Mukai Auth\Mukai Auth\bin\Debug\netcoreapp3.1\DataAbstract.pdb
+D:\Programs\Mukai Music\MicroService\Mukai Auth\Mukai Auth\obj\Debug\netcoreapp3.1\Mukai Auth.csprojAssemblyReference.cache
+D:\Programs\Mukai Music\MicroService\Mukai Auth\Mukai Auth\obj\Debug\netcoreapp3.1\Mukai Auth.AssemblyInfoInputs.cache
+D:\Programs\Mukai Music\MicroService\Mukai Auth\Mukai Auth\obj\Debug\netcoreapp3.1\Mukai Auth.AssemblyInfo.cs
+D:\Programs\Mukai Music\MicroService\Mukai Auth\Mukai Auth\obj\Debug\netcoreapp3.1\Mukai Auth.csproj.CoreCompileInputs.cache
+D:\Programs\Mukai Music\MicroService\Mukai Auth\Mukai Auth\obj\Debug\netcoreapp3.1\Mukai Auth.MvcApplicationPartsAssemblyInfo.cache
+D:\Programs\Mukai Music\MicroService\Mukai Auth\Mukai Auth\obj\Debug\netcoreapp3.1\staticwebassets\Mukai Auth.StaticWebAssets.Manifest.cache
+D:\Programs\Mukai Music\MicroService\Mukai Auth\Mukai Auth\obj\Debug\netcoreapp3.1\staticwebassets\Mukai Auth.StaticWebAssets.xml
+D:\Programs\Mukai Music\MicroService\Mukai Auth\Mukai Auth\obj\Debug\netcoreapp3.1\scopedcss\bundle\Mukai Auth.styles.css
+D:\Programs\Mukai Music\MicroService\Mukai Auth\Mukai Auth\obj\Debug\netcoreapp3.1\Mukai Auth.RazorTargetAssemblyInfo.cache
+D:\Programs\Mukai Music\MicroService\Mukai Auth\Mukai Auth\obj\Debug\netcoreapp3.1\Mukai Auth.csproj.CopyComplete
+D:\Programs\Mukai Music\MicroService\Mukai Auth\Mukai Auth\obj\Debug\netcoreapp3.1\Mukai Auth.genruntimeconfig.cache

@@ -1,0 +1,91 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="ContentModelStore">
+    <e p="C:\Users\kaniu\AppData\Local\JetBrains\Rider2020.2\extResources" t="IncludeRecursive" />
+    <e p="C:\Users\kaniu\AppData\Local\JetBrains\Rider2020.2\resharper-host\Local\Transient\Rider\v202\SolutionCaches\_Mukai Auth.-1473846754.00" t="ExcludeRecursive" />
+    <e p="D:\Programs\Mukai Music\MicroService\DataAbstract" t="IncludeRecursive">
+      <e p=".gitignore" t="Include" />
+      <e p="Account" t="Include">
+        <e p="User.cs" t="Include" />
+      </e>
+      <e p="Attributes" t="Include">
+        <e p="EncryptAttribute.cs" t="Include" />
+      </e>
+      <e p="bin" t="ExcludeRecursive" />
+      <e p="DataAbstract.csproj" t="IncludeRecursive" />
+      <e p="Middleware" t="Include">
+        <e p="DecryptMiddleware.cs" t="Include" />
+      </e>
+      <e p="Music" t="Include">
+        <e p="DataSource.cs" t="Include" />
+        <e p="Lyric.cs" t="Include" />
+        <e p="MusicInfo.cs" t="Include" />
+        <e p="UrlInfo.cs" t="Include" />
+        <e p="UserMusic.cs" t="Include" />
+        <e p="UserPlaylist.cs" t="Include" />
+      </e>
+      <e p="obj" t="ExcludeRecursive">
+        <e p="Debug" t="Include">
+          <e p="netcoreapp3.1" t="Include">
+            <e p="DataAbstract.AssemblyInfo.cs" t="Include" />
+          </e>
+        </e>
+      </e>
+      <e p="PageResult.cs" t="Include" />
+      <e p="Playlist" t="Include">
+        <e p="PlaylistInfo.cs" t="Include" />
+      </e>
+      <e p="Protos" t="Include">
+        <e p="account.proto" t="Include" />
+      </e>
+      <e p="Result.cs" t="Include" />
+      <e p="ServiceInfo.cs" t="Include" />
+    </e>
+    <e p="D:\Programs\Mukai Music\MicroService\Mukai Auth" t="IncludeFlat">
+      <e p="dockerFile.txt" t="Include" />
+      <e p="Mukai Auth" t="IncludeRecursive">
+        <e p="appsettings.Development.json" t="Include" />
+        <e p="appsettings.json" t="Include" />
+        <e p="appsettings.Production.json" t="Include" />
+        <e p="bin" t="ExcludeRecursive" />
+        <e p="ConsulHostService.cs" t="Include" />
+        <e p="Context" t="Include">
+          <e p="AccountContext.cs" t="Include" />
+        </e>
+        <e p="Controllers" t="Include">
+          <e p="AccountController.cs" t="Include" />
+        </e>
+        <e p="Filters" t="Include">
+          <e p="EncryptFilter.cs" t="Include" />
+        </e>
+        <e p="Migrations" t="Include">
+          <e p="20200716145212_InitialCreate.cs" t="Include" />
+          <e p="20200716145212_InitialCreate.Designer.cs" t="Include" />
+          <e p="AccountContextModelSnapshot.cs" t="Include" />
+        </e>
+        <e p="Models" t="Include">
+          <e p="LoginModel.cs" t="Include" />
+        </e>
+        <e p="Mukai Auth.csproj" t="IncludeRecursive" />
+        <e p="obj" t="ExcludeRecursive">
+          <e p="Debug" t="Include">
+            <e p="netcoreapp3.1" t="Include">
+              <e p="Mukai Auth.AssemblyInfo.cs" t="Include" />
+            </e>
+          </e>
+        </e>
+        <e p="Program.cs" t="Include" />
+        <e p="Properties" t="Include">
+          <e p="launchSettings.json" t="Include" />
+        </e>
+        <e p="Services" t="Include">
+          <e p="TokenProvider.cs" t="Include" />
+        </e>
+        <e p="Startup.cs" t="Include" />
+      </e>
+      <e p="Mukai Auth.sln" t="IncludeFlat" />
+      <e p="packages" t="ExcludeRecursive" />
+      <e p="Solution Items" t="Include" />
+    </e>
+  </component>
+</project>
