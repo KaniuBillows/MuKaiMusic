@@ -1,0 +1,14 @@
+version: '3.4'
+
+services:
+  mukai-ng:
+    image: mukai-ng:latest
+    build: ./
+    ports:
+      - "8900:80"
+    networks:
+      - nginx_default
+    container_name: "mukai-ng"
+networks:
+  nginx_default:
+    external: true

@@ -47,7 +47,7 @@ export class MusicService {
    * @param limit 数量
    */
   public getPersonalizedPlaylist(limit?: number): Observable<Result<Playlist[]>> {
-    return this.httpClient.get<Result<Playlist[]>>(environment.baseUrl + `/ne/playlist/personlized?limit=${limit | 10}`);
+    return this.httpClient.get<Result<Playlist[]>>(environment.baseUrl + `/ne/playlist/personalized?limit=${limit | 10}`);
   }
 
   /**
@@ -92,10 +92,10 @@ export class MusicService {
   public async searchMusic(key: string): Promise<Song[]> {
     let neRes = await this.httpClient.get<Song[]>(environment.baseUrl + `/ne/search?keyword=${key}`).toPromise();
     let kuwoRes = await this.httpClient.get<Song[]>(environment.baseUrl + `/kuwo/search?keyword=${key}`).toPromise();
-    let miguRes = await this.httpClient.get<Song[]>(environment.baseUrl + `/migu/search?keyword=${key}`).toPromise();
+    //let miguRes = await this.httpClient.get<Song[]>(environment.baseUrl + `/migu/search?keyword=${key}`).toPromise();
     let songs: Song[] = [];
     songs = songs.concat(kuwoRes);
-    songs = songs.concat(miguRes);
+    //songs = songs.concat(miguRes);
     songs = songs.concat(neRes);
     songs = songs.sort((s1, s2): number =>
       this.editDistance.getEditDistance(key, s1.name + s1.artists[0].name)
