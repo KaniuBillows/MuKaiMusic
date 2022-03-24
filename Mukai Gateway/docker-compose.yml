@@ -1,15 +1,15 @@
 version: '2'
 
-services: 
+services:
     mukai-gateway:
         image: mukai-gateway:latest
         build: ./
-        ports: 
+        ports:
             - "9999:9999"
-        networks: 
-            mynet:
-                 ipv4_address: 172.18.0.10
+        networks:
+            nginx_default:
+                ipv4_address: 172.18.0.10
         container_name: "mukai-gateway"
-networks: 
-    mynet:
+networks:
+    nginx_default:
         external: true

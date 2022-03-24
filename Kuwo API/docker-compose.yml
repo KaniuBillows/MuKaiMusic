@@ -1,14 +1,16 @@
 version: '2'
 
-services: 
+services:
     kuwo-api:
         image: kuwo-api:latest
-        build: ./
-        ports: 
+        build:
+            context: ../
+            dockerfile: Kuwo API/Dockerfile
+        ports:
             - "2002:2002"
-        networks: 
-            - mynet
+        networks:
+            - nginx_default
         container_name: "kuwo-api"
-networks: 
-    mynet:
+networks:
+    nginx_default:
         external: true

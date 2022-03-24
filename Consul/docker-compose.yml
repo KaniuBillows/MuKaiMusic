@@ -6,7 +6,7 @@ services:
         ports: 
             - "8500:8500"
         networks: 
-            mynet:
+            nginx_default:
                  ipv4_address: 172.18.0.2
         command: "agent -server -ui -bootstrap -node=1 -client='0.0.0.0'"
         container_name: "consul_server_1"
@@ -14,11 +14,11 @@ services:
     consul2:
         image: consul:latest
         networks: 
-            mynet:
+            nginx_default:
                  ipv4_address: 172.18.0.3
         command: "agent -client -node=2 -join='172.18.0.2'  -client='0.0.0.0'"
         container_name: "consul_server_2"
 
 networks: 
-    mynet:
+    nginx_default:
         external: true

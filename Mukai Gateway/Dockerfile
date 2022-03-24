@@ -1,8 +1,8 @@
-FROM registry.cn-hangzhou.aliyuncs.com/yoyosoft/dotnet/core/aspnet:3.1 AS base
+FROM mcr.microsoft.com/dotnet/core/aspnet:3.1.0 AS base
 WORKDIR /app
 EXPOSE 9999
 
-FROM registry.cn-hangzhou.aliyuncs.com/yoyosoft/dotnet/core/sdk AS build
+FROM mcr.microsoft.com/dotnet/sdk:6.0 AS build
 WORKDIR /src
 COPY ["Mukai Gateway/Mukai Gateway.csproj","Mukai Gateway/"]
 

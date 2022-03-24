@@ -1,14 +1,17 @@
 version: '2'
 
-services: 
+services:
     ne-api:
         image: ne-api:latest
-        build: ./
-        ports: 
+        build:
+            context: ../
+            dockerfile: Netease API/Dockerfile
+            
+        ports:
             - "2003:2003"
-        networks: 
-            - mynet
+        networks:
+            - nginx_default
         container_name: "ne-api"
-networks: 
-    mynet:
+networks:
+    nginx_default:
         external: true

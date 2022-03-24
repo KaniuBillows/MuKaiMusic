@@ -17,6 +17,7 @@ namespace Kuwo_API
 
         public async Task<string> GetKuwoToken()
         {
+            return null;
             using HttpClient client = this._httpClientFactory.CreateClient();
             HttpResponseMessage response = await client.GetAsync("http://www.kuwo.cn");
             if (!response.Headers.TryGetValues("Set-Cookie", out var values)) return null;

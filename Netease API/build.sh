@@ -1,1 +1,1 @@
-dotnet publish "Netease API/Netease API.csproj" -c Release -o ./dist
+docker build -t netease_api -f Dockerfile ~/mukai_music/MuKaiMusic
