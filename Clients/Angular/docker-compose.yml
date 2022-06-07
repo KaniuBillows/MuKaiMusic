@@ -1,9 +1,11 @@
-version: '3.4'
+version: '3'
 
 services:
   mukai-ng:
     image: mukai-ng:latest
-    build: ./
+    build:
+      context: ../
+      dockerfile: Angular/Dockerfile
     ports:
       - "8900:80"
     networks:
