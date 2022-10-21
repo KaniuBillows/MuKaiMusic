@@ -23,7 +23,7 @@
     "react-native-highlight-words": "^1.0.1",
     "react-native-marquee-ab": "^1.2.6",
     "react-native-progress": "^4.1.2",
-    "react-native-reanimated": "~1.13.0",
+    "react-native-reanimated": "~2.10.0",
     "react-native-root-toast": "^3.2.1",
     "react-native-safe-area-context": "3.1.4",
     "react-native-screens": "~2.10.1",
