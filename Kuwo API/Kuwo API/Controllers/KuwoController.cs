@@ -72,7 +72,7 @@ namespace Kuwo_API.Controllers
             TimeSpan ts = DateTime.UtcNow - new DateTime(1970, 1, 1, 0, 0, 0, 0);
             var t = Convert.ToInt64(ts.TotalMilliseconds);
             var url =
-                $"http://www.kuwo.cn/url?format=mp3&rid={id}&response=url&type=convert_url3&from=web&t={t}&reqId={gid}";
+                $"http://www.kuwo.cn/api/v1/www/music/playUrl?format=mp3&mid={id}&type=music&httpStatus=1&reqId={gid}";
             using HttpClient client = this._httpClientFactory.CreateClient();
             client.DefaultRequestHeaders.Add(HeaderNames.Referer, "http://www.kuwo.cn/");
             client.DefaultRequestHeaders.Add(HeaderNames.Host, "www.kuwo.cn");
@@ -81,7 +81,7 @@ namespace Kuwo_API.Controllers
             {
                 KuwoUrl_Result result =
                     JsonSerializer.Deserialize<KuwoUrl_Result>(await response.Content.ReadAsStringAsync());
-                return Result<string>.SuccessReuslt(result.Url);
+                return Result<string>.SuccessReuslt(result.ToProcessedData().Url);
             }
             catch (Exception)
             {
@@ -93,7 +93,7 @@ namespace Kuwo_API.Controllers
         public async Task<Result<Lyric[]>> Lyric(int id)
         {
             Guid gid = Guid.NewGuid();
-            var url = $"http://m.kuwo.cn/newh5/singles/songinfoandlrc?musicId={id}&&reqId={gid}";
+            var url = $"http://m.kuwo.cn/newh5/singles/songinfoandlrc?musicId={id}&httpsStatus=1&reqId={gid}";
             using HttpClient client = this._httpClientFactory.CreateClient();
             client.DefaultRequestHeaders.Add(HeaderNames.Referer, "http://www.kuwo.cn/");
             client.DefaultRequestHeaders.Add(HeaderNames.Host, "www.kuwo.cn");

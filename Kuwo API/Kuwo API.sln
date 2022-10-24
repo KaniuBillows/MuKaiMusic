@@ -7,6 +7,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Kuwo API", "Kuwo API\Kuwo A
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DataAbstract", "..\DataAbstract\DataAbstract.csproj", "{EEC80DD1-487A-4CA6-874B-9BE207038D4D}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ApiTest", "ApiTest\ApiTest.csproj", "{508D5321-8E38-4B22-953A-012FE9344F66}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -21,6 +23,10 @@ Global
 		{EEC80DD1-487A-4CA6-874B-9BE207038D4D}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{EEC80DD1-487A-4CA6-874B-9BE207038D4D}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{EEC80DD1-487A-4CA6-874B-9BE207038D4D}.Release|Any CPU.Build.0 = Release|Any CPU
+		{508D5321-8E38-4B22-953A-012FE9344F66}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{508D5321-8E38-4B22-953A-012FE9344F66}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{508D5321-8E38-4B22-953A-012FE9344F66}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{508D5321-8E38-4B22-953A-012FE9344F66}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

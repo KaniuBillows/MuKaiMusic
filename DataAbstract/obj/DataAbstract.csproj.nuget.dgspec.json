@@ -1,25 +1,27 @@
 {
   "format": 1,
   "restore": {
-    "D:\\Programs\\Mukai Music\\MicroService\\DataAbstract\\DataAbstract.csproj": {}
+    "D:\\Programs\\MuKaiMusic\\DataAbstract\\DataAbstract.csproj": {}
   },
   "projects": {
-    "D:\\Programs\\Mukai Music\\MicroService\\DataAbstract\\DataAbstract.csproj": {
+    "D:\\Programs\\MuKaiMusic\\DataAbstract\\DataAbstract.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "D:\\Programs\\Mukai Music\\MicroService\\DataAbstract\\DataAbstract.csproj",
+        "projectUniqueName": "D:\\Programs\\MuKaiMusic\\DataAbstract\\DataAbstract.csproj",
         "projectName": "DataAbstract",
-        "projectPath": "D:\\Programs\\Mukai Music\\MicroService\\DataAbstract\\DataAbstract.csproj",
-        "packagesPath": "D:\\NugetPackages",
-        "outputPath": "D:\\Programs\\Mukai Music\\MicroService\\DataAbstract\\obj\\",
+        "projectPath": "D:\\Programs\\MuKaiMusic\\DataAbstract\\DataAbstract.csproj",
+        "packagesPath": "D:\\packages",
+        "outputPath": "D:\\Programs\\MuKaiMusic\\DataAbstract\\obj\\",
         "projectStyle": "PackageReference",
         "configFilePaths": [
-          "C:\\Users\\kaniu\\AppData\\Roaming\\NuGet\\NuGet.Config"
+          "C:\\Users\\kaniu\\AppData\\Roaming\\NuGet\\NuGet.Config",
+          "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.Offline.config"
         ],
         "originalTargetFrameworks": [
           "netcoreapp3.1"
         ],
         "sources": {
+          "D:\\packages\\": {},
           "https://api.nuget.org/v3/index.json": {}
         },
         "frameworks": {
@@ -77,10 +79,25 @@
             "net47",
             "net471",
             "net472",
-            "net48"
+            "net48",
+            "net481"
           ],
           "assetTargetFallback": true,
           "warn": true,
+          "downloadDependencies": [
+            {
+              "name": "Microsoft.AspNetCore.App.Ref",
+              "version": "[3.1.10, 3.1.10]"
+            },
+            {
+              "name": "Microsoft.NETCore.App.Ref",
+              "version": "[3.1.0, 3.1.0]"
+            },
+            {
+              "name": "Microsoft.WindowsDesktop.App.Ref",
+              "version": "[3.1.0, 3.1.0]"
+            }
+          ],
           "frameworkReferences": {
             "Microsoft.AspNetCore.App": {
               "privateAssets": "none"
@@ -89,7 +106,7 @@
               "privateAssets": "all"
             }
           },
-          "runtimeIdentifierGraphPath": "D:\\dotnet\\sdk\\5.0.100\\RuntimeIdentifierGraph.json"
+          "runtimeIdentifierGraphPath": "D:\\Program Files\\dotnet\\sdk\\6.0.400\\RuntimeIdentifierGraph.json"
         }
       }
     }
