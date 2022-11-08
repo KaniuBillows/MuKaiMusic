@@ -33,7 +33,7 @@ https://music.kaniu.pro
 ### 整合三个音乐平台，基本能听许多许多歌曲了
 ### 将不同平台的歌曲保存为自己的歌单（已开发完成API，客户端正在开发，详见Mukai Playlist）
 
-## 功能（目前功能少得可怜，咱确实有点不争气，但会坚持开发维护的）以下已开启IP黑名单，仅供试验用
+## 功能
 1. 各个平台搜索: 
  咪咕[/migu/search?keyword=陈奕迅](https://api.kaniu.pro/migu/search?keyword=陈奕迅)
  酷我[/kuwo/search?keyword=陈奕迅](https://api.kaniu.pro/kuwo/search?keyword=陈奕迅)
