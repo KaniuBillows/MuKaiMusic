@@ -64,6 +64,5 @@ https://music.kaniu.pro
 
 ## 部署步骤写的很详细，目的是帮助你更加熟悉它。你或许也可以试试用一个docker-compose.yml搞定所有。
 
-# 服务结构：
-![结构](https://kaniu-pic.oss-cn-chengdu.aliyuncs.com/githubPic/Architecture.png)
+
 
